@@ -23,6 +23,7 @@ FirstName nvarchar(255),
 Lastname nvarchar(255),
 Email nvarchar(255),
 Password nvarchar(255),
+Phone nvarchar(25),
 Address nvarchar(255),
 ZipCode nvarchar(10),
 City nvarchar(255),
@@ -37,7 +38,7 @@ ManufacturerName nvachar(255)
 );
 
 CREATE TABLE Categories(
-CategoryID int NOT NULL AUTO_INCREMENT,
+CategoryID int NOT NULL AUTO_INCREMENT,,
 CategoryName nvarchar(255),
 );
 
