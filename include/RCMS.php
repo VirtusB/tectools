@@ -150,7 +150,7 @@ class RCMS {
         mysqli_set_charset($conn, "utf8");
         $this->mysqli = $conn;
     }
-
+    
     //Used for all MySQL executions, for a safer MySQL connection and standard
     public function execute($query, $parameters = NULL) {
         if ($parameters != NULL && $parameters != "" && !empty($parameters)) {
