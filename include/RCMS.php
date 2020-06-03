@@ -18,7 +18,6 @@ require_once(__DIR__ . "/Functions.php");
 require_once(__DIR__ . "/Login.php");
 
 class RCMS {
-    private $version = '1.0.0';
     private $host;
     private $user;
     private $pass;
@@ -34,15 +33,8 @@ class RCMS {
 
     private $salt;
 
-    private $cron;
-
     function __construct($host, $user, $pass, $database, $homefolder, $templatefolder, $uploadsfolder, $salt) {
         session_start();
-        $this->cron = NULL;
-
-        if (class_exists('Cron')) {
-            $this->cron = new Cron($this);
-        }
 
         $this->host = $host;
         $this->user = $user;
@@ -68,20 +60,7 @@ class RCMS {
 
         ob_start();
 
-        if ($this->cron != NULL) {
-            $this->cron->runCronJobs();
-        }
-
         require_once 'template/' . $templatefolder . '/index.php';
-        echo $this->addMetaGeneratorVersion();
-    }
-
-    function getVersion() {
-        return $this->version;
-    }
-
-    function addMetaGeneratorVersion() {
-        return "<meta name='generator' content='RCMS {$this->getVersion()}'>";
     }
 
     function loadPlugins($path) {
@@ -96,24 +75,6 @@ class RCMS {
                 }
             }
         }
-    }
-
-    function getData($table, $where) {
-        $rows = false;
-
-        $res = $this->execute("SELECT data FROM $table $where");
-
-        if ($res->num_rows > 0 && $res->num_rows !== 1) {
-            while ($row = $res->fetch_assoc()) {
-                $rows[] = $row;
-            }
-        }
-
-        if ($res->num_rows === 1) {
-            return $res->fetch_assoc();
-        }
-
-        return $rows;
     }
 
     function newGlobal($newGlobal, $value) {
@@ -140,10 +101,6 @@ class RCMS {
         return $this->getMySQLI()->insert_id;
     }
 
-    function getCron() {
-        return $this->cron;
-    }
-
     //Used at build to connect to MySQL
     public function connect() {
         $conn = mysqli_connect($this->host, $this->user, $this->pass, $this->database) or die("MySQLi Error!");
@@ -161,14 +118,14 @@ class RCMS {
             if (false === $rc) {
                 die('bind_param() failed: ' . htmlspecialchars($stmt->error));
             }
-            if (substr($query, 0, 6) == "SELECT") {
-                $result = $stmt->get_result();
-                return $result;
+
+            if (substr($query, 0, 6) === "SELECT" || substr($query, 0, 4) === 'CALL') {
+                return $stmt->get_result();
             }
         } else {
             $result = mysqli_query($this->getMySQLI(), $query) or die("MySQLi Query Error: " . mysqli_error($this->getMySQLI()));
 
-            if (substr($query, 0, 6) == "SELECT") {
+            if (substr($query, 0, 6) === "SELECT") {
                 return $result;
             }
         }
@@ -176,14 +133,12 @@ class RCMS {
 
     //Use this for catching events via both POST and/or GET
     private function eventhandler() {
-        if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'GET')) {
+        if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'GET')) {
             if (isset($_POST['log_in']) && $_POST['log_in'] == 1) {
-                //Return search results via function
                 $this->Login->log_in();
             }
 
             if (isset($_GET['log_out']) && $_GET['log_out'] == 1) {
-                //Return search results via function
                 $this->Login->log_out();
             }
         }
@@ -193,10 +148,10 @@ class RCMS {
     public function getRequestedPage() {
         $request_url = explode('?', $_SERVER['REQUEST_URI'], 2)[0];
         $request_url2 = $request_url . "/";
-        if ($request_url == "/index.php" || $request_url == "/index.php/")
+        if ($request_url === "/index.php" || $request_url === "/index.php/")
             $request_url = "/";
 
-        $result = $this->execute("SELECT * FROM pages WHERE (url = ? OR url = ?) AND active = 1 LIMIT 1", array('ss', &$request_url, &$request_url2));
+        $result = $this->execute("CALL getRequestedPage(?, ?)", array('ss', &$request_url, &$request_url2));
 
         $row = NULL;
         if ($result->num_rows > 0)

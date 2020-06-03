@@ -16,7 +16,7 @@ require_once 'config.php';
 require_once 'include/RCMS.php';
 
 
-RCMS::fixURLQueryQuestionMarks(); // vigtigt. tjek beskrivelse af funktion.
+RCMS::fixURLQueryQuestionMarks();
 
 new RCMS(DB_HOST, DB_USER, DB_PASS, DB_NAME, ROOT_FOLDER, TEMPLATE_FOLDER_NAME, UPLOADS_FOLDER, SALT);
 

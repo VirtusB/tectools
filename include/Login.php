@@ -21,55 +21,70 @@ class Login {
 	}
 	
 	public function log_in() {
-		$username = $_POST['username'];
+		$email = $_POST['email'];
 		$password = $this->saltPass($_POST['password']);
 		
 		if ($password == "")
 			return;
 		
-		$result = $this->RCMS->execute("SELECT id, user, level, data FROM users WHERE user = ? AND pass = ? LIMIT 1", array('ss', &$username, &$password));
+		$result = $this->RCMS->execute("CALL getUserByEmailAndPassword(?, ?)", array('ss', &$email, &$password));
 		if ($result->num_rows == 1){
 			$_SESSION['logged_in'] = 1;
 			$_SESSION['user'] = $result->fetch_assoc();
 
-			$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
-			header('Location: ' . $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+			header('Location: /dashboard');
 		}else{
 			header("Location: ?error=1");
 		}
 	}
 
 	public function createUser() {
-	    $username = $_POST['username'];
-	    $pass = $_POST['password'];
-	    $level = 1;
+	    $email = $_POST['email'];
+	    $password = $_POST['password'];
+	    $firstname = $_POST['firstname'];
+	    $lastname = $_POST['lastname'];
+	    $phone = $_POST['phone'];
+	    $address = $_POST['address'];
+	    $city = $_POST['city'];
+	    $zipcode = $_POST['zipcode'];
 
-        $exists = $this->RCMS->execute('SELECT * FROM users WHERE user = ? LIMIT 1', array('s', &$username));
+        $exists = $this->RCMS->execute('CALL getUserByEmail(?)', array('s', &$email));
 
         if ($exists->num_rows !== 0) {
+            $_SESSION['createUserPOST'] = $_POST;
             header('Location: /register/?emailtaken');
             return false;
         }
 
-        $hashedPass = $this->saltPass($pass);
+        $hashedPass = $this->saltPass($password);
 
-        $this->RCMS->execute('INSERT INTO users (user, pass, level) VALUES (?, ?, ?)', array('sss', &$username, &$hashedPass, &$level));
+        $this->RCMS->execute('CALL addUser(?, ?, ?, ?, ?, ?, ?, ?)', array('ssssssss', &$firstname, &$lastname, &$email, &$hashedPass, &$phone, &$address, &$zipcode, &$city));
+        header('Location: /login');
 	}
+
+    public function userExists($userID) {
+        $result = $this->RCMS->execute("CALL getUserByID(?)", array('i', &$userID));
+        if ($result->num_rows === 1){
+            return true;
+        }
+
+        return false;
+    }
 
 	public function isAdmin() {
 	    return $this->getUserLevel() >= $this::MIN_LEVEL_FOR_ADMIN;
     }
 
-	public function getUsername() {
-	    return $_SESSION['user']['user'] ?? false;
+	public function getEmail() {
+	    return $_SESSION['user']['Email'] ?? false;
     }
 
     public function getUserID() {
-	    return $_SESSION['user']['id'] ?? false;
+	    return $_SESSION['user']['UserID'] ?? false;
     }
 
     public function getUserLevel() {
-	    return $_SESSION['user']['level'] ?? false;
+	    return $_SESSION['user']['Level'] ?? false;
     }
 	
 	public function log_out($customLocation = '') {
@@ -84,24 +99,9 @@ class Login {
 	public function saltPass($pass) {
 		return md5($this->RCMS->getSalt() . $pass . $this->RCMS->getSalt());
 	}
-	
-	public function userExists($userID) {
-		$result = $this->RCMS->execute("SELECT * FROM users WHERE id = ? LIMIT 1", array('i', &$userID));
-		if ($result->num_rows == 1){
-			return true;
-		}else{
-			return false;
-		}
-	}
-	
-	public function getUsers($where = ""){
-		if ($where == ""){
-			$query = "SELECT * FROM users";
-		}else{
-			$query = "SELECT * FROM users $where";
-		}
 
-		if ($result = $this->RCMS->execute($query)){
+	public function getUsers(){
+		if ($result = $this->RCMS->execute('CALL getAllUsers()')){
 			$rows = array(); 
 			while ($row = $result->fetch_assoc()) {
 				$rows[] = $row;
@@ -113,4 +113,3 @@ class Login {
 		return $rows;
 	}
 }
-?>
