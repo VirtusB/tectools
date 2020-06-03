@@ -28,16 +28,16 @@ ZipCode nvarchar(10),
 City nvarchar(255),
 StripeID nvarchar(255),
 Level int(11) NOT NULL default '0',
-PRIMARY KEY (UserID),
+PRIMARY KEY (UserID)
 );
 
 CREATE TABLE Manufacturers (
 ManufacturerID int NOT NULL AUTO_INCREMENT,
-ManufacturerName nvachar(255)
+ManufacturerName nvarchar(255)
 );
 
 CREATE TABLE Categories(
-CategoryID int NOT NULL AUTO_INCREMENT,,
+CategoryID int NOT NULL AUTO_INCREMENT,
 CategoryName nvarchar(255),
 );
 
@@ -64,7 +64,7 @@ FK_UserID int NOT NULL,
 FK_ToolID int NOT NULL,
 FOREIGN KEY (FK_UserID) REFERENCES Users(UserID),
 FOREIGN KEY (FK_ToolID) REFERENCES Tools(ToolID),
-StartDate datetime default GETDATE(),
+StartDate datetime default NOW(),
 EndDate datetime default (NOW() + INTERVAL 7 day),
 CheckedOut bit,
 Comment nvarchar(1000)
