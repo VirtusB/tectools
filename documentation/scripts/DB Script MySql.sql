@@ -44,11 +44,11 @@ CategoryName nvarchar(255),
 CREATE TABLE Tools (
 ToolID int NOT NULL AUTO_INCREMENT,
 FK_ManufacturerID int NOT NULL,
-BarCode nvachar(13),
+BarCode nvarchar(13),
 ToolName nvarchar(500),
-Description nvarchar(max),
+Description nvarchar(4000),
 Status int,
-Image nvarchar(max),
+Image nvarchar(4000),
 FOREIGN KEY (FK_ManufacturerID) REFERENCES Manufacturers(ManufacturerID)
 );
 
