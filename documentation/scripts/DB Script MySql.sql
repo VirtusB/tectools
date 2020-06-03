@@ -27,6 +27,7 @@ Phone nvarchar(25),
 Address nvarchar(255),
 ZipCode nvarchar(10),
 City nvarchar(255),
+StripeID nvarchar(255),
 Level int(11) NOT NULL default '0',
 PRIMARY KEY (UserID),
 FOREIGN KEY (FK_PermissionID) REFERENCES UserPermissions(PermissionID)
