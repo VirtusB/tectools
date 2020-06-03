@@ -30,6 +30,8 @@ class RCMS {
 
     private $homefolder;
     private $templatefolder;
+    public $uploadsfolder;
+    public $relativeUploadsFolder;
 
     private $salt;
 
@@ -44,6 +46,8 @@ class RCMS {
         $this->homefolder = $homefolder;
         $this->templatefolder = $homefolder . 'template/' . $templatefolder;
         $this->uploadsfolder = __DIR__ . '/../' . $uploadsfolder;
+        $this->relativeUploadsFolder = '/' . $uploadsfolder;
+
 
         $this->salt = $salt;
 
@@ -125,7 +129,7 @@ class RCMS {
         } else {
             $result = mysqli_query($this->getMySQLI(), $query) or die("MySQLi Query Error: " . mysqli_error($this->getMySQLI()));
 
-            if (substr($query, 0, 6) === "SELECT") {
+            if (substr($query, 0, 6) === "SELECT" || substr($query, 0, 4) === 'CALL') {
                 return $result;
             }
         }

@@ -31,8 +31,9 @@ class Login {
 		if ($result->num_rows == 1){
 			$_SESSION['logged_in'] = 1;
 			$_SESSION['user'] = $result->fetch_assoc();
+            unset($_SESSION['createUserPOST']);
 
-			header('Location: /dashboard');
+            header('Location: /dashboard');
 		}else{
 			header("Location: ?error=1");
 		}
@@ -55,6 +56,7 @@ class Login {
             header('Location: /register/?emailtaken');
             return false;
         }
+        unset($_SESSION['createUserPOST']);
 
         $hashedPass = $this->saltPass($password);
 

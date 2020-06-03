@@ -1,0 +1,10 @@
+Få alle tools og kategorier som værktøjet har
+SELECT * FROM Tools p1
+LEFT JOIN
+Manufacturers p2 ON p1.FK_ManufacturerID = p2.ManufacturerID
+LEFT JOIN
+Categories p3 ON p3.CategoryID IN (SELECT FK_CategoryID FROM CategoryTools WHERE FK_ToolID = p1.ToolID)
+
+
+Få alle kategorier med deres navne
+SELECT * FROM Categories WHERE CategoryID IN (SELECT FK_CategoryID FROM CategoryTools WHERE FK_ToolID = 2)
