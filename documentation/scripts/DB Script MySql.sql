@@ -18,7 +18,6 @@ CREATE TABLE IF NOT EXISTS `pages` (
 
 CREATE TABLE Users (
 UserID int NOT NULL AUTO_INCREMENT,
-FK_PermissionID int NOT NULL,
 FirstName nvarchar(255),
 Lastname nvarchar(255),
 Email nvarchar(255),
@@ -30,7 +29,6 @@ City nvarchar(255),
 StripeID nvarchar(255),
 Level int(11) NOT NULL default '0',
 PRIMARY KEY (UserID),
-FOREIGN KEY (FK_PermissionID) REFERENCES UserPermissions(PermissionID)
 );
 
 CREATE TABLE Manufacturers (
