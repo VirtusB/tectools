@@ -1,0 +1,2 @@
+INSERT INTO Users (FirstName, LastName, Email, `Password`, Phone, Address, ZipCode, City, StripeID, `Level`)
+VALUES('Lars', 'Andersen', 'testmail@mail.com', 'password', '88888888', 'Telegrafvej 9', '2800', 'Kgs. Lyngby','',0)
