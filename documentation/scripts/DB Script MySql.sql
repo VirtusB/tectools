@@ -4,6 +4,12 @@ PermissionName nvachar(255),
 PRIMARY KEY (PermissionID)
 );*/
 
+DROP TABLE CheckIns;
+DROP TABLE CategoryTools;
+DROP TABLE Tools;
+DROP TABLE Categories;
+DROP TABLE Manufacturers;
+DROP TABLE Users;
 
 CREATE TABLE IF NOT EXISTS `pages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -19,26 +25,28 @@ CREATE TABLE IF NOT EXISTS `pages` (
 CREATE TABLE Users (
 UserID int NOT NULL AUTO_INCREMENT,
 FirstName nvarchar(255),
-Lastname nvarchar(255),
+LastName nvarchar(255),
 Email nvarchar(255),
 Password nvarchar(255),
 Phone nvarchar(25),
 Address nvarchar(255),
 ZipCode nvarchar(10),
 City nvarchar(255),
-StripeID nvarchar(255),
-Level int(11) NOT NULL default '0',
+StripeID nvarchar(255) NOT NULL default '',
+Level int(11) NOT NULL default '1',
 PRIMARY KEY (UserID)
 );
 
 CREATE TABLE Manufacturers (
 ManufacturerID int NOT NULL AUTO_INCREMENT,
-ManufacturerName nvarchar(255)
+ManufacturerName nvarchar(255),
+PRIMARY KEY (ManufacturerID)
 );
 
 CREATE TABLE Categories(
 CategoryID int NOT NULL AUTO_INCREMENT,
 CategoryName nvarchar(255),
+PRIMARY KEY (CategoryID)
 );
 
 CREATE TABLE Tools (
@@ -49,6 +57,7 @@ ToolName nvarchar(500),
 Description nvarchar(4000),
 Status int,
 Image nvarchar(4000),
+PRIMARY KEY (ToolID),
 FOREIGN KEY (FK_ManufacturerID) REFERENCES Manufacturers(ManufacturerID)
 );
 
@@ -65,7 +74,7 @@ FK_ToolID int NOT NULL,
 FOREIGN KEY (FK_UserID) REFERENCES Users(UserID),
 FOREIGN KEY (FK_ToolID) REFERENCES Tools(ToolID),
 StartDate datetime default NOW(),
-EndDate datetime default (NOW() + INTERVAL 7 day),
+EndDate datetime,
 CheckedOut bit,
 Comment nvarchar(1000)
 );
