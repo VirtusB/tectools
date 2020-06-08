@@ -8,3 +8,22 @@ body {
 main {
     flex: 1 0 auto;
 }
+
+nav, .page-footer {
+    background-color: #FF9800;
+}
+
+.card .card-image {
+    padding-top: 20px;
+}
+
+.cubes-icon {
+    vertical-align: bottom;
+    margin-right: 5px;
+    font-size: 24px;
+    color: #DCA85F;
+}
+
+.cubes-icon.not-available {
+    color: #FF0000;
+}

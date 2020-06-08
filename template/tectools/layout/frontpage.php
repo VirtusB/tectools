@@ -1,84 +1,53 @@
 <div class="container">
     <div class="row" id="tools-row">
 
+        <input type="text" placeholder="Fritekst...">
+
+
+
+        <?php
+        /**
+         * @var $TecTools TecTools
+         */
+        $TecTools = $GLOBALS['TecTools'];
+
+        /**
+         * @var $GlobalHandlers GlobalHandlers
+         */
+        $GlobalHandlers = $GLOBALS['GlobalHandlers'];
+
+        $tools = $TecTools->getAllTools();
+
+        foreach ($tools as $tool): ?>
+
         <div class="col s12 m6 l3 xl3">
-            <div class="card medium">
+            <div class="card">
                 <div class="card-image">
-                    <img src="<?= $this->RCMS->getTemplateFolder() ?>/images/testtool.png" alt="">
+                    <img src="<?= $TecTools->RELATIVE_TOOL_IMAGE_FOLDER . '/' . $tool['Image'] ?>" alt="">
                 </div>
                 <div class="card-content">
-                    <span class="card-title black-text">Vinkelsliber</span>
-                    <p>CRAFTMAN</p>
+                    <span class="card-title black-text"><?= $tool['ToolName'] ?></span>
+                    <p><?= $tool['ManufacturerName'] ?></p>
                     <br>
-                    <p>På lager</p>
+                    <p><i class="fas fa-cubes cubes-icon <?= $tool['Status'] !== 1 ? 'not-available' : '' ?>"></i> <?= $GlobalHandlers->formatStatus([$tool['Status']]) ?></p>
 
                     <br>
                 </div>
                 <div class="card-action">
-                    <a href="">Tjek ud</a>
+                    <ul>
+                        <?php foreach ($tool['Categories'] as $category): ?>
+                            <li><?= $category['CategoryName'] ?></li>
+                        <?php endforeach; ?>
+                    </ul>
                 </div>
             </div>
         </div>
 
-        <div class="col s12 m6 l3 xl3">
-            <div class="card medium">
-                <div class="card-image">
-                    <img src="<?= $this->RCMS->getTemplateFolder() ?>/images/testtool.png" alt="">
-                </div>
-                <div class="card-content">
-                    <span class="card-title black-text">Vinkelsliber</span>
-                    <p>CRAFTMAN</p>
-                    <br>
-                    <p>På lager</p>
-
-                    <br>
-                </div>
-                <div class="card-action">
-                    <a href="">Tjek ud</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col s12 m6 l3 xl3">
-            <div class="card medium">
-                <div class="card-image">
-                    <img src="<?= $this->RCMS->getTemplateFolder() ?>/images/testtool.png" alt="">
-                </div>
-                <div class="card-content">
-                    <span class="card-title black-text">Vinkelsliber</span>
-                    <p>CRAFTMAN</p>
-                    <br>
-                    <p>På lager</p>
-
-                    <br>
-                </div>
-                <div class="card-action">
-                    <a href="">Tjek ud</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col s12 m6 l3 xl3">
-            <div class="card medium">
-                <div class="card-image">
-                    <img src="<?= $this->RCMS->getTemplateFolder() ?>/images/testtool.png" alt="">
-                </div>
-                <div class="card-content">
-                    <span class="card-title black-text">Vinkelsliber</span>
-                    <p>CRAFTMAN</p>
-                    <br>
-                    <p>På lager</p>
-
-                    <br>
-                </div>
-                <div class="card-action">
-                    <a href="">Tjek ud</a>
-                </div>
-            </div>
-        </div>
+        <?php endforeach; ?>
 
     </div>
 </div>
+
 
 <style>
     #tools-row {
@@ -96,10 +65,6 @@
         display: inline-block;
         vertical-align: sub;
     }
-
-    /*#tools-row .card.large {*/
-    /*    height: 510px;*/
-    /*}*/
 </style>
 
 

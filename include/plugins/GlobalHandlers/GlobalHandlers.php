@@ -63,4 +63,17 @@ class GlobalHandlers {
             <img style="max-height: 53.75px;" src="$imgSrc" alt="">
 HTML;
     }
+
+    function showToolBarcode($barcode){
+        $barcode = $barcode[0];
+
+
+        return <<<HTML
+            <svg class="barcode" style=" width: 48mm; height: 10mm; background-color: white;margin: 0; padding: 0; " 
+            jsbarcode-format="ean13"
+            jsbarcode-value="$barcode" jsbarcode-textmargin="0"
+            jsbarcode-marginleft="0" jsbarcode-marginright="0" jsbarcode-margintop="0"
+            jsbarcode-marginbottom="0" jsbarcode-height="20"></svg>
+HTML;
+    }
 }

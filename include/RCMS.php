@@ -22,10 +22,25 @@ class RCMS {
     private $user;
     private $pass;
     private $database;
+
+    /**
+     * @var $mysqli mysqli
+     */
     private $mysqli;
 
+    /**
+     * @var $Functions Functions
+     */
     public $Functions;
+
+    /**
+     * @var $Template Template
+     */
     public $Template;
+
+    /**
+     * @var $Login Login
+     */
     public $Login;
 
     private $homefolder;
@@ -55,8 +70,6 @@ class RCMS {
 
         $this->Functions = new Functions($this);
         $this->Login = new Login($this);
-        $this->eventhandler();
-
 
         $this->Template = new Template($this);
 
@@ -114,37 +127,23 @@ class RCMS {
     
     //Used for all MySQL executions, for a safer MySQL connection and standard
     public function execute($query, $parameters = NULL) {
+        $stmt = mysqli_prepare($this->mysqli, $query) or die("MySQLi Query Error: " . mysqli_error($this->mysqli));
+
         if ($parameters != NULL && $parameters != "" && !empty($parameters)) {
-            $stmt = mysqli_prepare($this->mysqli, $query) or die("MySQLi Query Error: " . mysqli_error($this->mysqli));
             $rc = call_user_func_array(array($stmt, "bind_param"), $parameters);
             $rc = $stmt->execute();
 
             if (false === $rc) {
                 die('bind_param() failed: ' . htmlspecialchars($stmt->error));
             }
-
-            if (substr($query, 0, 6) === "SELECT" || substr($query, 0, 4) === 'CALL') {
-                return $stmt->get_result();
-            }
         } else {
-            $result = mysqli_query($this->getMySQLI(), $query) or die("MySQLi Query Error: " . mysqli_error($this->getMySQLI()));
-
-            if (substr($query, 0, 6) === "SELECT" || substr($query, 0, 4) === 'CALL') {
-                return $result;
-            }
+            $rc = $stmt->execute();
         }
-    }
 
-    //Use this for catching events via both POST and/or GET
-    private function eventhandler() {
-        if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'GET')) {
-            if (isset($_POST['log_in']) && $_POST['log_in'] == 1) {
-                $this->Login->log_in();
-            }
+        if (substr($query, 0, 6) === "SELECT" || substr($query, 0, 4) === 'CALL') {
+            $result = $stmt->get_result();
 
-            if (isset($_GET['log_out']) && $_GET['log_out'] == 1) {
-                $this->Login->log_out();
-            }
+            return $result;
         }
     }
 

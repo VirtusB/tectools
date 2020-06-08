@@ -8,3 +8,10 @@ Categories p3 ON p3.CategoryID IN (SELECT FK_CategoryID FROM CategoryTools WHERE
 
 Få alle kategorier med deres navne
 SELECT * FROM Categories WHERE CategoryID IN (SELECT FK_CategoryID FROM CategoryTools WHERE FK_ToolID = 2)
+
+Brug IF statements i Stored Procedures når vi skal filtrere på søgeord og kategorier
+Mulighed for at vælge mere end 1 kategori
+Brug LIMIT N, N til pagination
+
+
+Slet gamle billeder efter upload

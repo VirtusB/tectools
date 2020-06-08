@@ -11,6 +11,14 @@ class Login {
 	function __construct($RCMS) {
 		$this->RCMS = $RCMS;
 
+        if (isset($_POST['log_in']) && $_POST['log_in'] == 1) {
+            $this->log_in();
+        }
+
+        if (isset($_GET['log_out']) && $_GET['log_out'] == 1) {
+            $this->log_out();
+        }
+
         if (isset($_POST['create_new_user']) && $_POST['create_new_user'] == "1") {
             $this->createUser();
         }
@@ -79,6 +87,10 @@ class Login {
 
 	public function getEmail() {
 	    return $_SESSION['user']['Email'] ?? false;
+    }
+
+    public function getFirstName() {
+        return $_SESSION['user']['FirstName'];
     }
 
     public function getUserID() {
