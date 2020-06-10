@@ -53,10 +53,10 @@ CREATE TABLE Tools (
 ToolID int NOT NULL AUTO_INCREMENT,
 FK_ManufacturerID int NOT NULL,
 BarCode nvarchar(13),
-ToolName nvarchar(500),
-Description nvarchar(4000),
+ToolName nvarchar(255),
+Description nvarchar(1000),
 Status int,
-Image nvarchar(4000),
+Image nvarchar(1000),
 PRIMARY KEY (ToolID),
 FOREIGN KEY (FK_ManufacturerID) REFERENCES Manufacturers(ManufacturerID)
 );
@@ -79,13 +79,22 @@ CheckedOut bit,
 Comment nvarchar(1000)
 );
 
-CREATE TABLE StripeSubscriptions (
-StripeID PRIMARY KEY NOT NULL,
+CREATE TABLE `Reservations` (
+	`FK_UserID` INT(11) NOT NULL,
+	`FK_ToolID` INT(11) NOT NULL,
+	`StartDate` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+	`EndDate` DATETIME NULL,
+	FOREIGN KEY (FK_UserID) REFERENCES Users(UserID),
+	FOREIGN KEY (FK_ToolID) REFERENCES Tools(ToolID),
+);
+
+
+CREATE TABLE StripePlans (
+StripeID nvarchar(255),
 SubscriptionName NVARCHAR(255),
 MaxCheckouts int NOT NULL DEFAULT 0,
 CheckoutDuration int NOT NULL DEFAULT 0,
-
-
+PRIMARY KEY(StripeID)
 );
 
 /*
