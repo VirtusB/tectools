@@ -79,6 +79,15 @@ CheckedOut bit,
 Comment nvarchar(1000)
 );
 
+CREATE TABLE StripeSubscriptions (
+StripeID PRIMARY KEY NOT NULL,
+SubscriptionName NVARCHAR(255),
+MaxCheckouts int NOT NULL DEFAULT 0,
+CheckoutDuration int NOT NULL DEFAULT 0,
+
+
+);
+
 /*
 CREATE TABLE Comments(
 FK_UserID int NOT NULL,
