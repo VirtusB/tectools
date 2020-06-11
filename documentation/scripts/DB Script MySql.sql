@@ -69,23 +69,27 @@ FOREIGN KEY (FK_ToolID) REFERENCES Tools(ToolID)
 );
 
 CREATE TABLE CheckIns (
+CheckInID int NOT NULL AUTO_INCREMENT,
 FK_UserID int NOT NULL,
 FK_ToolID int NOT NULL,
-FOREIGN KEY (FK_UserID) REFERENCES Users(UserID),
-FOREIGN KEY (FK_ToolID) REFERENCES Tools(ToolID),
 StartDate datetime default NOW(),
 EndDate datetime,
 CheckedOut bit,
-Comment nvarchar(1000)
+Comment nvarchar(1000),
+PRIMARY KEY (CheckInID),
+FOREIGN KEY (FK_UserID) REFERENCES Users(UserID),
+FOREIGN KEY (FK_ToolID) REFERENCES Tools(ToolID)
 );
 
 CREATE TABLE `Reservations` (
+	ReservationID INT NOT NULL AUTO_INCREMENT,
 	`FK_UserID` INT(11) NOT NULL,
 	`FK_ToolID` INT(11) NOT NULL,
 	`StartDate` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
 	`EndDate` DATETIME NULL,
 	FOREIGN KEY (FK_UserID) REFERENCES Users(UserID),
 	FOREIGN KEY (FK_ToolID) REFERENCES Tools(ToolID),
+	PRIMARY KEY (ReservationID)
 );
 
 
