@@ -49,16 +49,23 @@ CategoryName nvarchar(255),
 PRIMARY KEY (CategoryID)
 );
 
+CREATE TABLE Statuses(
+StatusID int NOT NULL AUTO_INCREMENT,
+StatusName nvarchar(255),
+PRIMARY KEY (StatusID)
+);
+
 CREATE TABLE Tools (
 ToolID int NOT NULL AUTO_INCREMENT,
 FK_ManufacturerID int NOT NULL,
 BarCode nvarchar(13),
 ToolName nvarchar(255),
 Description nvarchar(1000),
-Status int,
+FK_StatusID int,
 Image nvarchar(1000),
 PRIMARY KEY (ToolID),
-FOREIGN KEY (FK_ManufacturerID) REFERENCES Manufacturers(ManufacturerID)
+FOREIGN KEY (FK_ManufacturerID) REFERENCES Manufacturers(ManufacturerID),
+FOREIGN KEY (FK_StatusID) REFERENCES Statuses(StatusID)
 );
 
 CREATE TABLE CategoryTools (
@@ -91,6 +98,8 @@ CREATE TABLE `Reservations` (
 	FOREIGN KEY (FK_ToolID) REFERENCES Tools(ToolID),
 	PRIMARY KEY (ReservationID)
 );
+
+
 
 
 CREATE TABLE StripePlans (
