@@ -49,16 +49,23 @@ CategoryName nvarchar(255),
 PRIMARY KEY (CategoryID)
 );
 
+CREATE TABLE Statuses(
+StatusID int NOT NULL AUTO_INCREMENT,
+StatusName nvarchar(255),
+PRIMARY KEY (StatusID)
+);
+
 CREATE TABLE Tools (
 ToolID int NOT NULL AUTO_INCREMENT,
 FK_ManufacturerID int NOT NULL,
 BarCode nvarchar(13),
-ToolName nvarchar(500),
-Description nvarchar(4000),
-Status int,
-Image nvarchar(4000),
+ToolName nvarchar(255),
+Description nvarchar(1000),
+FK_StatusID int,
+Image nvarchar(1000),
 PRIMARY KEY (ToolID),
-FOREIGN KEY (FK_ManufacturerID) REFERENCES Manufacturers(ManufacturerID)
+FOREIGN KEY (FK_ManufacturerID) REFERENCES Manufacturers(ManufacturerID),
+FOREIGN KEY (FK_StatusID) REFERENCES Statuses(StatusID)
 );
 
 CREATE TABLE CategoryTools (
@@ -69,14 +76,38 @@ FOREIGN KEY (FK_ToolID) REFERENCES Tools(ToolID)
 );
 
 CREATE TABLE CheckIns (
+CheckInID int NOT NULL AUTO_INCREMENT,
 FK_UserID int NOT NULL,
 FK_ToolID int NOT NULL,
-FOREIGN KEY (FK_UserID) REFERENCES Users(UserID),
-FOREIGN KEY (FK_ToolID) REFERENCES Tools(ToolID),
 StartDate datetime default NOW(),
 EndDate datetime,
 CheckedOut bit,
-Comment nvarchar(1000)
+Comment nvarchar(1000),
+PRIMARY KEY (CheckInID),
+FOREIGN KEY (FK_UserID) REFERENCES Users(UserID),
+FOREIGN KEY (FK_ToolID) REFERENCES Tools(ToolID)
+);
+
+CREATE TABLE `Reservations` (
+	ReservationID INT NOT NULL AUTO_INCREMENT,
+	`FK_UserID` INT(11) NOT NULL,
+	`FK_ToolID` INT(11) NOT NULL,
+	`StartDate` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+	`EndDate` DATETIME NULL,
+	FOREIGN KEY (FK_UserID) REFERENCES Users(UserID),
+	FOREIGN KEY (FK_ToolID) REFERENCES Tools(ToolID),
+	PRIMARY KEY (ReservationID)
+);
+
+
+
+
+CREATE TABLE StripePlans (
+StripeID nvarchar(255),
+SubscriptionName NVARCHAR(255),
+MaxCheckouts int NOT NULL DEFAULT 0,
+CheckoutDuration int NOT NULL DEFAULT 0,
+PRIMARY KEY(StripeID)
 );
 
 /*
