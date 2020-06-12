@@ -5,7 +5,7 @@ if (!isset($_GET['manufacturerid'])) {
 }
 
 /**
- * @var $TecTools TecTools
+ * @var TecTools $TecTools
  */
 $TecTools = $GLOBALS['TecTools'];
 

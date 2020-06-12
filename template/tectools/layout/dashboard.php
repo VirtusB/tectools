@@ -4,6 +4,7 @@
     }
 </style>
 
+
 <div class="section no-pad-bot">
     <div class="container">
         <br><br>
@@ -17,7 +18,7 @@
                     <a class="btn" href="/createcategory">Opret kategori</a>
                     <a class="btn" href="/createmanufacturer">Opret producent</a>
 
-                    <p style="margin: 0" class="right">Velkommen, <?= $this->RCMS->Login->getFirstName() ?><br>Du er administrator</p>
+                    <p style="margin: 0" class="right">Velkommen, <?= $this->RCMS->Login->getFirstName() ?><br>Du er personale</p>
                 </div>
             </div>
 
@@ -44,9 +45,8 @@
                         'label' => "Producent"
                     ),
                     array(
-                        'column' => "Status",
-                        'label' => "Status",
-                        'function' => 'formatStatus'
+                        'column' => "StatusName",
+                        'label' => "Status"
                     ),
                     array(
                         'column' => "Description",
@@ -69,7 +69,7 @@
                     )
                 );
 
-                $GLOBALS['RCMSTables']->createRCMSTable("tools_table", "Tools p1 LEFT JOIN Manufacturers p2 ON p1.FK_ManufacturerID = p2.ManufacturerID", $columns, $settings, null, $order, $buttons, null);
+                $GLOBALS['RCMSTables']->createRCMSTable("tools_table", "Tools p1 LEFT JOIN Manufacturers p2 ON p1.FK_ManufacturerID = p2.ManufacturerID LEFT JOIN Statuses p3 ON p3.StatusID = p1.FK_StatusID", $columns, $settings, null, $order, $buttons, null);
                 ?>
             </div>
 
@@ -122,7 +122,6 @@
                 $GLOBALS['RCMSTables']->createRCMSTable("users_table", "Users", $columns, $settings, null, $order, $buttons, null);
                 ?>
 
-                <script src="<?= $this->RCMS->getTemplateFolder() ?>/js/dashboard/dashboard.js"></script>
             </div>
 
             <div class="row dashboard-row">
@@ -184,7 +183,7 @@
                 );
 
                 $order = "ORDER BY p1.ManufacturerID DESC";
-                $settings = array('searchbar' => true, 'querylogger' => true, 'queryloggerpath' => '/home/virtusbc/tectools.virtusb.com/querylogger.txt');
+                $settings = array('searchbar' => true);
 
                 $buttons = array(
                     array(
@@ -198,11 +197,147 @@
             </div>
         <?php elseif ($this->RCMS->Login->isAdmin() === false && $this->RCMS->Login->isLoggedIn() === true): ?>
             <div class="row">
-                <p>Du er standard bruger</p>
+                <div class="col s12">
+                    <a class="btn" href="/my-subscription">Mit abonnement</a>
+                    <!-- TODO: skriv hvilket abonnement brugeren har -->
+                    <p style="margin: 0" class="right">Velkommen, <?= $this->RCMS->Login->getFirstName() ?><br>Du er standard bruger</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <h3>Aktive udlejninger</h3>
+
+                <?php
+                $columns = array(
+                    array(
+                        'column' => 'Image',
+                        'label' => 'Billede',
+                        'function' => 'showToolImage'
+                    ),
+                    array(
+                        'column' => 'ToolName',
+                        'label' => 'Navn'
+                    ),
+                    array(
+                        'column' => "ManufacturerName",
+                        'label' => "Producent"
+                    ),
+                    array(
+                        'column' => "StartDate",
+                        'label' => "Udlejning start",
+                        'tdclass' => 'check-in-out-date',
+                        'tdattributes' => [
+                            [
+                                'name' => 'datetime',
+                                'valuefromcolumn' => 'StartDate'
+                            ]
+                        ]
+                    ),
+                    array(
+                        'column' => "EndDate",
+                        'label' => "Udlejning slut",
+                        'tdclass' => 'check-in-out-date',
+                        'tdattributes' => [
+                            [
+                                'name' => 'datetime',
+                                'valuefromcolumn' => 'EndDate'
+                            ]
+                        ]
+                    )
+                );
+
+                $order = "ORDER BY EndDate DESC, CheckedOut DESC";
+                $settings = array('searchbar' => true);
+
+                $where = [
+                    [
+                        'column' => 'FK_UserID',
+                        'eq' => $userID = $this->RCMS->Login->getUserID(),
+                        'type' => 'i'
+                    ],
+                    [
+                        'column' => 'CheckedOut',
+                        'eq' => 0,
+                        'type' => 'i'
+                    ]
+                ];
+
+                $GLOBALS['RCMSTables']->createRCMSTable("manufacturers_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, [], null);
+                ?>
+            </div>
+
+            <div class="row">
+                <h3>Dine reservationer</h3>
+            </div>
+
+            <div class="row">
+                <h3>Afsluttede udlejninger</h3>
+
+                <?php
+                $columns = array(
+                    array(
+                        'column' => 'Image',
+                        'label' => 'Billede',
+                        'function' => 'showToolImage'
+                    ),
+                    array(
+                        'column' => 'ToolName',
+                        'label' => 'Navn'
+                    ),
+                    array(
+                        'column' => "ManufacturerName",
+                        'label' => "Producent"
+                    ),
+                    array(
+                        'column' => "StartDate",
+                        'label' => "Udlejning start",
+                        'tdclass' => 'check-in-out-date',
+                        'tdattributes' => [
+                            [
+                                'name' => 'datetime',
+                                'valuefromcolumn' => 'StartDate'
+                            ]
+                        ]
+                    ),
+                    array(
+                        'column' => "EndDate",
+                        'label' => "Udlejning slut",
+                        'tdclass' => 'check-in-out-date',
+                        'tdattributes' => [
+                            [
+                                'name' => 'datetime',
+                                'valuefromcolumn' => 'EndDate'
+                            ]
+                        ]
+                    )
+                );
+
+                $order = "ORDER BY EndDate DESC, CheckedOut DESC";
+                $settings = array('searchbar' => true);
+
+                $where = [
+                    [
+                        'column' => 'FK_UserID',
+                        'eq' => $userID = $this->RCMS->Login->getUserID(),
+                        'type' => 'i'
+                    ],
+                    [
+                        'column' => 'CheckedOut',
+                        'eq' => 1,
+                        'type' => 'i'
+                    ]
+                ];
+
+                $GLOBALS['RCMSTables']->createRCMSTable("manufacturers_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, [], null);
+                ?>
             </div>
         <?php endif; ?>
     </div>
 </div>
 
+<script src="<?= $this->RCMS->getTemplateFolder() ?>/js/libs/timeago/timeago.min.js"></script>
 
+
+
+<script src="<?= $this->RCMS->getTemplateFolder() ?>/js/dashboard/dashboard.js"></script>
 

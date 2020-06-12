@@ -1,8 +1,11 @@
 <?PHP
 class Template {
+    /**
+     * @var RCMS $RCMS
+     */
 	var $RCMS;
 	
-	function __construct($RCMS) {
+	function __construct(RCMS $RCMS) {
 		$this->RCMS = $RCMS;
 	}
 

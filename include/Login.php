@@ -1,7 +1,7 @@
 <?PHP
 class Login {
     /**
-     * @var $RCMS RCMS
+     * @var RCMS $RCMS
      */
 	public $RCMS;
 
@@ -11,38 +11,39 @@ class Login {
 	function __construct($RCMS) {
 		$this->RCMS = $RCMS;
 
-        if (isset($_POST['log_in']) && $_POST['log_in'] == 1) {
+        if (isset($_POST['log_in']) && $_POST['log_in'] === '1') {
             $this->log_in();
         }
 
-        if (isset($_GET['log_out']) && $_GET['log_out'] == 1) {
+        if (isset($_GET['log_out']) && $_GET['log_out'] === '1') {
             $this->log_out();
         }
 
-        if (isset($_POST['create_new_user']) && $_POST['create_new_user'] == "1") {
+        if (isset($_POST['create_new_user']) && $_POST['create_new_user'] === '1') {
             $this->createUser();
         }
 	}
 	
 	public function isLoggedIn() {
-		return (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == 1) ? true : false;
+		return isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === 1;
 	}
 	
 	public function log_in() {
 		$email = $_POST['email'];
 		$password = $this->saltPass($_POST['password']);
 		
-		if ($password == "")
-			return;
+		if ($password === "") {
+            return;
+        }
 		
 		$result = $this->RCMS->execute("CALL getUserByEmailAndPassword(?, ?)", array('ss', &$email, &$password));
-		if ($result->num_rows == 1){
+		if ($result->num_rows === 1){
 			$_SESSION['logged_in'] = 1;
 			$_SESSION['user'] = $result->fetch_assoc();
-            unset($_SESSION['createUserPOST']);
+            unset($_SESSION['createUserPOST'], $_SESSION['user']['password']);
 
             header('Location: /dashboard');
-		}else{
+		} else {
 			header("Location: ?error=1");
 		}
 	}
@@ -60,6 +61,7 @@ class Login {
         $exists = $this->RCMS->execute('CALL getUserByEmail(?)', array('s', &$email));
 
         if ($exists->num_rows !== 0) {
+            unset($_POST['password']);
             $_SESSION['createUserPOST'] = $_POST;
             header('Location: /register/?emailtaken');
             return false;
@@ -68,9 +70,32 @@ class Login {
 
         $hashedPass = $this->saltPass($password);
 
-        $this->RCMS->execute('CALL addUser(?, ?, ?, ?, ?, ?, ?, ?)', array('ssssssss', &$firstname, &$lastname, &$email, &$hashedPass, &$phone, &$address, &$zipcode, &$city));
-        header('Location: /login');
+        $stripeID = $this->addUserToStripe($firstname, $lastname, $email, $phone, $address, $zipcode, $city);
+
+        $this->RCMS->execute('CALL addUser(?, ?, ?, ?, ?, ?, ?, ?, ?)', array('sssssssss', &$firstname, &$lastname, &$email, &$hashedPass, &$phone, &$address, &$zipcode, &$city, &$stripeID));
+
+        $this->log_in();
 	}
+
+    private function addUserToStripe($firstname, $lastname, $email, $phone, $address, $zipcode, $city) {
+        $params = [
+            'name' => $firstname . ' ' . $lastname,
+            'email' => $email,
+            'phone' => $phone,
+            'address' => [
+                'line1' => $address,
+                'city' => $city,
+                'postal_code' => $zipcode
+            ]
+        ];
+
+        /**
+         * @var \Stripe\Customer $customer
+         */
+        $customer = $this->RCMS->StripeWrapper->createCustomer($params);
+
+        return $customer->id;
+    }
 
     public function userExists($userID) {
         $result = $this->RCMS->execute("CALL getUserByID(?)", array('i', &$userID));
@@ -87,6 +112,10 @@ class Login {
 
 	public function getEmail() {
 	    return $_SESSION['user']['Email'] ?? false;
+    }
+
+    public function getStripeID() {
+	    return $_SESSION['user']['StripeID'] ?? false;
     }
 
     public function getFirstName() {
@@ -114,7 +143,7 @@ class Login {
 		return md5($this->RCMS->getSalt() . $pass . $this->RCMS->getSalt());
 	}
 
-	public function getUsers(){
+	public function getUsers() {
 		if ($result = $this->RCMS->execute('CALL getAllUsers()')){
 			$rows = array(); 
 			while ($row = $result->fetch_assoc()) {

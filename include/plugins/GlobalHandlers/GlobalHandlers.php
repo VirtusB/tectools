@@ -5,7 +5,14 @@ class GlobalHandlers {
 	function __construct($RCMS) {
 		$this->RCMS = $RCMS;
 	}
-	
+
+    /**
+     * Tjekker om $function eksisterer i denne klasse, kalder funktionen hvis den gør og returnerer værdien fra det kald
+     * Hvis funktionen ikke eksisterer bliver false returneret
+     * @param string $function
+     * @param array $args
+     * @return mixed|bool
+     */
 	function callFunction($function, $args = array()){
 		if (method_exists($this, $function)){
 		 return $this->$function($args);
@@ -22,39 +29,18 @@ class GlobalHandlers {
                 return 'Standard';
                 break;
             case 9:
-                return 'Administrator';
+                return 'Personale';
                 break;
         }
 
         return 'N/A';
     }
 
-    function formatStatus($status){
-        $status = $status[0];
-
-        /**
-         * @var $TecTools TecTools
-         */
-        $TecTools = $GLOBALS['TecTools'];
-
-        $statusList = $TecTools->getStatusList();
-        $status = array_filter($statusList, function ($s) use($status) {
-            if (is_numeric($status)) {
-                return $s['id'] === intval($status);
-            }
-            return false;
-        });
-
-        $status = reset($status);
-
-        return $status['name'];
-    }
-
     function showToolImage($image){
         $image = $image[0];
 
         /**
-         * @var $TecTools TecTools
+         * @var TecTools $TecTools
          */
         $TecTools = $GLOBALS['TecTools'];
         $imgSrc = $TecTools->RELATIVE_TOOL_IMAGE_FOLDER . '/' . $image;

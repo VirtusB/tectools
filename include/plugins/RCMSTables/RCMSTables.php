@@ -1,6 +1,4 @@
 <?PHP
-/* RCMSTables.php */
-/* Plugin med funktioner til nem oprettelse af RCMSTables */
 
 class RCMSTables {
     var $RCMS;
@@ -128,11 +126,26 @@ class RCMSTables {
             echo '<tr class="dataRow ' . $addClass . '">';
             foreach ($columns as $column){
                 $tdClass = $column['tdclass'] ?? '';
-                if (!empty($column['function'])){
-                    echo "<td class='$tdClass'>" . $GLOBALS['GlobalHandlers']->callFunction($column['function'], array($row[$column['column']], $row)) . '</td>';
-                }else{
-                    echo "<td class='$tdClass'>" . $row[$column['column']] . '</td>';
+                $tdAttributes = $column['tdattributes'] ?? [];
+                $attributesString = '';
+
+                foreach ($tdAttributes as $tdAttribute) {
+                    if (isset($tdAttribute['value'])) {
+                        $attributesString .= $tdAttribute['name'] . '="' . $tdAttribute['value'] . '" ';
+                    } else if (isset($tdAttribute['valuefromcolumn'])) {
+                        $columnName = $tdAttribute['valuefromcolumn'];
+
+                        $attributesString .= $tdAttribute['name'] . '="' . $row[$columnName] . '" ';
+                    }
                 }
+
+                if (!empty($column['function'])){
+                    echo "<td $attributesString class='$tdClass'>" . $GLOBALS['GlobalHandlers']->callFunction($column['function'], array($row[$column['column']], $row)) . '</td>';
+                }else{
+                    echo "<td $attributesString class='$tdClass'>" . $row[$column['column']] . '</td>';
+                }
+
+
             }
             if (!empty($buttons)){
                 foreach ($buttons as $button){

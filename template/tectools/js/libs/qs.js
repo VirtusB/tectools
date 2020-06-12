@@ -50,4 +50,12 @@ QS.prototype.getQueryString = function() {
     return q.join( '&' );
 }
 
+QS.prototype.getValue = function(name) {
+    return this.qs[name];
+}
+
 QS.prototype.toString = QS.prototype.getQueryString;
+
+QS.prototype.reloadWithQS = function () {
+    document.location.search = this.toString()
+}

@@ -7,12 +7,12 @@
 
         <?php
         /**
-         * @var $TecTools TecTools
+         * @var TecTools $TecTools
          */
         $TecTools = $GLOBALS['TecTools'];
 
         /**
-         * @var $GlobalHandlers GlobalHandlers
+         * @var GlobalHandlers $GlobalHandlers
          */
         $GlobalHandlers = $GLOBALS['GlobalHandlers'];
 
@@ -29,7 +29,7 @@
                     <span class="card-title black-text"><?= $tool['ToolName'] ?></span>
                     <p><?= $tool['ManufacturerName'] ?></p>
                     <br>
-                    <p><i class="fas fa-cubes cubes-icon <?= $tool['Status'] !== 1 ? 'not-available' : '' ?>"></i> <?= $GlobalHandlers->formatStatus([$tool['Status']]) ?></p>
+                    <p><i class="fas fa-cubes cubes-icon <?= $tool['StatusID'] !== 1 ? 'not-available' : '' ?>"></i> <?= $tool['StatusName'] ?></p>
 
                     <br>
                 </div>

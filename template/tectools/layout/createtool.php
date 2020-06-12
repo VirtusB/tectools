@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var $TecTools TecTools
+ * @var TecTools $TecTools
  */
 $TecTools = $GLOBALS['TecTools'];
 
@@ -23,7 +23,7 @@ $categories = $TecTools->getAllCategories();
         <div class="row center">
             <div class="col s12 m6 l6 xl6 offset-m3 offset-l3 offset-xl3">
                 <?php
-                if (isset($_SESSION['create_tool_image_error'])) {
+                if (isset($_SESSION['tool_image_upload_error'])) {
                     $this->RCMS->Functions->outputError($_SESSION['tool_image_upload_error'], 'h5', true);
                     unset($_SESSION['tool_image_upload_error']);
                 }
@@ -39,8 +39,8 @@ $categories = $TecTools->getAllCategories();
                     <label>Status</label>
                     <select required class="browser-default" name="status">
                         <option value="" disabled selected>Vælg status</option>
-                        <?php foreach ($TecTools->getStatusList() as $status): ?>
-                            <option value="<?= $status['id'] ?>"><?= $status['name'] ?></option>
+                        <?php foreach ($TecTools->getAllStatuses() as $status): ?>
+                            <option value="<?= $status['StatusID'] ?>"><?= $status['StatusName'] ?></option>
                         <?php endforeach; ?>
                     </select>
 

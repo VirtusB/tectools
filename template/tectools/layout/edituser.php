@@ -5,7 +5,7 @@ if (!isset($_GET['userid'])) {
 }
 
 /**
- * @var $TecTools TecTools
+ * @var TecTools $TecTools
  */
 $TecTools = $GLOBALS['TecTools'];
 
@@ -57,7 +57,7 @@ $user = $TecTools->getUserByID($_GET['userid']);
                     <select required class="browser-default" name="level">
                         <option value="" disabled selected>Vælg brugertype</option>
                         <option <?= $user['Level'] === 1 ? 'selected' : '' ?> value="1">Standard</option>
-                        <option <?= $user['Level'] === 9 ? 'selected' : '' ?> value="9">Administrator</option>
+                        <option <?= $user['Level'] === 9 ? 'selected' : '' ?> value="9">Personale</option>
                     </select>
 
                     <input type="hidden" name="edit_user" value="1" />

@@ -5,7 +5,7 @@ if (!isset($_GET['categoryid'])) {
 }
 
 /**
- * @var $TecTools TecTools
+ * @var TecTools $TecTools
  */
 $TecTools = $GLOBALS['TecTools'];
 

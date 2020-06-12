@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var $TecTools TecTools
+ * @var TecTools $TecTools
  */
 $TecTools = $GLOBALS['TecTools'];
 

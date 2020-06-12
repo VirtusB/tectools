@@ -1,5 +1,9 @@
 <?PHP
 
+/**
+ * Instantiere alle de klasser som ligger i plugins mappen, så loadPlugins() funktionen kan tilføje dem til $GLOBALS
+ * @param string $path Stien til plugins mappen
+ */
 function recursive_require_plugins($path) {
     $dir = new DirectoryIterator($path);
     foreach ($dir as $fileinfo) {
@@ -15,6 +19,7 @@ recursive_require_plugins(__DIR__ . '/plugins/');
 
 require_once(__DIR__ . "/Template.php");
 require_once(__DIR__ . "/Functions.php");
+require_once(__DIR__ . "/StripeWrapper.php");
 require_once(__DIR__ . "/Login.php");
 
 class RCMS {
@@ -24,30 +29,34 @@ class RCMS {
     private $database;
 
     /**
-     * @var $mysqli mysqli
+     * @var mysqli $mysqli
      */
     private $mysqli;
 
     /**
-     * @var $Functions Functions
+     * @var Functions $Functions
      */
     public $Functions;
 
     /**
-     * @var $Template Template
+     * @var Template $Template
      */
     public $Template;
 
     /**
-     * @var $Login Login
+     * @var Login $Login
      */
     public $Login;
 
+    /**
+     * @var StripeWrapper $StripeWrapper
+     */
+    public $StripeWrapper;
+
     private $homefolder;
     private $templatefolder;
-    public $uploadsfolder;
-    public $relativeUploadsFolder;
-
+    private $uploadsfolder;
+    private $relativeUploadsFolder;
     private $salt;
 
     function __construct($host, $user, $pass, $database, $homefolder, $templatefolder, $uploadsfolder, $salt) {
@@ -69,8 +78,8 @@ class RCMS {
         $this->connect();
 
         $this->Functions = new Functions($this);
+        $this->StripeWrapper = new StripeWrapper($this);
         $this->Login = new Login($this);
-
         $this->Template = new Template($this);
 
         $this->loadPlugins(__DIR__ . '/plugins/');
@@ -80,6 +89,10 @@ class RCMS {
         require_once 'template/' . $templatefolder . '/index.php';
     }
 
+    /**
+     * Tilføjer alle klasser der ligger i plugins mappen til $GLOBALS, så de kan bruges alle steder i koden
+     * @param string $path Stien til plugins mappen
+     */
     function loadPlugins($path) {
         $dir = new DirectoryIterator($path);
         foreach ($dir as $fileinfo) {
@@ -94,38 +107,73 @@ class RCMS {
         }
     }
 
+    /**
+     * Opretter en variabel i $GLOBALS arrayet, $GLOBALS er et indbygget array i PHP som er tilgængeligt alle steder i koden
+     * @param string $newGlobal Navnet/key på det nye element
+     * @param object $value Et objekt/klasse
+     */
     function newGlobal($newGlobal, $value) {
         $GLOBALS[$newGlobal] = $value;
     }
 
+    public function getUploadsFolder() {
+        return $this->uploadsfolder;
+    }
+
+    public function getRelativeUploadsFolder() {
+        return $this->relativeUploadsFolder;
+    }
+
+    /**
+     * Returnere stien til hjemme/root mappen
+     * F.eks. "/"
+     * @return string
+     */
     function getHomefolder() {
         return $this->homefolder;
     }
 
-    function getTemplateFolder() {
+    /**
+     * Returnere stien til template mappen
+     * F.eks. "/template/tectools"
+     * @return string
+     */
+    public function getTemplateFolder() {
         return $this->templatefolder;
     }
 
+    /**
+     * Returnere det salt som bruges til adgangskoder for at øge sikkerheden
+     * F.eks. hvis salt er "secretsalt" og brugeren ved oprettelse skriver "12356" som adgangskode, bliver deres adgangskode gemt som "secretsalt123456" i databasen
+     * @return string
+     */
     function getSalt() {
         return $this->salt;
     }
 
+    /**
+     * Returnere den oprettede MySQL forbindelse
+     * @return mysqli
+     */
     function getMySQLI() {
         return $this->mysqli;
     }
 
-    function getInsertedId() {
-        return $this->getMySQLI()->insert_id;
-    }
-
-    //Used at build to connect to MySQL
+    /**
+     * Opretter forbindelse til MySQL databasen
+     */
     public function connect() {
         $conn = mysqli_connect($this->host, $this->user, $this->pass, $this->database) or die("MySQLi Error!");
         mysqli_set_charset($conn, "utf8");
-        $this->mysqli = $conn;
+        $this->mysqli = $conn; 
     }
-    
-    //Used for all MySQL executions, for a safer MySQL connection and standard
+
+    /**
+     * Eksekvere en MySQL query og bruger prepared statements for at undgå SQL injection
+     * @param string $query En MySQL query, f.eks. "SELECT * FROM Users"
+     * @param null|array $parameters Et array af typer og parametre, f.eks. ['ssi', &$username, &$firstname, &$userID] - første element er en string over typer (s for string, i for int), efterfølgende elementer er variabler givet med reference (& symbolet betyder reference pass-by-reference)
+     * @return false|mysqli_result
+     */
     public function execute($query, $parameters = NULL) {
         $stmt = mysqli_prepare($this->mysqli, $query) or die("MySQLi Query Error: " . mysqli_error($this->mysqli));
 
@@ -145,9 +193,13 @@ class RCMS {
 
             return $result;
         }
+        return false;
     }
 
-    //Use this for matching requested page with saved pages in database
+    /**
+     * Henter den side som brugeren gerne vil se fra 'pages' tabellen i databasen
+     * @return array|null
+     */
     public function getRequestedPage() {
         $request_url = explode('?', $_SERVER['REQUEST_URI'], 2)[0];
         $request_url2 = $request_url . "/";
@@ -163,16 +215,6 @@ class RCMS {
         return $row;
     }
 
-    //Use this for test, and general error messages, for troubleshooting later
-    function logToFile($file, $text) {
-        $target_dir = "logs/";
-        $target_file = $target_dir . basename($file);
-
-        $text = "-----\r\n" . date("j-n-Y H:i:s", time()) . " - " . $text . "\r\n";
-
-        file_put_contents($target_file, $text, FILE_APPEND);
-    }
-
     /**
      * Gør så man kan skrive QMARK i en URL i stedet for et spørgsmålstegn
      *
@@ -180,12 +222,12 @@ class RCMS {
      *
      * $buttons = array(
      *      array(
-     *          "button" => '<input type="button" class="btn rbooking-btn" onclick="location.pathname = \'/admin/editticketQMARKticket_id=?\'" value="Rediger" />',
+     *          "button" => '<input type="button" class="btn rbooking-btn" onclick="location.pathname = \'/admin/edituserQMARKuser_id=?\'" value="Rediger bruger" />',
      *          "value" => "id"
      *      )
      * );
      */
-    static function fixURLQueryQuestionMarks() {
+    public static function fixURLQueryQuestionMarks() {
         $uri = $_SERVER['REQUEST_URI'];
         $questionMarksReplaced = str_replace('QMARK', '?', $uri);
 

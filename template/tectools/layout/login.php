@@ -7,7 +7,7 @@ if ($this->RCMS->Login->isLoggedIn()) {
 <div class="row">
     <div class="col s12 m8 l4 xl2 offset-m2 offset-l4 offset-xl5">
         <div id="">
-            <h1>Login</h1>
+            <h1>Log ind</h1>
 
             <?php
 
@@ -21,7 +21,7 @@ if ($this->RCMS->Login->isLoggedIn()) {
                 <input autocomplete="off" name="email" type="email" required placeholder="E-mail"><br>
                 <input autocomplete="off" name="password" type="password" required placeholder="Password"><br>
                 <input name="log_in" type="hidden" value="1"><br>
-                <input class="btn" type="submit" value="Login">
+                <input class="btn" type="submit" value="Log ind">
             </form>
             <br><br><br>
         </div>

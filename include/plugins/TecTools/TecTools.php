@@ -2,24 +2,17 @@
 
 class TecTools {
     /**
-     * @var $RCMS RCMS
+     * @var RCMS $RCMS
      */
     var $RCMS;
-
-    private $statusList = [
-      'STATUS_SOLD_OUT' => ['id' => 0, 'name' => 'Ikke på lager'],
-      'STATUS_AVAILABLE' => ['id' => 1, 'name' => 'På lager'],
-      'STATUS_RESERVED' => ['id' => 2, 'name' => 'Reserveret'],
-      'STATUS_LOANED_OUT' => ['id' => 3, 'name' => 'Udlånt'],
-    ];
 
     public $TOOL_IMAGE_FOLDER;
     public $RELATIVE_TOOL_IMAGE_FOLDER;
 
     public function __construct($RCMS) {
         $this->RCMS = $RCMS;
-        $this->TOOL_IMAGE_FOLDER = $this->RCMS->uploadsfolder . '/tools/images';
-        $this->RELATIVE_TOOL_IMAGE_FOLDER = $this->RCMS->relativeUploadsFolder . '/tools/images';
+        $this->TOOL_IMAGE_FOLDER = $this->RCMS->getUploadsFolder() . '/tools/images';
+        $this->RELATIVE_TOOL_IMAGE_FOLDER = $this->RCMS->getRelativeUploadsFolder() . '/tools/images';
 
         if (isset($_POST['add_tool'])) {
             $this->addTool();
@@ -66,6 +59,11 @@ class TecTools {
 
     private function editUser() {
         $userID = $_POST['user_id'];
+
+        if (!$this->authorizeUser($userID)) {
+            return;
+        }
+
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
         $email = $_POST['email'];
@@ -88,12 +86,34 @@ class TecTools {
     }
 
     public function removeAllCategoriesFromTool($toolID) {
+        if (!$this->RCMS->Login->isAdmin()) {
+            return;
+        }
+
         $toolID = intval($toolID);
 
         $this->RCMS->execute('CALL removeAllCategoriesFromTool(?)', array('i', &$toolID));
     }
 
+    private function authorizeUser($userID) {
+        $userID = intval($userID);
+
+        if (!$this->RCMS->Login->isLoggedIn()) {
+            return false;
+        }
+
+        if ($this->RCMS->Login->isAdmin() === false && intval($userID) !== $this->RCMS->Login->getUserID()) {
+            return false;
+        }
+
+        return true;
+    }
+
     private function addManufacturer() {
+        if (!$this->RCMS->Login->isAdmin()) {
+            return;
+        }
+
         $manufacturerName = $_POST['manufacturer_name'];
 
         $this->RCMS->execute('CALL addManufacturer(?)', array('s', &$manufacturerName));
@@ -108,6 +128,10 @@ class TecTools {
     }
 
     private function editManufacturer() {
+        if (!$this->RCMS->Login->isAdmin()) {
+            return;
+        }
+
         $manufacturerID = intval($_POST['manufacturer_id']);
         $manufacturerName = $_POST['manufacturer_name'];
 
@@ -116,6 +140,10 @@ class TecTools {
     }
 
     private function addCategory() {
+        if (!$this->RCMS->Login->isAdmin()) {
+            return;
+        }
+
         $categoryName = $_POST['category_name'];
 
         $this->RCMS->execute('CALL addCategory(?)', array('s', &$categoryName));
@@ -130,6 +158,10 @@ class TecTools {
     }
 
     private function editCategory() {
+        if (!$this->RCMS->Login->isAdmin()) {
+            return;
+        }
+
         $categoryID = intval($_POST['category_id']);
         $categoryName = $_POST['category_name'];
 
@@ -138,6 +170,10 @@ class TecTools {
     }
 
     private function editTool() {
+        if (!$this->RCMS->Login->isAdmin()) {
+            return;
+        }
+
         $toolID = $_POST['tool_id'];
         $toolName = $_POST['tool_name'];
         $description = $_POST['description'];
@@ -164,7 +200,10 @@ class TecTools {
         $imageName = $_FILES['image']['name'] ?? false;
         if ($imageName) {
             // opdater billede
-            $newImageName = $this->uploadImage($imageName);
+            $newImageName = $this->uploadImage($imageName, $_FILES['image']['tmp_name']);
+            if (!$newImageName) {
+                return;
+            }
         } else {
             // brug gamle billede
             $newImageName = $currentTool['Image'];
@@ -174,9 +213,17 @@ class TecTools {
         header('Location: /dashboard');
     }
 
-    private function uploadImage($imageName) {
+    private function uploadImage($imageName, $tmpName) {
         $ext = pathinfo($imageName, PATHINFO_EXTENSION);
         $newImageName = date('dmYHis') . '_' . bin2hex(random_bytes(2)) . '.' . $ext;
+
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $type = finfo_file($finfo, $tmpName);
+
+        if (!isset($type) || !in_array($type, array("image/png", "image/jpeg", "image/gif"))) {
+            $_SESSION['tool_image_upload_error'] = 'Billedet kunne ikke uploades';
+            return false;
+        }
 
         $finalImagePath = $this->TOOL_IMAGE_FOLDER . '/' . $newImageName;
 
@@ -190,6 +237,10 @@ class TecTools {
     }
 
     private function addTool() {
+        if (!$this->RCMS->Login->isAdmin()) {
+            return;
+        }
+
         $toolName = $_POST['tool_name'];
         $description = $_POST['description'];
         $status = $_POST['status'];
@@ -198,11 +249,14 @@ class TecTools {
 
         $imageName = $_FILES['image']['name'] ?? false;
         if (!$imageName) {
-            $_SESSION['create_tool_image_error'] = 'Billedet kunne ikke uploades';
             return;
         }
 
-        $newImageName = $this->uploadImage($imageName);
+        $newImageName = $this->uploadImage($imageName, $_FILES['image']['tmp_name']);
+
+        if (!$newImageName) {
+            return;
+        }
 
         $res = $this->RCMS->execute('CALL addTool(?, ?, ?, ?, ?)', array('issis', &$manufacturerID, &$toolName, &$description, &$status, &$newImageName));
 
@@ -220,10 +274,6 @@ class TecTools {
         $categoryID = intval($categoryID);
 
         $this->RCMS->execute('CALL addToolToCategory(?, ?)', array('ii', &$toolID, &$categoryID));
-    }
-
-    public function getStatusList() {
-        return $this->statusList;
     }
 
     public function getToolByID($toolID) {
@@ -247,6 +297,12 @@ class TecTools {
         }
 
         return $tools;
+    }
+
+    public function getAllStatuses() {
+        $res = $this->RCMS->execute('CALL getAllStatuses();');
+
+        return $res->fetch_all(MYSQLI_ASSOC);
     }
 
     public function getAllCategories() {

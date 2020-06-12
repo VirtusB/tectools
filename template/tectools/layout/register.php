@@ -7,7 +7,7 @@ if ($this->RCMS->Login->isLoggedIn()) {
 <div class="row">
     <div class="col s12 m8 l4 xl2 offset-m2 offset-l4 offset-xl5">
         <div id="">
-            <h1>Opret</h1>
+            <h1 style="font-size: 3.2rem">Opret Konto</h1>
 
             <?php
             if (isset($_GET['emailtaken'])) {
