@@ -23,9 +23,28 @@ require_once(__DIR__ . "/StripeWrapper.php");
 require_once(__DIR__ . "/Login.php");
 
 class RCMS {
+    /**
+     * domæne eller IP til databasen
+     * @var string $host
+     */
     private $host;
+
+    /**
+     * Brugernavn til databasen
+     * @var string $user
+     */
     private $user;
+
+    /**
+     * Adgangskode til databasen
+     * @var string $pass
+     */
     private $pass;
+
+    /**
+     * Navnet på databasen
+     * @var string $database
+     */
     private $database;
 
     /**
@@ -116,10 +135,18 @@ class RCMS {
         $GLOBALS[$newGlobal] = $value;
     }
 
+    /**
+     * Returnerer den absolutte sti til uploads mappen, ex. /home2/virtusbc/tectool.virtusb.com/public_html/include/../uploads/tools/images
+     * @return string
+     */
     public function getUploadsFolder() {
         return $this->uploadsfolder;
     }
 
+    /**
+     * Returnerer den relative sti til uploads mappen, ex. /uploads/tools/images
+     * @return string
+     */
     public function getRelativeUploadsFolder() {
         return $this->relativeUploadsFolder;
     }

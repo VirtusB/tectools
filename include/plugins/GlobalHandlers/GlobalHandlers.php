@@ -11,17 +11,17 @@ class GlobalHandlers {
      * Hvis funktionen ikke eksisterer bliver false returneret
      * @param string $function
      * @param array $args
-     * @return mixed|bool
+     * @return bool|mixed
      */
-	function callFunction($function, $args = array()){
-		if (method_exists($this, $function)){
+	function callFunction($function, $args = array()) {
+		if (method_exists($this, $function)) {
 		 return $this->$function($args);
 		}else{
 			return false;
 		}
 	}
 
-    function formatUserLevel($level){
+    function formatUserLevel($level) {
         $level = $level[0];
 
         switch ($level) {
@@ -36,7 +36,7 @@ class GlobalHandlers {
         return 'N/A';
     }
 
-    function showToolImage($image){
+    function showToolImage($image) {
         $image = $image[0];
 
         /**
@@ -50,7 +50,7 @@ class GlobalHandlers {
 HTML;
     }
 
-    function showToolBarcode($barcode){
+    function showToolBarcode($barcode) {
         $barcode = $barcode[0];
 
 
