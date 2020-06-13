@@ -1,5 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * @var Template $this
+ */
+
 /**
  * @var TecTools $TecTools
  */
@@ -8,12 +14,6 @@ $TecTools = $GLOBALS['TecTools'];
 $categories = $TecTools->getAllCategories();
 
 ?>
-
-<style>
-    #add_tool_form input, #add_tool_form select {
-        margin-bottom: 2rem;
-    }
-</style>
 
 <div class="section no-pad-bot">
     <div class="container">
@@ -28,7 +28,7 @@ $categories = $TecTools->getAllCategories();
                     unset($_SESSION['tool_image_upload_error']);
                 }
                 ?>
-                <form enctype="multipart/form-data" id="add_tool_form" action="" method="POST">
+                <form class="tectool-form" enctype="multipart/form-data" id="add_tool_form" action="" method="POST">
 
                     <label>Navn</label>
                     <input id="tool_name" required name="tool_name" type="text" placeholder="Navn på værktøj">
@@ -63,7 +63,7 @@ $categories = $TecTools->getAllCategories();
                     <div class="file-field input-field">
                         <div class="btn">
                             <span>Billede</span>
-                            <input onchange="updateImagePreview(this);" required name="image" type="file">
+                            <input onchange="updateImagePreview(this, 'tool-image');" required name="image" type="file">
                         </div>
                         <div class="file-path-wrapper">
                             <input class="file-path validate" type="text">
@@ -85,5 +85,4 @@ $categories = $TecTools->getAllCategories();
     </div>
 </div>
 
-<script src="<?= $this->RCMS->getTemplateFolder() ?>/js/tools/create-tool.js"></script>
 

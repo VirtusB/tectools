@@ -1,17 +1,25 @@
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
+declare(strict_types=1);
+
+use Stripe\Customer;
+use Stripe\Exception\ApiErrorException;
+use Stripe\Plan;
+use Stripe\Product;
+use Stripe\StripeClient;
+use Stripe\Subscription;
+use Stripe\SubscriptionItem;
 
 class StripeWrapper {
     /**
      * @var RCMS $RCMS
      */
-    var $RCMS;
+    public RCMS $RCMS;
 
     /**
-     * @var \Stripe\StripeClient
+     * @var StripeClient
      */
-    private $stripe;
+    private StripeClient $stripe;
 
     /**
      * StripeWrapper constructor.
@@ -19,14 +27,14 @@ class StripeWrapper {
      */
     public function __construct(RCMS $RCMS) {
         $this->RCMS = $RCMS;
-        $this->stripe = new \Stripe\StripeClient(STRIPE_SECRET_KEY);
+        $this->stripe = new StripeClient(STRIPE_SECRET_KEY);
     }
 
     /**
      * Returnerer den instans af StripeClient som er blevet lavet i __construct
-     * @return \Stripe\StripeClient
+     * @return StripeClient
      */
-    public function getStripeClient() {
+    public function getStripeClient(): StripeClient {
         return $this->stripe;
     }
 
@@ -35,29 +43,29 @@ class StripeWrapper {
      *
      * Reference: https://stripe.com/docs/api/customers/create
      * @param array $params
-     * @return \Stripe\Customer
-     * @throws \Stripe\Exception\ApiErrorException
+     * @return Customer
+     * @throws ApiErrorException
      */
-    public function createCustomer($params) {
+    public function createCustomer(array $params): Customer {
         return $this->getStripeClient()->customers->create($params);
     }
 
     /**
      * Henter alle produkter fra Stripe, og returnerer kun det vigtige data som vi er interesseret i
      * @return array[]
-     * @throws \Stripe\Exception\ApiErrorException
+     * @throws ApiErrorException
      */
-    public function getStripeProducts() {
+    public function getStripeProducts(): array {
         $products = $this->getStripeClient()->products->all();
 
         $products = array_map(function ($product) {
             /**
-             * @var \Stripe\Product $product
+             * @var Product $product
              */
 
             $metadata = $product->metadata->toArray();
             foreach ($metadata as $key => $prop) {
-                $metadata[$key] = json_decode($prop, true);
+                $metadata[$key] = json_decode($prop, true, 512, JSON_THROW_ON_ERROR);
             }
 
             return [
@@ -68,9 +76,7 @@ class StripeWrapper {
             ];
         }, $products->data);
 
-        usort($products, function ($product1, $product2) {
-            return $product1['price'] <=> $product2['price'];
-        });
+        usort($products, static fn($product1, $product2) => $product1['price'] <=> $product2['price']);
 
         return $products;
     }
@@ -82,7 +88,7 @@ class StripeWrapper {
      * @param array $product
      * @return bool
      */
-    public function isPremiumPlan($product) {
+    public function isPremiumPlan(array $product): bool {
         return $product['price'] > 50;
     }
 
@@ -94,18 +100,16 @@ class StripeWrapper {
      * Reference for produkt: https://stripe.com/docs/api/products
      * @param string $productID ID på et Stripe produkt, F.eks. prod_HQWzfyxLdAjwWo
      * @return bool|float|int
-     * @throws \Stripe\Exception\ApiErrorException
+     * @throws ApiErrorException
      */
-    public function getPlanPrice($productID) {
+    public function getPlanPrice(string $productID) {
         $plans = $this->getStripeClient()->plans->all()->data;
 
-        $plan = array_filter($plans, function ($plan) use($productID) {
-           return $plan['product'] === $productID;
-        });
+        $plan = array_filter($plans, static fn($plan) => $plan['product'] === $productID);
 
         if ($plan) {
             /**
-             * @var \Stripe\Plan $plan
+             * @var Plan $plan
              */
 
             $plan = reset($plan);
@@ -121,12 +125,10 @@ class StripeWrapper {
      * Reference for produkt: https://stripe.com/docs/api/products
      * @param string $id ID på et Stripe produkt, F.eks. prod_HQWzfyxLdAjwWo
      * @return bool|array
-     * @throws \Stripe\Exception\ApiErrorException
+     * @throws ApiErrorException
      */
-    public function getStripeProduct($id) {
-        $product = array_filter($this->getStripeProducts(), function ($product) use ($id) {
-           return $product['id'] === $id;
-        });
+    public function getStripeProduct(string $id) {
+        $product = array_filter($this->getStripeProducts(), static fn($product) => $product['id'] === $id);
 
         if ($product) {
             $product = reset($product);
@@ -141,14 +143,14 @@ class StripeWrapper {
      *
      * Reference for kunder: https://stripe.com/docs/api/customers
      * @param string $customerStripeID Stripe customer ID som ligger i "StripeID" kolonnen i "Users" tabellen i databasen
-     * @return bool|string|\Stripe\Product|null
-     * @throws \Stripe\Exception\ApiErrorException
+     * @return bool|string|Product|null
+     * @throws ApiErrorException
      */
-    public function getProductIDForCustomer($customerStripeID) {
+    public function getProductIDForCustomer(string $customerStripeID) {
         $customer = $this->getStripeClient()->customers->retrieve($customerStripeID);
 
         /**
-         * @var \Stripe\Subscription $sub
+         * @var Subscription $sub
          */
         $sub = $customer->subscriptions->data[0] ?? null;
 
@@ -157,7 +159,7 @@ class StripeWrapper {
         }
 
         /**
-         * @var \Stripe\SubscriptionItem $subItem
+         * @var SubscriptionItem $subItem
          */
         $subItem = $sub->items->data[0];
 

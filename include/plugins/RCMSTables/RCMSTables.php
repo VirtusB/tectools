@@ -1,10 +1,12 @@
-<?PHP
+<?php
+
+declare(strict_types=1);
 
 class RCMSTables {
     /**
      * @var RCMS $RCMS
      */
-    var $RCMS;
+    public RCMS $RCMS;
 
     /**
      * @var array $table
@@ -15,9 +17,9 @@ class RCMSTables {
      * @var array $dropdown
      * @var array $settings
      */
-    var $table, $columns, $where, $order, $buttons, $dropdown, $settings;
+    private array $table, $columns, $where, $order, $buttons, $dropdown, $settings;
 
-    function __construct(RCMS $RCMS) {
+    public function __construct(RCMS $RCMS) {
         $this->RCMS = $RCMS;
     }
 
@@ -33,8 +35,9 @@ class RCMSTables {
      * @param null|string $order
      * @param array $buttons
      * @param null|array $dropdown
+     * @return void
      */
-    public function createRCMSTable($id, $table, $columns, $settings = array(), $where = array(), $order = null, $buttons = array(), $dropdown = null) {
+    public function createRCMSTable(string $id, string $table, array $columns, ?array $settings = array(), ?array $where = array(), ?string $order = null, ?array $buttons = array(), ?array $dropdown = null): void {
         $this->columns = array();
         $this->table = array();
         $this->where = array();
@@ -74,8 +77,9 @@ class RCMSTables {
     /**
      * Denne funktion udskriver HTML tabellen
      * @param string $id
+     * @return void
      */
-    private function createHTML($id) {
+    private function createHTML(string $id): void {
         $table = $this->table[$id];
         $columns = $this->columns[$id];
         $where = $this->where[$id];
@@ -133,8 +137,9 @@ class RCMSTables {
      * Udskriver HTML tabel rækkerne
      * @param string $id
      * @param array $rows
+     * @return void
      */
-    private function buildRows($id, $rows) {
+    private function buildRows(string $id, array $rows): void {
         $table = $this->table[$id];
         $columns = $this->columns[$id];
         $where = $this->where[$id];
@@ -197,9 +202,9 @@ class RCMSTables {
         echo '<tr class="dataRow">';
         echo '<td class="pagestd" colspan="' . (count($columns) + count($buttons)) . '">Side';
         for ($i = 1; $i <= $pages; $i++) {
-            if ((isset($settings['pageNum']) && $settings['pageNum'] == $i) || (!isset($settings['pageNum']) && $i == 1)) {
+            if ((isset($settings['pageNum']) && (int) $settings['pageNum'] === $i) || (!isset($settings['pageNum']) && $i === 1)) {
                 echo ' <a class="pageSel" href="' . $i . '">' . $i . '</a>';
-            }else{
+            } else {
                 echo ' <a class="pageNorm" href="' . $i . '">' . $i . '</a>';
             }
         }
@@ -211,15 +216,10 @@ class RCMSTables {
      * Loader data og udskriver tabellen som HTML men bruges til AJAX requests
      * @return void
      */
-    private function loadAjax() {
+    private function loadAjax(): void {
         // ID på tabellen skal være sat enten i $_GET eller $_POST
         if (isset($_POST['RCMSTable']) || isset($_GET['RCMSTable'])) {
-            if (isset($_POST['RCMSTable'])) {
-                $id = $_POST['RCMSTable'];
-            }
-            if (isset($_GET['RCMSTable'])) {
-                $id = $_GET['RCMSTable'];
-            }
+            $id = $_POST['RCMSTable'] ?? $_GET['RCMSTable'];
         } else {
             return;
         }
@@ -272,7 +272,7 @@ class RCMSTables {
      * @param array $settings
      * @return int
      */
-    private function countRows($table, $columns, $where, $order, $settings) {
+    private function countRows(string $table, array $columns, array $where, string $order, array $settings): int {
         $settings['noLimit'] = true;
 
         if (isset($_POST['pageNum'])) {
@@ -295,10 +295,10 @@ class RCMSTables {
      * @param array $settings
      * @return array
      */
-    private function retrieveData($table, $columns, $where, $order, $settings) {
+    private function retrieveData(string $table, array $columns, array $where, string $order, array $settings): array {
         $selectColumns = "*";
 
-        if ($order == null) {
+        if ($order === null) {
             $order = "";
         } else {
             if (isset($settings['sortKey'], $settings['sortDir'])) {
@@ -415,7 +415,7 @@ class RCMSTables {
             $columnsCount = count($columns);
             $i = 0;
 
-            if ($whereCount != 0) {
+            if ($whereCount !== 0) {
                 $whereClause .= 'AND ';
             }
 
@@ -426,10 +426,10 @@ class RCMSTables {
             foreach ($columns as $c) {
                 $searchTxt = '%' . $settings['searchTxt'] . '%';
 
-                if ((isset($c['like']) && $c['like'] !== 'ignore') OR !isset($c['like'])) {
+                if ((isset($c['like']) && $c['like'] !== 'ignore') || !isset($c['like'])) {
                     if (isset($c['like']) && $c['like'] !== 'ignore') {
                         $whereClause .= $c['like'] . " LIKE ? ";
-                    }else{
+                    } else {
                         $subQ = '';
                         if (isset($c['order_subq']) && $c['order_subq'] !== '') {
                             $subQ = $c['order_subq'] . '.';
@@ -494,8 +494,9 @@ class RCMSTables {
      * @param array $settings
      * @param string $query
      * @param array $whereArr
+     * @return void
      */
-    private function logQuery($settings, $query, $whereArr) {
+    private function logQuery(array $settings, string $query, array $whereArr): void {
         if (isset($settings['querylogger'])) {
             $dt = new DateTime();
             $dt = $dt->format('d-m-Y H:i:s');
@@ -522,7 +523,7 @@ class RCMSTables {
      * @param string $prop Den property/key/egenskab der skal plukkes
      * @return array Array af egenskabsværdierne
      */
-    private static function pluck ( $a, $prop ) {
+    private static function pluck (array $a, string $prop ): array {
         $out = array();
         $arrayLength = count($a);
 

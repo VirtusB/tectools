@@ -1,3 +1,9 @@
+<?php
+
+declare(strict_types=1);
+
+?>
+
 <form action="" method="post">
     <input type="hidden" name="cancel_subscription" value="1">
 

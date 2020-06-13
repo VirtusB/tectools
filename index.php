@@ -1,11 +1,12 @@
-<?PHP
+<?php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+declare(strict_types=1);
+
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 
-
-ini_set( 'serialize_precision', -1 );
+ini_set( 'serialize_precision', '-1' );
 date_default_timezone_set('Europe/Copenhagen');
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);

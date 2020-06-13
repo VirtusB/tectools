@@ -15,3 +15,10 @@ RewriteRule ^index\.php$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.php [L]
+
+
+<IfModule mime_module>
+  AddHandler application/x-httpd-alt-php74___lsphp .php .php7 .phtml
+</IfModule>
+
+

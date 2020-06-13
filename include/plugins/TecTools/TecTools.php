@@ -1,24 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 class TecTools {
     /**
      * @var RCMS $RCMS
      */
-    var $RCMS;
+    public RCMS $RCMS;
 
     /**
      * Absolut sti til mappen hvor billeder af værktøj ligger
      * @var string $TOOL_IMAGE_FOLDER
      */
-    public $TOOL_IMAGE_FOLDER;
+    public string $TOOL_IMAGE_FOLDER;
 
     /**
      * Relative sti til mappen hvor billeder af værktøj ligger
      * @var string $RELATIVE_TOOL_IMAGE_FOLDER
      */
-    public $RELATIVE_TOOL_IMAGE_FOLDER;
+    public string $RELATIVE_TOOL_IMAGE_FOLDER;
 
-    public function __construct($RCMS) {
+    public const TOOL_AVAILABLE_STATUS = 1;
+    public const TOOL_RESERVED_STATUS = 2;
+    public const TOOL_LOANED_OUT_STATUS = 3;
+    public const TOOL_NOT_IN_STOCK_STATUS = 4;
+
+    public function __construct(RCMS $RCMS) {
         $this->RCMS = $RCMS;
         $this->TOOL_IMAGE_FOLDER = $this->RCMS->getUploadsFolder() . '/tools/images';
         $this->RELATIVE_TOOL_IMAGE_FOLDER = $this->RCMS->getRelativeUploadsFolder() . '/tools/images';
@@ -58,11 +65,11 @@ class TecTools {
      * @param array $b
      * @return bool
      */
-    public function array_equal($a, $b) {
+    public function array_equal(array $a, array $b): bool {
         return (
             is_array($a)
             && is_array($b)
-            && count($a) == count($b)
+            && count($a) === count($b)
             && array_diff($a, $b) === array_diff($b, $a)
         );
     }
@@ -72,7 +79,7 @@ class TecTools {
      * @param int $userID ID på den bruger som skal hentes ud
      * @return array|null
      */
-    public function getUserByID($userID) {
+    public function getUserByID(int $userID): ?array {
         $res = $this->RCMS->execute('CALL getUserByID(?)', array('i', &$userID));
         return $res->fetch_assoc();
     }
@@ -81,12 +88,19 @@ class TecTools {
      * Redigerer en bruger via en POST request
      * @return void
      */
-    private function editUser() {
-        $userID = $_POST['user_id'];
+    private function editUser(): void {
+        if (!is_numeric($_POST['user_id'])) {
+            return;
+        }
+
+        $userID = (int) $_POST['user_id'];
 
         if (!$this->authorizeUser($userID)) {
             return;
         }
+
+        //TODO: ændre brugerens email i stripe hvis den ændres her
+        //TODO: tilføj et ekstra felt, "confirm password" og tjek at de er ens
 
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
@@ -95,9 +109,13 @@ class TecTools {
         $address = $_POST['address'];
         $zipcode = $_POST['zipcode'];
         $city = $_POST['city'];
-        $level = $_POST['level'];
+        $level = $this->RCMS->Login::STANDARD_USER_LEVEL;
 
-        $currentUser = $this->getUserByID($_POST['user_id']);
+        if ($this->RCMS->Login->isAdmin()) {
+            $level = $_POST['level'];
+        }
+
+        $currentUser = $this->getUserByID($userID);
 
         if (isset($_POST['password']) && $_POST['password'] !== '') {
             $password = $this->RCMS->Login->saltPass($_POST['password']);
@@ -106,19 +124,23 @@ class TecTools {
         }
 
         $this->RCMS->execute('CALL editUser(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array('issssssssi', &$userID, &$firstname, &$lastname, &$email, &$password, &$phone, &$address, &$zipcode, &$city, &$level));
-        header('Location: /dashboard');
+
+        if ($userID === $this->RCMS->Login->getUserID()) {
+            $this->RCMS->Login->log_out('Location: /login?userInfoChanged');
+        } else {
+            header('Location: /dashboard');
+        }
     }
 
     /**
      * Fjerner alle kategorier fra et værktøj
      * @param int $toolID
+     * @return void
      */
-    public function removeAllCategoriesFromTool($toolID) {
+    public function removeAllCategoriesFromTool(int $toolID): void {
         if (!$this->RCMS->Login->isAdmin()) {
             return;
         }
-
-        $toolID = intval($toolID);
 
         $this->RCMS->execute('CALL removeAllCategoriesFromTool(?)', array('i', &$toolID));
     }
@@ -132,14 +154,12 @@ class TecTools {
      * @param int $userID
      * @return bool
      */
-    private function authorizeUser($userID) {
-        $userID = intval($userID);
-
+    private function authorizeUser(int $userID): bool {
         if (!$this->RCMS->Login->isLoggedIn()) {
             return false;
         }
 
-        if ($this->RCMS->Login->isAdmin() === false && intval($userID) !== $this->RCMS->Login->getUserID()) {
+        if ($this->RCMS->Login->isAdmin() === false && $userID !== $this->RCMS->Login->getUserID()) {
             return false;
         }
 
@@ -150,7 +170,7 @@ class TecTools {
      * Tilføjer en producent via en POST request
      * @return void
      */
-    private function addManufacturer() {
+    private function addManufacturer(): void {
         if (!$this->RCMS->Login->isAdmin()) {
             return;
         }
@@ -166,9 +186,7 @@ class TecTools {
      * @param int $manufacturerID
      * @return array|null
      */
-    public function getManufacturer($manufacturerID) {
-        $manufacturerID = intval($manufacturerID);
-
+    public function getManufacturer(int $manufacturerID): ?array {
         $res = $this->RCMS->execute('CALL getManufacturer(?)', array('i', &$manufacturerID));
         return $res->fetch_assoc();
     }
@@ -177,12 +195,12 @@ class TecTools {
      * Redigerer en producent via en POST request
      * @return void
      */
-    private function editManufacturer() {
-        if (!$this->RCMS->Login->isAdmin()) {
+    private function editManufacturer(): void {
+        if (!is_numeric($_POST['manufacturer_id']) || !$this->RCMS->Login->isAdmin()) {
             return;
         }
 
-        $manufacturerID = intval($_POST['manufacturer_id']);
+        $manufacturerID = (int) $_POST['manufacturer_id'];
         $manufacturerName = $_POST['manufacturer_name'];
 
         $this->RCMS->execute('CALL editManufacturer(?, ?)', array('is', &$manufacturerID, &$manufacturerName));
@@ -193,7 +211,7 @@ class TecTools {
      * Tilføjer en kategori via en POST request
      * @return void
      */
-    private function addCategory() {
+    private function addCategory(): void {
         if (!$this->RCMS->Login->isAdmin()) {
             return;
         }
@@ -209,9 +227,7 @@ class TecTools {
      * @param int $categoryID
      * @return array|null
      */
-    public function getCategory($categoryID) {
-        $categoryID = intval($categoryID);
-
+    public function getCategory(int $categoryID): ?array {
         $res = $this->RCMS->execute('CALL getCategory(?)', array('i', &$categoryID));
         return $res->fetch_assoc();
     }
@@ -220,12 +236,12 @@ class TecTools {
      * Redigerer en kategori via en POST request
      * @return void
      */
-    private function editCategory() {
-        if (!$this->RCMS->Login->isAdmin()) {
+    private function editCategory(): void {
+        if (!is_numeric($_POST['category_id']) || !$this->RCMS->Login->isAdmin() ) {
             return;
         }
 
-        $categoryID = intval($_POST['category_id']);
+        $categoryID = (int) $_POST['category_id'];
         $categoryName = $_POST['category_name'];
 
         $this->RCMS->execute('CALL editCategory(?, ?)', array('is', &$categoryID, &$categoryName));
@@ -235,13 +251,14 @@ class TecTools {
     /**
      * Redigerer et værktøj via en POST request
      * @return void
+     * @throws Exception
      */
-    private function editTool() {
-        if (!$this->RCMS->Login->isAdmin()) {
+    private function editTool(): void {
+        if (!is_numeric($_POST['tool_id']) || !$this->RCMS->Login->isAdmin() ) {
             return;
         }
 
-        $toolID = $_POST['tool_id'];
+        $toolID = (int) $_POST['tool_id'];
         $toolName = $_POST['tool_name'];
         $description = $_POST['description'];
         $status = $_POST['status'];
@@ -252,15 +269,16 @@ class TecTools {
 
         // Tjek om kategorier skal opdateres
         if (!empty($categories)) {
-            $currentToolCategoryIDs = array_map(function ($category) {
-                return strval($category['CategoryID']);
-            }, $currentTool['Categories']); 
+            $currentToolCategoryIDs = array_map(static fn($category) => strval($category['CategoryID']), $currentTool['Categories']);
 
             if ($this->array_equal($categories, $currentToolCategoryIDs) === false) {
                 // opdater kategorier
                 $this->removeAllCategoriesFromTool($toolID);
                 foreach ($categories as $categoryID) {
-                    $this->addToolToCategory($toolID, $categoryID);
+                    if (!is_numeric($categoryID)) {
+                        continue;
+                    }
+                    $this->addToolToCategory($toolID, (int) $categoryID);
                 }
             }
         }
@@ -289,7 +307,7 @@ class TecTools {
      * @return bool|string
      * @throws Exception
      */
-    private function uploadImage($imageName, $tmpName) {
+    private function uploadImage(string $imageName, string $tmpName) {
         $ext = pathinfo($imageName, PATHINFO_EXTENSION);
         $newImageName = date('dmYHis') . '_' . bin2hex(random_bytes(2)) . '.' . $ext;
 
@@ -316,8 +334,9 @@ class TecTools {
      * Tilføjer et værktøj til databasen via en POST request
      * @return void
      * @throws Exception
+     * @return void
      */
-    private function addTool() {
+    private function addTool(): void {
         if (!$this->RCMS->Login->isAdmin()) {
             return;
         }
@@ -344,7 +363,10 @@ class TecTools {
         $toolID = $res->fetch_assoc()['lastInsertId'];
 
         foreach ($categories as $categoryID) {
-            $this->addToolToCategory($toolID, $categoryID);
+            if (!is_numeric($categoryID)) {
+                continue;
+            }
+            $this->addToolToCategory($toolID, (int) $categoryID);
         }
 
         header('Location: /dashboard');
@@ -354,26 +376,26 @@ class TecTools {
      * Tilføjer et værktøj til en kategori
      * @param int $toolID
      * @param int $categoryID
+     * @return void
      */
-    public function addToolToCategory($toolID, $categoryID) {
-        $toolID = intval($toolID);
-        $categoryID = intval($categoryID);
-
+    public function addToolToCategory(int $toolID, int $categoryID): void {
         $this->RCMS->execute('CALL addToolToCategory(?, ?)', array('ii', &$toolID, &$categoryID));
     }
 
     /**
      * Henter et værktøj ud fra databasen
      * @param int $toolID
-     * @return array|null
+     * @return array|false
      */
-    public function getToolByID($toolID) {
-        $toolID = intval($toolID);
-
+    public function getToolByID(int $toolID) {
         $res = $this->RCMS->execute('CALL getToolByID(?)', array('i', &$toolID));
         $tool = $res->fetch_assoc();
 
         $tool['Categories'] = $this->getCategoriesForTool($tool['ToolID']);
+
+        if ($tool === null) {
+            return false;
+        }
 
         return $tool;
     }
@@ -382,7 +404,7 @@ class TecTools {
      * Henter alle værktøj ud fra databasen
      * @return array
      */
-    public function getAllTools() {
+    public function getAllTools(): array {
         $res = $this->RCMS->execute('CALL getAllTools();');
 
         $tools = $res->fetch_all(MYSQLI_ASSOC);
@@ -391,37 +413,35 @@ class TecTools {
             $tools[$key]['Categories'] = $this->getCategoriesForTool($tool['ToolID']);
         }
 
-        return $tools;
+        return $tools ?? [];
     }
 
     /**
      * Henter alle statusser ud fra databasen
      * @return array
      */
-    public function getAllStatuses() {
+    public function getAllStatuses(): array {
         $res = $this->RCMS->execute('CALL getAllStatuses();');
 
-        return $res->fetch_all(MYSQLI_ASSOC);
+        return $res->fetch_all(MYSQLI_ASSOC) ?? [];
     }
 
     /**
      * Henter alle kategorier ud fra databasen
      * @return array
      */
-    public function getAllCategories() {
+    public function getAllCategories(): array {
         $res = $this->RCMS->execute('CALL getAllCategories()');
 
-        return $res->fetch_all(MYSQLI_ASSOC);
+        return $res->fetch_all(MYSQLI_ASSOC) ?? [];
     }
 
     /**
      * Henter alle kategorier ud for et værktøj fra databasen
      * @param int $toolID
-     * @return array|mixed
+     * @return array
      */
-    public function getCategoriesForTool($toolID) {
-        $toolID = intval($toolID);
-
+    public function getCategoriesForTool(int $toolID): array {
         $res = $this->RCMS->execute('CALL getCategoriesForTool(?)', array('i', &$toolID));
 
         return $res->fetch_all(MYSQLI_ASSOC) ?? [];
@@ -431,8 +451,8 @@ class TecTools {
      * Henter alle producenter ud fra databasen
      * @return array
      */
-    public function getAllManufacturers() {
+    public function getAllManufacturers(): array {
         $res = $this->RCMS->execute('CALL getAllManufacturers()');
-        return $res->fetch_all(MYSQLI_ASSOC);
+        return $res->fetch_all(MYSQLI_ASSOC) ?? [];
     }
 }

@@ -1,3 +1,18 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @var Template $this
+ */
+
+/**
+ * @var RCMSTables $RCMSTables
+ */
+$RCMSTables = $GLOBALS['RCMSTables'];
+
+?>
+
 <style>
     .dashboard-row {
         margin-top: 4rem;
@@ -69,7 +84,7 @@
                     )
                 );
 
-                $GLOBALS['RCMSTables']->createRCMSTable("tools_table", "Tools p1 LEFT JOIN Manufacturers p2 ON p1.FK_ManufacturerID = p2.ManufacturerID LEFT JOIN Statuses p3 ON p3.StatusID = p1.FK_StatusID", $columns, $settings, null, $order, $buttons, null);
+                $RCMSTables->createRCMSTable("tools_table", "Tools p1 LEFT JOIN Manufacturers p2 ON p1.FK_ManufacturerID = p2.ManufacturerID LEFT JOIN Statuses p3 ON p3.StatusID = p1.FK_StatusID", $columns, $settings, null, $order, $buttons, null);
                 ?>
             </div>
 
@@ -119,7 +134,7 @@
                     )
                 );
 
-                $GLOBALS['RCMSTables']->createRCMSTable("users_table", "Users", $columns, $settings, null, $order, $buttons, null);
+                $RCMSTables->createRCMSTable("users_table", "Users", $columns, $settings, null, $order, $buttons, null);
                 ?>
 
             </div>
@@ -156,7 +171,7 @@
                     )
                 );
 
-                $GLOBALS['RCMSTables']->createRCMSTable("categories_table", "Categories p1 LEFT JOIN CategoryTools p2 ON p2.FK_CategoryID = p1.CategoryID GROUP BY p1.CategoryID, p1.CategoryName", $columns, $settings, null, $order, $buttons, null);
+                $RCMSTables->createRCMSTable("categories_table", "Categories p1 LEFT JOIN CategoryTools p2 ON p2.FK_CategoryID = p1.CategoryID GROUP BY p1.CategoryID, p1.CategoryName", $columns, $settings, null, $order, $buttons, null);
                 ?>
             </div>
 
@@ -192,13 +207,14 @@
                     )
                 );
 
-                $GLOBALS['RCMSTables']->createRCMSTable("manufacturers_table", "Manufacturers p1 LEFT JOIN Tools p2 ON p2.FK_ManufacturerID = p1.ManufacturerID GROUP BY p1.ManufacturerID, p1.ManufacturerName", $columns, $settings, null, $order, $buttons, null);
+                $RCMSTables->createRCMSTable("manufacturers_table", "Manufacturers p1 LEFT JOIN Tools p2 ON p2.FK_ManufacturerID = p1.ManufacturerID GROUP BY p1.ManufacturerID, p1.ManufacturerName", $columns, $settings, null, $order, $buttons, null);
                 ?>
             </div>
         <?php elseif ($this->RCMS->Login->isAdmin() === false && $this->RCMS->Login->isLoggedIn() === true): ?>
             <div class="row">
                 <div class="col s12">
                     <a class="btn" href="/my-subscription">Mit abonnement</a>
+                    <a class="btn" href="/edituser?userid=<?= $this->RCMS->Login->getUserID() ?>">Rediger bruger</a>
                     <!-- TODO: skriv hvilket abonnement brugeren har -->
                     <p style="margin: 0" class="right">Velkommen, <?= $this->RCMS->Login->getFirstName() ?><br>Du er standard bruger</p>
                 </div>
@@ -262,7 +278,7 @@
                     ]
                 ];
 
-                $GLOBALS['RCMSTables']->createRCMSTable("manufacturers_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, [], null);
+                $RCMSTables->createRCMSTable("manufacturers_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, [], null);
                 ?>
             </div>
 
@@ -328,16 +344,12 @@
                     ]
                 ];
 
-                $GLOBALS['RCMSTables']->createRCMSTable("manufacturers_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, [], null);
+                $RCMSTables->createRCMSTable("manufacturers_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, [], null);
                 ?>
             </div>
         <?php endif; ?>
     </div>
 </div>
-
-<script src="<?= $this->RCMS->getTemplateFolder() ?>/js/libs/timeago/timeago.min.js"></script>
-
-
 
 <script src="<?= $this->RCMS->getTemplateFolder() ?>/js/dashboard/dashboard.js"></script>
 

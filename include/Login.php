@@ -1,14 +1,19 @@
-<?PHP
+<?php
+
+declare(strict_types=1);
+
+use Stripe\Exception\ApiErrorException;
+
 class Login {
     /**
      * @var RCMS $RCMS
      */
-	public $RCMS;
+	public RCMS $RCMS;
 
-	const STANDARD_USER_LEVEL = 1;
-	const MIN_LEVEL_FOR_ADMIN = 9;
+	public const STANDARD_USER_LEVEL = 1;
+	public const MIN_LEVEL_FOR_ADMIN = 9;
 	
-	function __construct(RCMS $RCMS) {
+	public function __construct(RCMS $RCMS) {
 		$this->RCMS = $RCMS;
 
         if (isset($_POST['log_in']) && $_POST['log_in'] === '1') {
@@ -28,14 +33,15 @@ class Login {
      * Returnerer true hvis brugeren er logget ind, ellers false
      * @return bool
      */
-	public function isLoggedIn() {
+	public function isLoggedIn(): bool {
 		return isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === 1;
 	}
 
     /**
      * Logger en bruger ind via en POST request
+     * @return void
      */
-	public function log_in() {
+	public function log_in(): void {
 		$email = $_POST['email'];
 		$password = $this->saltPass($_POST['password']);
 		
@@ -51,13 +57,14 @@ class Login {
 
             header('Location: /dashboard');
 		} else {
-			header("Location: ?error=1");
+			header("Location: ?wrong_email_or_password");
 		}
 	}
 
     /**
      * Opretter en bruger via en POST request
      * @return bool|void
+     * @throws ApiErrorException
      */
 	public function createUser() {
 	    $email = $_POST['email'];
@@ -75,7 +82,7 @@ class Login {
             // brugeren eksisterer allerede
             unset($_POST['password']);
             $_SESSION['createUserPOST'] = $_POST;
-            header('Location: /register/?emailtaken');
+            header('Location: ?emailtaken');
 
             return false;
         }
@@ -100,9 +107,9 @@ class Login {
      * @param string $zipcode
      * @param string $city
      * @return string
-     * @throws \Stripe\Exception\ApiErrorException
+     * @throws ApiErrorException
      */
-    private function addUserToStripe($firstname, $lastname, $email, $phone, $address, $zipcode, $city) {
+    private function addUserToStripe(string $firstname, string $lastname, string $email, string $phone, string $address, string $zipcode, string $city): string {
         $params = [
             'name' => $firstname . ' ' . $lastname,
             'email' => $email,
@@ -114,9 +121,6 @@ class Login {
             ]
         ];
 
-        /**
-         * @var \Stripe\Customer $customer
-         */
         $customer = $this->RCMS->StripeWrapper->createCustomer($params);
 
         return $customer->id;
@@ -126,7 +130,7 @@ class Login {
      * Returnerer true hvis brugeren er personale, ellers false
      * @return bool
      */
-	public function isAdmin() {
+	public function isAdmin(): bool {
 	    return $this->getUserLevel() >= $this::MIN_LEVEL_FOR_ADMIN;
     }
 
@@ -148,10 +152,10 @@ class Login {
 
     /**
      * Returnerer brugerens fornavn
-     * @return mixed|string
+     * @return bool|string
      */
     public function getFirstName() {
-        return $_SESSION['user']['FirstName'];
+        return $_SESSION['user']['FirstName'] ?? false;
     }
 
     /**
@@ -173,8 +177,9 @@ class Login {
     /**
      * Logger en bruger ud fra siden ved at slette brugeren fra $_SESSION
      * @param string $customLocation URL som brugeren skal sendes til efter man er blevet logget ud
+     * @return void
      */
-	public function log_out($customLocation = '') {
+	public function log_out(string $customLocation = ''): void {
         unset($_SESSION['logged_in'], $_SESSION['user']);
         if ($customLocation !== '') {
             header($customLocation);
@@ -188,7 +193,7 @@ class Login {
      * @param string $pass Brugerens adgangskode
      * @return string
      */
-	public function saltPass($pass) {
+	public function saltPass(string $pass): string {
 		return md5($this->RCMS->getSalt() . $pass . $this->RCMS->getSalt());
 	}
 }

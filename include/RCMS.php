@@ -1,19 +1,25 @@
-<?PHP
+<?php
+
+declare(strict_types=1);
 
 /**
  * Instantiere alle de klasser som ligger i plugins mappen, så loadPlugins() funktionen kan tilføje dem til $GLOBALS
  * @param string $path Stien til plugins mappen
+ * @return void
  */
-function recursive_require_plugins($path) {
+function recursive_require_plugins(string $path) {
     $dir = new DirectoryIterator($path);
+
     foreach ($dir as $fileinfo) {
         if ($fileinfo->isDir() && !$fileinfo->isDot()) {
             recursive_require_plugins($fileinfo->getPath() . '/' . $fileinfo->getFilename() . '/');
-        } else if (!$fileinfo->isDot() && $fileinfo->getExtension() == 'php') {
+        } else if (!$fileinfo->isDot() && $fileinfo->getExtension() === 'php') {
             require_once $fileinfo->getPath() . '/' . $fileinfo->getFilename();
         }
     }
 }
+
+require_once __DIR__ . '/vendor/autoload.php';
 
 recursive_require_plugins(__DIR__ . '/plugins/');
 
@@ -27,58 +33,59 @@ class RCMS {
      * domæne eller IP til databasen
      * @var string $host
      */
-    private $host;
+    private string $host;
 
     /**
      * Brugernavn til databasen
      * @var string $user
      */
-    private $user;
+    private string $user;
 
     /**
      * Adgangskode til databasen
      * @var string $pass
      */
-    private $pass;
+    private string $pass;
 
     /**
      * Navnet på databasen
      * @var string $database
      */
-    private $database;
+    private string $database;
 
     /**
+     * Forbindelse til databasen
      * @var mysqli $mysqli
      */
-    private $mysqli;
+    private mysqli $mysqli;
 
     /**
      * @var Functions $Functions
      */
-    public $Functions;
+    public Functions $Functions;
 
     /**
      * @var Template $Template
      */
-    public $Template;
+    public Template $Template;
 
     /**
      * @var Login $Login
      */
-    public $Login;
+    public Login $Login;
 
     /**
      * @var StripeWrapper $StripeWrapper
      */
-    public $StripeWrapper;
+    public StripeWrapper $StripeWrapper;
 
-    private $homefolder;
-    private $templatefolder;
-    private $uploadsfolder;
-    private $relativeUploadsFolder;
-    private $salt;
+    private string $homefolder;
+    private string $templatefolder;
+    private string $uploadsfolder;
+    private string $relativeUploadsFolder;
+    private string $salt;
 
-    function __construct($host, $user, $pass, $database, $homefolder, $templatefolder, $uploadsfolder, $salt) {
+    public function __construct(string $host, string $user, string $pass, string $database, string $homefolder, string $templatefolder, string $uploadsfolder, string $salt) {
         session_start();
 
         $this->host = $host;
@@ -111,13 +118,14 @@ class RCMS {
     /**
      * Tilføjer alle klasser der ligger i plugins mappen til $GLOBALS, så de kan bruges alle steder i koden
      * @param string $path Stien til plugins mappen
+     * @return void
      */
-    function loadPlugins($path) {
+    private function loadPlugins(string $path): void {
         $dir = new DirectoryIterator($path);
         foreach ($dir as $fileinfo) {
             if ($fileinfo->isDir() && !$fileinfo->isDot()) {
                 $this->loadPlugins($fileinfo->getPath() . '/' . $fileinfo->getFilename() . '/');
-            } else if (!$fileinfo->isDot() && $fileinfo->getExtension() == 'php') {
+            } else if (!$fileinfo->isDot() && $fileinfo->getExtension() === 'php') {
                 $classname = $fileinfo->getBasename('.php');
                 if (class_exists($classname)) {
                     $this->newGlobal($classname, new $classname($this));
@@ -130,8 +138,9 @@ class RCMS {
      * Opretter en variabel i $GLOBALS arrayet, $GLOBALS er et indbygget array i PHP som er tilgængeligt alle steder i koden
      * @param string $newGlobal Navnet/key på det nye element
      * @param object $value Et objekt/klasse
+     * @return void
      */
-    function newGlobal($newGlobal, $value) {
+    private function newGlobal(string $newGlobal, object $value): void {
         $GLOBALS[$newGlobal] = $value;
     }
 
@@ -139,7 +148,7 @@ class RCMS {
      * Returnerer den absolutte sti til uploads mappen, ex. /home2/virtusbc/tectool.virtusb.com/public_html/include/../uploads/tools/images
      * @return string
      */
-    public function getUploadsFolder() {
+    public function getUploadsFolder(): string {
         return $this->uploadsfolder;
     }
 
@@ -147,7 +156,7 @@ class RCMS {
      * Returnerer den relative sti til uploads mappen, ex. /uploads/tools/images
      * @return string
      */
-    public function getRelativeUploadsFolder() {
+    public function getRelativeUploadsFolder(): string {
         return $this->relativeUploadsFolder;
     }
 
@@ -156,7 +165,7 @@ class RCMS {
      * F.eks. "/"
      * @return string
      */
-    function getHomefolder() {
+    public function getHomeFolder(): string {
         return $this->homefolder;
     }
 
@@ -165,7 +174,7 @@ class RCMS {
      * F.eks. "/template/tectools"
      * @return string
      */
-    public function getTemplateFolder() {
+    public function getTemplateFolder(): string {
         return $this->templatefolder;
     }
 
@@ -174,7 +183,7 @@ class RCMS {
      * F.eks. hvis salt er "secretsalt" og brugeren ved oprettelse skriver "12356" som adgangskode, bliver deres adgangskode gemt som "secretsalt123456" i databasen
      * @return string
      */
-    function getSalt() {
+    public function getSalt(): string {
         return $this->salt;
     }
 
@@ -182,14 +191,15 @@ class RCMS {
      * Returnere den oprettede MySQL forbindelse
      * @return mysqli
      */
-    function getMySQLI() {
+    public function getMySQLI(): \mysqli {
         return $this->mysqli;
     }
 
     /**
      * Opretter forbindelse til MySQL databasen
+     * @return void
      */
-    public function connect() {
+    public function connect(): void {
         $conn = mysqli_connect($this->host, $this->user, $this->pass, $this->database) or die("MySQLi Error!");
         mysqli_set_charset($conn, "utf8");
         $this->mysqli = $conn; 
@@ -199,45 +209,44 @@ class RCMS {
      * Eksekvere en MySQL query og bruger prepared statements for at undgå SQL injection
      * @param string $query En MySQL query, f.eks. "SELECT * FROM Users"
      * @param null|array $parameters Et array af typer og parametre, f.eks. ['ssi', &$username, &$firstname, &$userID] - første element er en string over typer (s for string, i for int), efterfølgende elementer er variabler givet med reference (& symbolet betyder reference pass-by-reference)
-     * @return false|mysqli_result
+     * @return mysqli_result|void
      */
-    public function execute($query, $parameters = NULL) {
+    public function execute(string $query, array $parameters = null) {
         $stmt = mysqli_prepare($this->mysqli, $query) or die("MySQLi Query Error: " . mysqli_error($this->mysqli));
 
-        if ($parameters != NULL && $parameters != "" && !empty($parameters)) {
+        if ($parameters !== null && $parameters !== "" && !empty($parameters)) {
             $rc = call_user_func_array(array($stmt, "bind_param"), $parameters);
-            $rc = $stmt->execute();
+            $stmt->execute();
 
             if (false === $rc) {
                 die('bind_param() failed: ' . htmlspecialchars($stmt->error));
             }
         } else {
-            $rc = $stmt->execute();
+            $stmt->execute();
         }
 
         if (substr($query, 0, 6) === "SELECT" || substr($query, 0, 4) === 'CALL') {
-            $result = $stmt->get_result();
-
-            return $result;
+            return $stmt->get_result();
         }
-        return false;
     }
 
     /**
      * Henter den side som brugeren gerne vil se fra 'pages' tabellen i databasen
      * @return array|null
      */
-    public function getRequestedPage() {
+    public function getRequestedPage(): ?array {
         $request_url = explode('?', $_SERVER['REQUEST_URI'], 2)[0];
         $request_url2 = $request_url . "/";
-        if ($request_url === "/index.php" || $request_url === "/index.php/")
+        if ($request_url === "/index.php" || $request_url === "/index.php/") {
             $request_url = "/";
+        }
 
         $result = $this->execute("CALL getRequestedPage(?, ?)", array('ss', &$request_url, &$request_url2));
 
-        $row = NULL;
-        if ($result->num_rows > 0)
+        $row = null;
+        if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
+        }
 
         return $row;
     }
@@ -253,8 +262,9 @@ class RCMS {
      *          "value" => "id"
      *      )
      * );
+     * @return void
      */
-    public static function fixURLQueryQuestionMarks() {
+    public static function fixURLQueryQuestionMarks(): void {
         $uri = $_SERVER['REQUEST_URI'];
         $questionMarksReplaced = str_replace('QMARK', '?', $uri);
 

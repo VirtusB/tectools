@@ -1,4 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
+/**
+ * @var Template $this
+ */
+
 if ($this->RCMS->Login->isLoggedIn()) {
     header('Location: /dashboard');
 }
@@ -17,7 +24,7 @@ if ($this->RCMS->Login->isLoggedIn()) {
 
             <form action="" method="POST">
                 <input autocomplete="off" name="email" required type="email" placeholder="E-mail"><br>
-                <input autocomplete="off" name="password" required type="password" placeholder="Password"><br>
+                <input autocomplete="off" name="password" required type="password" placeholder="Adgangskode"><br>
 
                 <input value="<?= $_SESSION['createUserPOST']['firstname'] ?? '' ?>" autocomplete="off" name="firstname" required type="text" placeholder="Fornavn"><br>
                 <input value="<?= $_SESSION['createUserPOST']['lastname'] ?? '' ?>" autocomplete="off" name="lastname" required type="text" placeholder="Efternavn"><br>

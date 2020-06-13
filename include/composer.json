@@ -1,5 +1,9 @@
 {
-    "require": {
-        "stripe/stripe-php": "^7.36"
-    }
+  "require": {
+    "stripe/stripe-php": "^7.36",
+    "ext-mysqli": "*",
+    "ext-mbstring": "*",
+    "ext-json": "*",
+    "ext-fileinfo": "*"
+  }
 }

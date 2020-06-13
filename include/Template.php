@@ -1,11 +1,14 @@
-<?PHP
+<?php
+
+declare(strict_types=1);
+
 class Template {
     /**
      * @var RCMS $RCMS
      */
-	var $RCMS;
+	public RCMS $RCMS;
 	
-	function __construct(RCMS $RCMS) {
+	public function __construct(RCMS $RCMS) {
 		$this->RCMS = $RCMS;
 	}
 
@@ -14,11 +17,12 @@ class Template {
      * Adgang har to niveauer
      * Hvis require_login er sat til true, kan man kun se siden hvis man er logget ind
      * Hvis is_admin_page er sat til true, kan man kun se siden hvis man er admin
+     * @return void
      */
-	function display_content() {
+	public function display_content(): void {
 		$request = $this->RCMS->getRequestedPage();
 
-		if ($request == null) {
+		if ($request === null) {
 			$this->display_404();
 			return;
 		}
@@ -31,7 +35,7 @@ class Template {
 			}
 			require_once($request);
 			return;
-		}else if (isset($request['require_login']) && $request['require_login'] && !$this->RCMS->Login->isLoggedIn()) {
+		} else if (isset($request['require_login']) && $request['require_login'] && !$this->RCMS->Login->isLoggedIn()) {
 			$request = __DIR__ . '/..' . $this->RCMS->getTemplateFolder() . "/layout/login.php";
 			if (!file_exists($request)) {
 				echo "Fejl ved loading af side! Kontakt en administrator hvis problemet genopstår.";
@@ -48,7 +52,7 @@ class Template {
 				return;
 			}
 			require_once($request);
-		}else{
+		} else {
 			$request['content'];
 		}
 	}
@@ -56,16 +60,18 @@ class Template {
     /**
      * Hvis en side ikke eksisterer, bruges den funktion efterfølgende
      * Sætter den HTTP status som browseren modtager til 404 Page Not Found
+     * @return void
      */
-	function display_404() {
+	public function display_404(): void {
 	    http_response_code(404);
 		echo "404 - Siden blev ikke fundet!";
 	}
 
     /**
      * Denne funktion køres kun 1 gang inden indhold i template bliver inkluderet, og sørger for at alt på siden, bortset fra MySQL data, er i UTF-8 format
+     * @return void
      */
-	function initEncoding() {
+	public function initEncoding(): void {
         mb_internal_encoding('UTF-8');
         mb_http_output('UTF-8');
         header('Content-Type: text/html; charset=UTF-8');

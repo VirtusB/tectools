@@ -1,7 +1,14 @@
 <?php
 
-if (!isset($_GET['toolid'])) {
+declare(strict_types=1);
+
+/**
+ * @var Template $this
+ */
+
+if (!isset($_GET['toolid']) || !is_numeric($_GET['toolid'])) {
     $this->RCMS->Functions->outputError('Tool ID mangler', 'h3', true);
+    return;
 }
 
 /**
@@ -9,22 +16,13 @@ if (!isset($_GET['toolid'])) {
  */
 $TecTools = $GLOBALS['TecTools'];
 
-$tool = $TecTools->getToolByID($_GET['toolid']);
+$tool = $TecTools->getToolByID((int) $_GET['toolid']);
 
-$toolCategoryIDs = array_map(function ($category) {
-    return $category['CategoryID'];
-}, $tool['Categories']);
-
+$toolCategoryIDs = array_map(static fn($category) => $category['CategoryID'], $tool['Categories']);
 
 $categories = $TecTools->getAllCategories();
 
 ?>
-
-<style>
-    #edit_tool_form input, #edit_tool_form select {
-        margin-bottom: 2rem;
-    }
-</style>
 
 <div class="section no-pad-bot">
     <div class="container">
@@ -39,7 +37,7 @@ $categories = $TecTools->getAllCategories();
                     unset($_SESSION['tool_image_upload_error']);
                 }
                 ?>
-                <form enctype="multipart/form-data" id="edit_tool_form" action="" method="POST">
+                <form class="tectool-form" enctype="multipart/form-data" id="edit_tool_form" action="" method="POST">
 
                     <label>Navn</label>
                     <input value="<?= $tool['ToolName'] ?>" id="tool_name" required name="tool_name" type="text" placeholder="Navn på værktøj">
@@ -74,7 +72,7 @@ $categories = $TecTools->getAllCategories();
                     <div class="file-field input-field">
                         <div class="btn">
                             <span>Billede</span>
-                            <input onchange="updateImagePreview(this);" name="image" type="file">
+                            <input onchange="updateImagePreview(this, 'tool-image');" name="image" type="file">
                         </div>
                         <div class="file-path-wrapper">
                             <input class="file-path validate" type="text">
@@ -98,5 +96,4 @@ $categories = $TecTools->getAllCategories();
     </div>
 </div>
 
-<script src="<?= $this->RCMS->getTemplateFolder() ?>/js/tools/edit-tool.js"></script>
 

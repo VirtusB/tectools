@@ -1,0 +1,21 @@
+#tools-row {
+    margin-top: 2rem;
+}
+
+#tools-row .card-image img {
+    width: 65%;
+    margin: 0 auto;
+}
+
+div.card-action a {
+    display: inline-block;
+    vertical-align: sub;
+}
+
+.card {
+    cursor: pointer;
+}
+
+.select-wrapper .caret {
+    fill: rgba(255,255,255,0.87);
+}

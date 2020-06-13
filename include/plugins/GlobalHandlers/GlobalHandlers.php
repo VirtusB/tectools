@@ -1,8 +1,11 @@
-<?PHP
+<?php
+
+declare(strict_types=1);
+
 class GlobalHandlers {
-	var $RCMS;
+	public RCMS $RCMS;
 	
-	function __construct($RCMS) {
+	public function __construct(RCMS $RCMS) {
 		$this->RCMS = $RCMS;
 	}
 
@@ -13,15 +16,20 @@ class GlobalHandlers {
      * @param array $args
      * @return bool|mixed
      */
-	function callFunction($function, $args = array()) {
+	public function callFunction(string $function, array $args = array()) {
 		if (method_exists($this, $function)) {
-		 return $this->$function($args);
-		}else{
-			return false;
+		    return $this->$function($args);
 		}
+
+		return false;
 	}
 
-    function formatUserLevel($level) {
+    /**
+     * Returnerer "Standard" eller "Personale", alt efter om hvad niveau brugeren er på
+     * @param array $level
+     * @return string
+     */
+    private function formatUserLevel(array $level): string {
         $level = $level[0];
 
         switch ($level) {
@@ -36,7 +44,12 @@ class GlobalHandlers {
         return 'N/A';
     }
 
-    function showToolImage($image) {
+    /**
+     * Returnerer HTML <img> element af værktøjets billede
+     * @param array $image
+     * @return string
+     */
+    private function showToolImage(array $image): string {
         $image = $image[0];
 
         /**
@@ -50,7 +63,12 @@ class GlobalHandlers {
 HTML;
     }
 
-    function showToolBarcode($barcode) {
+    /**
+     * Returnerer HTML <svg> element af stregkode
+     * @param array $barcode
+     * @return string
+     */
+    private function showToolBarcode(array $barcode): string {
         $barcode = $barcode[0];
 
 

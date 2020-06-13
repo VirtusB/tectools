@@ -27,3 +27,15 @@ nav, .page-footer {
 .cubes-icon.not-available {
     color: #FF0000;
 }
+
+strong {
+    font-weight: 600;
+}
+
+.hidedtrow {
+    display: none;
+}
+
+form.tectool-form input, form.tectool-form select {
+    margin-bottom: 2rem !important;
+}
