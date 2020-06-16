@@ -16,7 +16,14 @@ if (!isset($_GET['userid']) || !is_numeric($_GET['userid'])) {
  */
 $TecTools = $GLOBALS['TecTools'];
 
-$user = $TecTools->getUserByID((int) $_GET['userid']);
+$userID = (int) $_GET['userid'];
+
+if (!$TecTools->authorizeUser($userID)) {
+    $this->RCMS->Functions->outputError('Du har ikke adgang til denne side', 'h3', true);
+    return;
+}
+
+$user = $TecTools->getUserByID($userID);
 
 ?>
 

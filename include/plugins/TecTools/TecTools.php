@@ -154,7 +154,7 @@ class TecTools {
      * @param int $userID
      * @return bool
      */
-    private function authorizeUser(int $userID): bool {
+    public function authorizeUser(int $userID): bool {
         if (!$this->RCMS->Login->isLoggedIn()) {
             return false;
         }
@@ -407,6 +407,81 @@ class TecTools {
     public function getAllTools(): array {
         $res = $this->RCMS->execute('CALL getAllTools();');
 
+        $tools = $res->fetch_all(MYSQLI_ASSOC);
+
+        foreach ($tools as $key => $tool) {
+            $tools[$key]['Categories'] = $this->getCategoriesForTool($tool['ToolID']);
+        }
+
+        return $tools ?? [];
+    }
+
+    /**
+     * Henter værktøj ud af databasen, med mulighed for at filtrere på kategorier og søgetekst
+     * @param array $filters
+     * @return array
+     */
+    public function getAllToolsWithFilters(array $filters): array {
+        $query = <<<SQL
+        SELECT * FROM Tools p1
+        LEFT JOIN Manufacturers p2 ON p1.FK_ManufacturerID = p2.ManufacturerID
+        LEFT JOIN Statuses p3 ON p3.StatusID = p1.FK_StatusID
+        WHERE
+SQL;
+
+
+        $searchText = '';
+        $categories = [];
+        $parameters = [];
+        $types = '';
+
+        $hasSearchText = false;
+        $hasCategories = false;
+
+        if (isset($filters['search-text']) && !empty($filters['search-text'])) {
+            $searchText = $filters['search-text'];
+            $hasSearchText = true;
+        }
+
+        if (isset($filters['categories']) && !empty($filters['categories'])) {
+            $categories = array_map(static fn($category) => (int) $category, $filters['categories']);
+            $hasCategories = true;
+        }
+
+        if ($hasSearchText && !$hasCategories) {
+            $types = 'ssss';
+            $parameters = array_fill(0, 4, "%$searchText%");
+
+            $query .= <<<SQL
+            p1.ToolName LIKE ?
+            OR p1.Description LIKE ?
+            OR p2.ManufacturerName LIKE ?
+            OR p3.StatusName LIKE ?
+SQL;
+        } else if ($hasCategories && !$hasSearchText) {
+            $IN = str_repeat('?,', count($categories) - 1) . '?';
+            $types = str_repeat('i', count($categories));
+            $parameters = $categories;
+
+            $query .= <<<SQL
+            p1.ToolID IN (SELECT FK_ToolID FROM CategoryTools WHERE FK_ToolID = p1.ToolID AND FK_CategoryID IN($IN))
+SQL;
+        } else if ($hasCategories && $hasSearchText) {
+            $IN = str_repeat('?,', count($categories) - 1) . '?';
+            $types = str_repeat('i', count($categories)) . 'ssss';
+            $parameters = array_merge($categories, array_fill(0, 4, "%$searchText%"));
+
+            $query .= <<<SQL
+            p1.ToolID IN (SELECT FK_ToolID FROM CategoryTools WHERE FK_ToolID = p1.ToolID AND FK_CategoryID IN($IN))
+            AND (p1.ToolName LIKE ?
+            OR p1.Description LIKE ?
+            OR p2.ManufacturerName LIKE ?
+            OR p3.StatusName LIKE ?)
+SQL;
+        }
+
+
+        $res = $this->RCMS->execute($query, [$types, ...$parameters]);
         $tools = $res->fetch_all(MYSQLI_ASSOC);
 
         foreach ($tools as $key => $tool) {

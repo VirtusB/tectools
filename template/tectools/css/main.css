@@ -39,3 +39,15 @@ strong {
 form.tectool-form input, form.tectool-form select {
     margin-bottom: 2rem !important;
 }
+
+a.btn, button.btn {
+    font-family: 'Open Sans';
+}
+
+.card {
+    transition: 0.3s;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(113, 106, 106, 0.2);
+}

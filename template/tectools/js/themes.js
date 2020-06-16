@@ -5,12 +5,13 @@ document.addEventListener('DOMContentLoaded', e => {
         initTheme();
     }
 
-    addThemeSwitchListener()
+    addThemeSwitchListener();
 });
 
 
 /**
  * Tilføjer en EventListener til tema-kontakten
+ * @returns {undefined}
  */
 function addThemeSwitchListener() {
     const themeSwitch = document.getElementById('dark-theme-input');
@@ -20,6 +21,7 @@ function addThemeSwitchListener() {
 /**
  * Første funktion der kører i themes.js
  * Tjekker om brugeren har valgt et tema og aktiverer/deaktiverer efterfølgende
+ * @returns {undefined}
  */
 function initTheme() {
     const themeSwitch = document.getElementById('dark-theme-input');
@@ -54,6 +56,7 @@ function toggleTheme() {
 /**
  * Genindlæs et HTML element
  * @param {HTMLElement} element
+ * @returns {undefined}
  */
 function refreshElement(element) {
     const content = element.innerHTML;

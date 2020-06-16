@@ -43,21 +43,28 @@ class Login {
      */
 	public function log_in(): void {
 		$email = $_POST['email'];
-		$password = $this->saltPass($_POST['password']);
-		
+		$password = $_POST['password'];
+
 		if ($password === "") {
             return;
         }
-		
-		$result = $this->RCMS->execute("CALL getUserByEmailAndPassword(?, ?)", array('ss', &$email, &$password));
-		if ($result->num_rows === 1) {
-			$_SESSION['logged_in'] = 1;
-			$_SESSION['user'] = $result->fetch_assoc();
-            unset($_SESSION['createUserPOST'], $_SESSION['user']['password']);
 
-            header('Location: /dashboard');
+		$result = $this->RCMS->execute("CALL getUserByEmail(?)", array('s', &$email));
+
+		if ($result->num_rows === 1) {
+		    $user = $result->fetch_assoc();
+
+		    if (password_verify($password, $user['Password'])) {
+                unset($_SESSION['createUserPOST'], $_SESSION['user']['Password']);
+                $_SESSION['logged_in'] = 1;
+                $_SESSION['user'] = $user;
+
+                header('Location: /dashboard');
+            } else {
+                header("Location: /login?wrong_email_or_password");
+            }
 		} else {
-			header("Location: ?wrong_email_or_password");
+			header("Location: /login?wrong_email_or_password");
 		}
 	}
 
@@ -88,7 +95,7 @@ class Login {
         }
         unset($_SESSION['createUserPOST']);
 
-        $hashedPass = $this->saltPass($password);
+        $hashedPass = password_hash($password, PASSWORD_DEFAULT);
 
         $stripeID = $this->addUserToStripe($firstname, $lastname, $email, $phone, $address, $zipcode, $city);
 

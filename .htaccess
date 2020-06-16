@@ -22,3 +22,9 @@ RewriteRule . /index.php [L]
 </IfModule>
 
 
+#php_flag  xdebug.remote_enable on
+#php_value xdebug.remote_host 131.164.162.9
+#php_value xdebug.remote_port 9000
+#php_value xdebug.idekey PHPSTORM
+#php_flag  xdebug.remote_autostart on
+

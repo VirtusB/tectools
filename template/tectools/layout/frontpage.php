@@ -12,8 +12,13 @@ $TecTools = $GLOBALS['TecTools'];
  */
 $GlobalHandlers = $GLOBALS['GlobalHandlers'];
 
-$tools = $TecTools->getAllTools();
+$categories = $TecTools->getAllCategories();
 
+if (isset($_GET['search-text']) || isset($_GET['categories'])) {
+    $tools = $TecTools->getAllToolsWithFilters($_GET);
+} else {
+    $tools = $TecTools->getAllTools();
+}
 
 ?>
 
@@ -21,14 +26,15 @@ $tools = $TecTools->getAllTools();
     <form action="" method="get">
         <div class="row" style="margin-top: 2rem;">
             <div class="col s12 m12 l4 xl4">
-                <input name="search-text" type="text" placeholder="Fritekst...">
+                <input value="<?= isset($_GET['search-text']) ? $_GET['search-text'] : '' ?>" name="search-text" type="text" placeholder="Fritekst...">
             </div>
 
             <div id="category-select-col" class="col s12 m12 l4 xl4">
                 <select multiple name="categories[]" id="category-select">
-                    <option selected disabled value="SORT_CATEGORIES">Vælg kategori</option>
-                    <option value="1">Test</option>
-                    <option value="2">Test</option>
+                    <option <?= isset($_GET['categories']) ? '' : 'selected' ?> disabled value="SORT_CATEGORIES">Vælg kategori</option>
+                    <?php foreach ($categories as $category): ?>
+                        <option <?= isset($_GET['categories']) && in_array($category['CategoryID'], $_GET['categories'], false) ? 'selected' : '' ?> value="<?= $category['CategoryID'] ?>"><?= $category['CategoryName'] ?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
 

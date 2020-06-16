@@ -14,8 +14,11 @@ class Template {
 
     /**
      * Loader den side som brugeren gerne vil se, fra databasen, hvis den eksisterer og brugeren har adgang
+     *
      * Adgang har to niveauer
+     *
      * Hvis require_login er sat til true, kan man kun se siden hvis man er logget ind
+     *
      * Hvis is_admin_page er sat til true, kan man kun se siden hvis man er admin
      * @return void
      */
@@ -59,6 +62,7 @@ class Template {
 
     /**
      * Hvis en side ikke eksisterer, bruges den funktion efterfølgende
+     *
      * Sætter den HTTP status som browseren modtager til 404 Page Not Found
      * @return void
      */

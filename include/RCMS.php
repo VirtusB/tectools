@@ -162,6 +162,7 @@ class RCMS {
 
     /**
      * Returnere stien til hjemme/root mappen
+     *
      * F.eks. "/"
      * @return string
      */
@@ -171,6 +172,7 @@ class RCMS {
 
     /**
      * Returnere stien til template mappen
+     *
      * F.eks. "/template/tectools"
      * @return string
      */
@@ -180,6 +182,7 @@ class RCMS {
 
     /**
      * Returnere det salt som bruges til adgangskoder for at øge sikkerheden
+     *
      * F.eks. hvis salt er "secretsalt" og brugeren ved oprettelse skriver "12356" som adgangskode, bliver deres adgangskode gemt som "secretsalt123456" i databasen
      * @return string
      */
@@ -212,10 +215,17 @@ class RCMS {
      * @return mysqli_result|void
      */
     public function execute(string $query, array $parameters = null) {
+        $query = str_ireplace(array("\r","\n",'\r','\n'),'', trim($query));
+
         $stmt = mysqli_prepare($this->mysqli, $query) or die("MySQLi Query Error: " . mysqli_error($this->mysqli));
 
         if ($parameters !== null && $parameters !== "" && !empty($parameters)) {
-            $rc = call_user_func_array(array($stmt, "bind_param"), $parameters);
+            //$rc = call_user_func_array(array($stmt, "bind_param"), $parameters);
+
+            $types = $parameters[0];
+            unset($parameters[0]);
+
+            $rc = $stmt->bind_param($types, ...$parameters);
             $stmt->execute();
 
             if (false === $rc) {
@@ -258,7 +268,7 @@ class RCMS {
      *
      * $buttons = array(
      *      array(
-     *          "button" => '<input type="button" class="btn rbooking-btn" onclick="location.pathname = \'/admin/edituserQMARKuser_id=?\'" value="Rediger bruger" />',
+     *          "button" => '<input type="button" class="btn rbooking-btn" onclick="location.pathname = \'/admin/edituserQMARKuserid=?\'" value="Rediger bruger" />',
      *          "value" => "id"
      *      )
      * );

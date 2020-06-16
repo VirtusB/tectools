@@ -361,6 +361,7 @@ class RCMSTables {
             $limit = "";
         }
 
+        // Opbyg WHERE delen af SQL query'en
         $whereTypes = array();
         $whereTypes[] = implode("", self::pluck($where, 'type')); // array med typer, f.eks. [0] => "i", [1] => "s", [2] => "d"
 
@@ -389,10 +390,12 @@ class RCMSTables {
 
             foreach ($operators as $k => $op) {
                 if (isset($w[$k])) {
+                    // F.eks. $operator => ["eq" => "="]
                     $operator = [$k => $op];
                 }
             }
 
+            // F.eks. $operatorKey = "eq"
             $operatorKey = (string) array_keys($operator)[0];
 
             // direct_eq eller direct_in kan bruges til at slippe uden om prepared statements, så vi kan tjekke på værdier eller køre en IN direkte
@@ -423,6 +426,7 @@ class RCMSTables {
                 $whereClause .= '(';
             }
 
+            // Søg på hver kolonne
             foreach ($columns as $c) {
                 $searchTxt = '%' . $settings['searchTxt'] . '%';
 
@@ -430,6 +434,7 @@ class RCMSTables {
                     if (isset($c['like']) && $c['like'] !== 'ignore') {
                         $whereClause .= $c['like'] . " LIKE ? ";
                     } else {
+                        // Husk at bruge prefix'et til subquery'en hvis det er er et
                         $subQ = '';
                         if (isset($c['order_subq']) && $c['order_subq'] !== '') {
                             $subQ = $c['order_subq'] . '.';

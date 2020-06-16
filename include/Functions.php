@@ -24,6 +24,30 @@ class Functions {
 	}
 
     /**
+     * Konvertere et array til et array hvor værdierne er referenced
+     * @param array $arr
+     * @return array
+     */
+	public function makeValuesReferenced(array &$arr): array {
+        $refs = array();
+
+        foreach($arr as $key => $value) {
+            $refs[$key] = &$arr[$key];
+        }
+
+        return $refs;
+    }
+
+    /**
+     * Fjerner HTML fra en string
+     * @param string $str
+     * @return string
+     */
+	public function escape(string $str): string {
+        return htmlentities($str, ENT_QUOTES, 'UTF-8');
+    }
+
+    /**
      * Laver en ny DateTime ud af $dateTimeString, og returnerer true hvis den DateTime er i fremtiden, ellers false
      * @param string $dateTimeString
      * @return bool

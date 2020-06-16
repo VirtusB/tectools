@@ -83,7 +83,7 @@ $listColumnCount = count($tool['Categories']) > 1 ? 2 : 1;
                 <div style="margin-top: 2rem">
                     <p><strong>Lagerstatus: </strong><i class="fas fa-cubes cubes-icon <?= $tool['StatusID'] !== $TecTools::TOOL_AVAILABLE_STATUS ? 'not-available' : '' ?>"></i> <?= $tool['StatusName'] ?></p>
 
-                    <?php if ($tool['EndDate'] !== null && $TecTools->RCMS->Functions::isFutureDateTimeString($tool['EndDate']) && ($tool['StatusID'] === $TecTools::TOOL_LOANED_OUT_STATUS || $tool['StatusID'] === $TecTools::TOOL_RESERVED_STATUS)): ?>
+                    <?php if ($tool['CheckedOut'] !== null && $tool['CheckedOut'] === 0 && $tool['EndDate'] !== null && $TecTools->RCMS->Functions::isFutureDateTimeString($tool['EndDate']) && ($tool['StatusID'] === $TecTools::TOOL_LOANED_OUT_STATUS || $tool['StatusID'] === $TecTools::TOOL_RESERVED_STATUS)): ?>
                         <p>Tilgængelig <span class="check-in-end-date" datetime="<?= $tool['EndDate'] ?>"></span></p>
                     <?php endif; ?>
                 </div>

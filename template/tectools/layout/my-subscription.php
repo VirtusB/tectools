@@ -3,13 +3,15 @@
 declare(strict_types=1);
 
 /**
+ * @var Template $this
+ */
+
+/**
  * @var TecTools $TecTools
  */
 $TecTools = $GLOBALS['TecTools'];
 
-/**
- * @var Template $this
- */
+
 $products = $this->RCMS->StripeWrapper->getStripeProducts();
 
 $userProduct = null;
