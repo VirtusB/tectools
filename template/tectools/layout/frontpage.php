@@ -39,7 +39,7 @@ if (isset($_GET['search-text']) || isset($_GET['categories'])) {
             </div>
 
             <div style="justify-content: flex-end" class="col s12 m12 l4 xl4 valign-wrapper">
-                <button style="width: 50%;" id="filter-tools-btn" type="submit" class="btn green">Søg</button>
+                <button style="width: 50%;" id="filter-tools-btn" type="submit" class="btn green-btn">Søg</button>
             </div>
         </div>
         <div class="row" id="tools-row">

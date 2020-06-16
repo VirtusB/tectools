@@ -50,4 +50,13 @@ a.btn, button.btn {
 
 .card:hover {
     box-shadow: 0 8px 16px 0 rgba(113, 106, 106, 0.2);
+    /*box-shadow: 0 4px 16px 0 rgba(113, 106, 106, 0.15);*/
+}
+
+.green-btn {
+    background-color: #4CAF50;
+}
+
+a.btn:hover, button.btn:hover {
+    background-color: #ff9800;
 }

@@ -241,7 +241,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                     array(
                         'column' => "StartDate",
                         'label' => "Udlejning start",
-                        'tdclass' => 'check-in-out-date',
+                        'tdclass' => 'render-datetime',
                         'tdattributes' => [
                             [
                                 'name' => 'datetime',
@@ -252,7 +252,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                     array(
                         'column' => "EndDate",
                         'label' => "Udlejning slut",
-                        'tdclass' => 'check-in-out-date',
+                        'tdclass' => 'render-datetime',
                         'tdattributes' => [
                             [
                                 'name' => 'datetime',
@@ -278,12 +278,69 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                     ]
                 ];
 
-                $RCMSTables->createRCMSTable("manufacturers_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, [], null);
+                $RCMSTables->createRCMSTable("active_checkins_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, [], null);
                 ?>
             </div>
 
             <div class="row">
                 <h3>Dine reservationer</h3>
+
+                <?php
+                $columns = array(
+                    array(
+                        'column' => 'Image',
+                        'label' => 'Billede',
+                        'function' => 'showToolImage'
+                    ),
+                    array(
+                        'column' => 'ToolName',
+                        'label' => 'Navn'
+                    ),
+                    array(
+                        'column' => "ManufacturerName",
+                        'label' => "Producent"
+                    ),
+                    array(
+                        'column' => "StartDate",
+                        'prefix' => 'r.StartDate AS ',
+                        'order_subq' => 'r',
+                        'label' => "Reservation start",
+                        'tdclass' => 'render-datetime',
+                        'tdattributes' => [
+                            [
+                                'name' => 'datetime',
+                                'valuefromcolumn' => 'StartDate'
+                            ]
+                        ]
+                    ),
+                    array(
+                        'column' => "EndDate",
+                        'prefix' => 'r.EndDate AS ',
+                        'order_subq' => 'r',
+                        'label' => "Reservation slut",
+                        'tdclass' => 'render-datetime',
+                        'tdattributes' => [
+                            [
+                                'name' => 'datetime',
+                                'valuefromcolumn' => 'EndDate'
+                            ]
+                        ]
+                    )
+                );
+
+                $order = "ORDER BY r.EndDate DESC";
+                $settings = array('searchbar' => true, 'querylogger' => true, 'queryloggerpath' => '/home/virtusbc/tectools.virtusb.com/querylogger.txt');
+
+                $where = [
+                    [
+                        'column' => 'r.FK_UserID',
+                        'eq' => $userID = $this->RCMS->Login->getUserID(),
+                        'type' => 'i'
+                    ]
+                ];
+
+                $RCMSTables->createRCMSTable("reservations_table", "Reservations r LEFT JOIN Tools t ON t.ToolID = r.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID LEFT JOIN Statuses s ON s.StatusID = t.FK_StatusID LEFT JOIN Reservations ON r.FK_ToolID = t.ToolID", $columns, $settings, $where, $order, [], null);
+                ?>
             </div>
 
             <div class="row">
@@ -306,8 +363,10 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                     ),
                     array(
                         'column' => "StartDate",
+                        'prefix' => 'c.StartDate AS ',
+                        'order_subq' => 'c',
                         'label' => "Udlejning start",
-                        'tdclass' => 'check-in-out-date',
+                        'tdclass' => 'render-datetime',
                         'tdattributes' => [
                             [
                                 'name' => 'datetime',
@@ -317,8 +376,10 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                     ),
                     array(
                         'column' => "EndDate",
+                        'prefix' => 'c.EndDate AS ',
+                        'order_subq' => 'c',
                         'label' => "Udlejning slut",
-                        'tdclass' => 'check-in-out-date',
+                        'tdclass' => 'render-datetime',
                         'tdattributes' => [
                             [
                                 'name' => 'datetime',
@@ -344,7 +405,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                     ]
                 ];
 
-                $RCMSTables->createRCMSTable("manufacturers_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, [], null);
+                $RCMSTables->createRCMSTable("ended_checkins_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, [], null);
                 ?>
             </div>
         <?php endif; ?>

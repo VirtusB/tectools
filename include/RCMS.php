@@ -19,18 +19,18 @@ function recursive_require_plugins(string $path) {
     }
 }
 
-require_once __DIR__ . '/vendor/autoload.php';
-
-recursive_require_plugins(__DIR__ . '/plugins/');
+require __DIR__ . '/vendor/autoload.php';
 
 require_once(__DIR__ . "/Template.php");
 require_once(__DIR__ . "/Functions.php");
 require_once(__DIR__ . "/StripeWrapper.php");
 require_once(__DIR__ . "/Login.php");
 
+recursive_require_plugins(__DIR__ . '/plugins/');
+
 class RCMS {
     /**
-     * domæne eller IP til databasen
+     * Domæne eller IP til databasen
      * @var string $host
      */
     private string $host;
