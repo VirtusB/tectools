@@ -3,7 +3,7 @@
     border: 1px dashed;
 }
 
-#scan-btn {
+#scan-btn, #check-in-btn {
     margin: 0 auto;
     display: block;
     width: 50%;
@@ -12,7 +12,7 @@
     font-size: 30px;
 }
 
-#scan-btn i {
+#scan-btn i, #check-in-btn i {
     font-size: 30px;
 }
 

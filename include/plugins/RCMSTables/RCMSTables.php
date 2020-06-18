@@ -405,7 +405,7 @@ class RCMSTables {
                 $whereClause .= $w['column'] . ' ' . $operator[$operatorKey] . ' ' . $w[$operatorKey] . ' ';
             } else {
                 $whereClause .= $w['column'] . ' ' . $operator[$operatorKey] . ' ? ';
-                $whereArr[] = &$w[$operatorKey];
+                $whereArr[] = $w[$operatorKey];
             }
 
             if (++$i !== $whereCount) {
@@ -441,7 +441,7 @@ class RCMSTables {
                         }
                         $whereClause .= $subQ . $c['column'] . " LIKE ? ";
                     }
-                    $whereArr[] = &$searchTxt;
+                    $whereArr[] = $searchTxt;
 
                     $whereTypes[] = 's';
 

@@ -29,15 +29,15 @@ $RCMSTables = $GLOBALS['RCMSTables'];
         <?php if ($this->RCMS->Login->isAdmin()): ?>
             <div class="row">
                 <div class="col s12">
-                    <a class="btn" href="/createtool">Opret værktøj</a>
-                    <a class="btn" href="/createcategory">Opret kategori</a>
-                    <a class="btn" href="/createmanufacturer">Opret producent</a>
+                    <a class="btn dashboard-btn" href="/createtool">Opret værktøj</a>
+                    <a class="btn dashboard-btn" href="/createcategory">Opret kategori</a>
+                    <a class="btn dashboard-btn" href="/createmanufacturer">Opret producent</a>
 
-                    <p style="margin: 0" class="right">Velkommen, <?= $this->RCMS->Login->getFirstName() ?><br>Du er personale</p>
+<!--                    <p style="margin: 0" class="right">Velkommen, --><?//= $this->RCMS->Login->getFirstName() ?><!--<br>Du er personale</p>-->
                 </div>
             </div>
 
-            <div class="row dashboard-row">
+            <div class="row dashboard-row responsive-table-container">
                 <h3>Værktøj</h3>
 
                 <?php
@@ -88,7 +88,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                 ?>
             </div>
 
-            <div class="row dashboard-row">
+            <div class="row dashboard-row responsive-table-container">
                 <h3>Brugere</h3>
 
                 <?php
@@ -139,7 +139,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
 
             </div>
 
-            <div class="row dashboard-row">
+            <div class="row dashboard-row responsive-table-container">
                 <h3>Kategorier</h3>
 
                 <?php
@@ -175,7 +175,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                 ?>
             </div>
 
-            <div class="row dashboard-row">
+            <div class="row dashboard-row responsive-table-container">
                 <h3>Producenter</h3>
 
                 <?php
@@ -213,14 +213,14 @@ $RCMSTables = $GLOBALS['RCMSTables'];
         <?php elseif ($this->RCMS->Login->isAdmin() === false && $this->RCMS->Login->isLoggedIn() === true): ?>
             <div class="row">
                 <div class="col s12">
-                    <a class="btn" href="/my-subscription">Mit abonnement</a>
-                    <a class="btn" href="/edituser?userid=<?= $this->RCMS->Login->getUserID() ?>">Rediger bruger</a>
+                    <a class="btn dashboard-btn" href="/my-subscription">Mit abonnement</a>
+                    <a class="btn dashboard-btn" href="/edituser?userid=<?= $this->RCMS->Login->getUserID() ?>">Rediger bruger</a>
                     <!-- TODO: skriv hvilket abonnement brugeren har -->
-                    <p style="margin: 0" class="right">Velkommen, <?= $this->RCMS->Login->getFirstName() ?><br>Du er standard bruger</p>
+<!--                    <p style="margin: 0" class="right">Velkommen, --><?//= $this->RCMS->Login->getFirstName() ?><!--<br>Du er standard bruger</p>-->
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row responsive-table-container">
                 <h3>Aktive udlejninger</h3>
 
                 <?php
@@ -282,7 +282,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                 ?>
             </div>
 
-            <div class="row">
+            <div class="row responsive-table-container">
                 <h3>Dine reservationer</h3>
 
                 <?php
@@ -343,7 +343,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                 ?>
             </div>
 
-            <div class="row">
+            <div class="row responsive-table-container">
                 <h3>Afsluttede udlejninger</h3>
 
                 <?php

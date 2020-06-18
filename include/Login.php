@@ -49,7 +49,7 @@ class Login {
             return;
         }
 
-		$result = $this->RCMS->execute("CALL getUserByEmail(?)", array('s', &$email));
+		$result = $this->RCMS->execute("CALL getUserByEmail(?)", array('s', $email));
 
 		if ($result->num_rows === 1) {
 		    $user = $result->fetch_assoc();
@@ -83,7 +83,7 @@ class Login {
 	    $city = $_POST['city'];
 	    $zipcode = $_POST['zipcode'];
 
-        $exists = $this->RCMS->execute('CALL getUserByEmail(?)', array('s', &$email));
+        $exists = $this->RCMS->execute('CALL getUserByEmail(?)', array('s', $email));
 
         if ($exists->num_rows !== 0) {
             // brugeren eksisterer allerede
@@ -99,7 +99,7 @@ class Login {
 
         $stripeID = $this->addUserToStripe($firstname, $lastname, $email, $phone, $address, $zipcode, $city);
 
-        $this->RCMS->execute('CALL addUser(?, ?, ?, ?, ?, ?, ?, ?, ?)', array('sssssssss', &$firstname, &$lastname, &$email, &$hashedPass, &$phone, &$address, &$zipcode, &$city, &$stripeID));
+        $this->RCMS->execute('CALL addUser(?, ?, ?, ?, ?, ?, ?, ?, ?)', array('sssssssss', $firstname, $lastname, $email, $hashedPass, $phone, $address, $zipcode, $city, $stripeID));
 
         $this->log_in();
 	}

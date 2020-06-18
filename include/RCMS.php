@@ -25,6 +25,7 @@ require_once(__DIR__ . "/Template.php");
 require_once(__DIR__ . "/Functions.php");
 require_once(__DIR__ . "/StripeWrapper.php");
 require_once(__DIR__ . "/Login.php");
+require_once(__DIR__ . "/Logger.php");
 
 recursive_require_plugins(__DIR__ . '/plugins/');
 
@@ -79,6 +80,11 @@ class RCMS {
      */
     public StripeWrapper $StripeWrapper;
 
+    /**
+     * @var Logger $Logger
+     */
+    public Logger $Logger;
+
     private string $homefolder;
     private string $templatefolder;
     private string $uploadsfolder;
@@ -104,11 +110,13 @@ class RCMS {
         $this->connect();
 
         $this->Functions = new Functions($this);
-        $this->StripeWrapper = new StripeWrapper($this);
+
         $this->Login = new Login($this);
         $this->Template = new Template($this);
-
+        $this->Logger = new Logger($this);
+        $this->StripeWrapper = new StripeWrapper($this);
         $this->loadPlugins(__DIR__ . '/plugins/');
+
 
         ob_start();
 
@@ -211,7 +219,7 @@ class RCMS {
     /**
      * Eksekvere en MySQL query og bruger prepared statements for at undgå SQL injection
      * @param string $query En MySQL query, f.eks. "SELECT * FROM Users"
-     * @param null|array $parameters Et array af typer og parametre, f.eks. ['ssi', &$username, &$firstname, &$userID] - første element er en string over typer (s for string, i for int), efterfølgende elementer er variabler givet med reference (& symbolet betyder reference pass-by-reference)
+     * @param null|array $parameters Et array af typer og parametre, f.eks. ['ssi', $username, $firstname, $userID] - første element er en string over typer (s for string, i for int), efterfølgende elementer er variabler givet med reference (& symbolet betyder reference pass-by-reference)
      * @return mysqli_result|void
      */
     public function execute(string $query, array $parameters = null) {
@@ -251,7 +259,7 @@ class RCMS {
             $request_url = "/";
         }
 
-        $result = $this->execute("CALL getRequestedPage(?, ?)", array('ss', &$request_url, &$request_url2));
+        $result = $this->execute("CALL getRequestedPage(?, ?)", array('ss', $request_url, $request_url2));
 
         $row = null;
         if ($result->num_rows > 0) {

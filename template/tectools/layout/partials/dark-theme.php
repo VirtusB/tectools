@@ -51,6 +51,10 @@ declare(strict_types=1);
     #tool-image-col {
         border: 2px solid #1D1D1D !important;
     }
+
+    .info-paragraph {
+        background-color: #eeeeee24;
+    }
 </style>
 
 <script src="<?= $this->getTemplateFolder() ?>/js/themes.js"></script>

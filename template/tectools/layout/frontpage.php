@@ -14,11 +14,12 @@ $GlobalHandlers = $GLOBALS['GlobalHandlers'];
 
 $categories = $TecTools->getAllCategories();
 
-if (isset($_GET['search-text']) || isset($_GET['categories'])) {
+if (isset($_GET['search-text']) && !empty($_GET['search-text']) || isset($_GET['categories'])) {
     $tools = $TecTools->getAllToolsWithFilters($_GET);
 } else {
     $tools = $TecTools->getAllTools();
 }
+
 
 ?>
 

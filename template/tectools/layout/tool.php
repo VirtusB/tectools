@@ -20,6 +20,8 @@ $tool = $TecTools->getToolByID((int) $_GET['toolid']);
 
 $listColumnCount = count($tool['Categories']) > 1 ? 2 : 1;
 
+//TODO: fjern inline CSS
+
 ?>
 
 <style>

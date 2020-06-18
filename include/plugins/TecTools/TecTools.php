@@ -57,6 +57,14 @@ class TecTools {
         if (isset($_POST['edit_user'])) {
             $this->editUser();
         }
+
+        if (isset($_POST['check_in_tool'])) {
+            $this->checkIn();
+        }
+
+        if (isset($_POST['get_tool_by_barcode_ajax'])) {
+            $this->getToolByBarcodeAjax();
+        }
     }
 
     /**
@@ -75,12 +83,166 @@ class TecTools {
     }
 
     /**
+     * Tilføj et Check-In af et værktøj på en bruger, via POST request
+     * //TODO: opryd og split ind i funktioner
+     * @return void
+     * @throws \Stripe\Exception\ApiErrorException
+     */
+    private function checkIn(): void {
+        $userID = $this->RCMS->Login->getUserID();
+        $stripeCustomerID = $this->RCMS->Login->getStripeID();
+
+        $response = ['result' => ''];
+        $barcode = $_POST['tool_barcode'] ?? null;
+
+        if ($this->RCMS->Login->isLoggedIn() === false) {
+            $response['result'] = 'Du er ikke logget ind';
+            $this->RCMS->Functions->outputAJAXResult(200, $response);
+        }
+
+        if (is_string($barcode) === false || strlen($barcode) !== 13) {
+            $response['result'] = 'Stregkode er ikke 13 karakterer';
+            $this->RCMS->Functions->outputAJAXResult(200, $response);
+        }
+
+        $tool = $this->getToolByBarcode($barcode);
+
+        if (empty($tool)) {
+            $response['result'] = 'Intet værktøj fundet med den stregkode';
+            $this->RCMS->Functions->outputAJAXResult(200, $response);
+        }
+
+        $toolID = $tool['ToolID'];
+
+        if ($this->isToolCheckedIn($toolID) || $this->isToolReserved($toolID, $userID)) {
+            $response['result'] = 'Værktøjet er allerede udlånt eller reserveret';
+            $this->RCMS->Functions->outputAJAXResult(200, $response);
+        }
+
+        $userProduct = $this->getUserProduct();
+
+        if ($userProduct === false) {
+            $response['result'] = 'Du har ikke noget abonnement';
+            $this->RCMS->Functions->outputAJAXResult(200, $response);
+        }
+
+        if ($this->hasUserReachedMaxCheckouts($userID, $stripeCustomerID)) {
+            $response['result'] = 'Du har allerede udlånt det antal værktøj som dit abonnement tillader';
+            $this->RCMS->Functions->outputAJAXResult(200, $response);
+        }
+
+        // Alt validering foretaget
+        // Tilføj checkin
+
+        $checkInDuration = (int) $userProduct['metadata']['MaxCheckoutDays'];
+
+        $this->RCMS->execute('CALL addCheckIn(?, ?, ?)', array('iii', $userID, $toolID, $checkInDuration));
+
+        $response['result'] = 'success';
+        $this->RCMS->Functions->outputAJAXResult(200, $response);
+    }
+
+    /**
+     * Tjekker om et værktøj er udlånt
+     * @param int $toolID
+     * @return bool
+     */
+    public function isToolCheckedIn(int $toolID): bool {
+        $res = $this->RCMS->execute('SELECT fn_isToolCheckedIn(?) AS isToolCheckedIn', array('i', $toolID));
+        return (bool) $res->fetch_object()->isToolCheckedIn;
+    }
+
+    /**
+     * Tjekker om et værktøj er reserveret
+     *
+     * Returnerer false hvis det er brugeren selv, $userID, som har ejer reservationen
+     * @param int $toolID
+     * @param int $userID
+     * @return bool
+     */
+    public function isToolReserved(int $toolID, int $userID): bool {
+        $res = $this->RCMS->execute('SELECT fn_isToolReserved(?, ?) AS isToolReserved', array('ii', $toolID, $userID));
+        return (bool) $res->fetch_object()->isToolReserved;
+    }
+
+    /**
+     * Returnerer hvor mange udlån brugeren har
+     * @param int $userID
+     * @return bool
+     */
+    public function getCheckInCountForUser(int $userID): bool {
+        $res = $this->RCMS->execute('SELECT fn_getCheckInCountForUser(?) AS TOOL_COUNT', array('i', $userID));
+        return (bool) $res->fetch_object()->TOOL_COUNT;
+    }
+
+    /**
+     * Returnerer brugerens abonnement
+     * TODO: skal kunne returnere abonnement per bruger, med $userID parameter, bør måske ikke ligge i denne klasse
+     * @return array|bool
+     * @throws \Stripe\Exception\ApiErrorException
+     */
+    public function getUserProduct() {
+        $userProduct = null;
+
+        if ($this->RCMS->Login->getStripeID()) {
+            $productID = $this->RCMS->StripeWrapper->getProductIDForCustomer($this->RCMS->Login->getStripeID());
+
+            if ($productID) {
+                $userProduct = $this->RCMS->StripeWrapper->getStripeProduct($productID);
+
+                if (!empty($userProduct)) {
+                    return $userProduct;
+                }
+
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Tjekker om en bruger har udlånt det antal værktøj som deres abonnement tillader
+     * TODO: skal laves om så stripeCustomerID hentes fra databasen, bør måske ikke ligge i denne klasse. skal bruge $userID
+     * @param int $userID
+     * @param string $stripeCustomerID
+     * @return bool
+     * @throws \Stripe\Exception\ApiErrorException
+     */
+    public function hasUserReachedMaxCheckouts(int $userID, string $stripeCustomerID): bool {
+        $userProduct = $this->getUserProduct();
+
+        if ($userProduct) {
+            $maxCheckOuts = (int) $userProduct['metadata']['MaxCheckouts'];
+            $userCurrentCheckOut = $this->getCheckInCountForUser($userID);
+
+            if ($userCurrentCheckOut >= $maxCheckOuts) {
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Henter et værktøj ud fra databasen hvor værktøjets stregkode er lig $barcode
+     * @param string $barcode
+     * @return array|null
+     */
+    public function getToolByBarcode(string $barcode): ?array {
+        $res = $this->RCMS->execute('CALL getToolByBarcode(?)', array('s', $barcode));
+        return $res->fetch_assoc();
+    }
+
+    /**
      * Henter en bruger ud fra databasen
      * @param int $userID ID på den bruger som skal hentes ud
      * @return array|null
      */
     public function getUserByID(int $userID): ?array {
-        $res = $this->RCMS->execute('CALL getUserByID(?)', array('i', &$userID));
+        $res = $this->RCMS->execute('CALL getUserByID(?)', array('i', $userID));
         return $res->fetch_assoc();
     }
 
@@ -123,7 +285,7 @@ class TecTools {
             $password = $currentUser['Password'];
         }
 
-        $this->RCMS->execute('CALL editUser(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array('issssssssi', &$userID, &$firstname, &$lastname, &$email, &$password, &$phone, &$address, &$zipcode, &$city, &$level));
+        $this->RCMS->execute('CALL editUser(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array('issssssssi', $userID, $firstname, $lastname, $email, $password, $phone, $address, $zipcode, $city, $level));
 
         if ($userID === $this->RCMS->Login->getUserID()) {
             $this->RCMS->Login->log_out('Location: /login?userInfoChanged');
@@ -142,7 +304,7 @@ class TecTools {
             return;
         }
 
-        $this->RCMS->execute('CALL removeAllCategoriesFromTool(?)', array('i', &$toolID));
+        $this->RCMS->execute('CALL removeAllCategoriesFromTool(?)', array('i', $toolID));
     }
 
     /**
@@ -177,7 +339,7 @@ class TecTools {
 
         $manufacturerName = $_POST['manufacturer_name'];
 
-        $this->RCMS->execute('CALL addManufacturer(?)', array('s', &$manufacturerName));
+        $this->RCMS->execute('CALL addManufacturer(?)', array('s', $manufacturerName));
         header('Location: /dashboard');
     }
 
@@ -187,7 +349,7 @@ class TecTools {
      * @return array|null
      */
     public function getManufacturer(int $manufacturerID): ?array {
-        $res = $this->RCMS->execute('CALL getManufacturer(?)', array('i', &$manufacturerID));
+        $res = $this->RCMS->execute('CALL getManufacturer(?)', array('i', $manufacturerID));
         return $res->fetch_assoc();
     }
 
@@ -203,7 +365,7 @@ class TecTools {
         $manufacturerID = (int) $_POST['manufacturer_id'];
         $manufacturerName = $_POST['manufacturer_name'];
 
-        $this->RCMS->execute('CALL editManufacturer(?, ?)', array('is', &$manufacturerID, &$manufacturerName));
+        $this->RCMS->execute('CALL editManufacturer(?, ?)', array('is', $manufacturerID, $manufacturerName));
         header('Location: /dashboard');
     }
 
@@ -218,7 +380,7 @@ class TecTools {
 
         $categoryName = $_POST['category_name'];
 
-        $this->RCMS->execute('CALL addCategory(?)', array('s', &$categoryName));
+        $this->RCMS->execute('CALL addCategory(?)', array('s', $categoryName));
         header('Location: /dashboard');
     }
 
@@ -228,7 +390,7 @@ class TecTools {
      * @return array|null
      */
     public function getCategory(int $categoryID): ?array {
-        $res = $this->RCMS->execute('CALL getCategory(?)', array('i', &$categoryID));
+        $res = $this->RCMS->execute('CALL getCategory(?)', array('i', $categoryID));
         return $res->fetch_assoc();
     }
 
@@ -244,7 +406,7 @@ class TecTools {
         $categoryID = (int) $_POST['category_id'];
         $categoryName = $_POST['category_name'];
 
-        $this->RCMS->execute('CALL editCategory(?, ?)', array('is', &$categoryID, &$categoryName));
+        $this->RCMS->execute('CALL editCategory(?, ?)', array('is', $categoryID, $categoryName));
         header('Location: /dashboard');
     }
 
@@ -296,7 +458,7 @@ class TecTools {
             $newImageName = $currentTool['Image'];
         }
 
-        $this->RCMS->execute('CALL editTool(?, ?, ?, ?, ?, ?)', array('issisi', &$manufacturerID, &$toolName, &$description, &$status, &$newImageName, &$toolID));
+        $this->RCMS->execute('CALL editTool(?, ?, ?, ?, ?, ?)', array('issisi', $manufacturerID, $toolName, $description, $status, $newImageName, $toolID));
         header('Location: /dashboard');
     }
 
@@ -358,7 +520,7 @@ class TecTools {
             return;
         }
 
-        $res = $this->RCMS->execute('CALL addTool(?, ?, ?, ?, ?)', array('issis', &$manufacturerID, &$toolName, &$description, &$status, &$newImageName));
+        $res = $this->RCMS->execute('CALL addTool(?, ?, ?, ?, ?)', array('issis', $manufacturerID, $toolName, $description, $status, $newImageName));
 
         $toolID = $res->fetch_assoc()['lastInsertId'];
 
@@ -379,7 +541,7 @@ class TecTools {
      * @return void
      */
     public function addToolToCategory(int $toolID, int $categoryID): void {
-        $this->RCMS->execute('CALL addToolToCategory(?, ?)', array('ii', &$toolID, &$categoryID));
+        $this->RCMS->execute('CALL addToolToCategory(?, ?)', array('ii', $toolID, $categoryID));
     }
 
     /**
@@ -388,7 +550,7 @@ class TecTools {
      * @return array|false
      */
     public function getToolByID(int $toolID) {
-        $res = $this->RCMS->execute('CALL getToolByID(?)', array('i', &$toolID));
+        $res = $this->RCMS->execute('CALL getToolByID(?)', array('i', $toolID));
         $tool = $res->fetch_assoc();
 
         $tool['Categories'] = $this->getCategoriesForTool($tool['ToolID']);
@@ -398,6 +560,23 @@ class TecTools {
         }
 
         return $tool;
+    }
+
+    private function getToolByBarcodeAjax() {
+        if (!isset($_POST['tool_barcode']) || strlen($_POST['tool_barcode']) !== 13) {
+            $this->RCMS->Functions->outputAJAXResult(400, ['result' => 'Stregkode er forkert']);
+        }
+
+        $tool = $this->getToolByBarcode($_POST['tool_barcode']);
+
+        $tool['Image'] = $this->RELATIVE_TOOL_IMAGE_FOLDER . '/' . $tool['Image'];
+
+        $result = [
+            'result' => 'success',
+            'tool' => $tool
+        ];
+
+        $this->RCMS->Functions->outputAJAXResult(200, $result);
     }
 
     /**
@@ -517,7 +696,7 @@ SQL;
      * @return array
      */
     public function getCategoriesForTool(int $toolID): array {
-        $res = $this->RCMS->execute('CALL getCategoriesForTool(?)', array('i', &$toolID));
+        $res = $this->RCMS->execute('CALL getCategoriesForTool(?)', array('i', $toolID));
 
         return $res->fetch_all(MYSQLI_ASSOC) ?? [];
     }

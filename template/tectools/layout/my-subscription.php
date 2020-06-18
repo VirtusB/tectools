@@ -22,6 +22,9 @@ if ($this->RCMS->Login->getStripeID()) {
         $userProduct = $this->RCMS->StripeWrapper->getStripeProduct($productID);
     }
 }
+
+
+
 ?>
 
 
@@ -29,7 +32,7 @@ if ($this->RCMS->Login->getStripeID()) {
 <div class="section no-pad-bot">
     <div class="container">
         <br><br>
-        <h1 class="header center orange-text">Abonnement</h1>
+        <h2 class="header center orange-text">Abonnement</h2>
 
         <div class="row center" style="margin-top: 4rem;">
             <?php foreach ($products as $key => $product): ?>

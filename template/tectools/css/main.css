@@ -60,3 +60,18 @@ a.btn, button.btn {
 a.btn:hover, button.btn:hover {
     background-color: #ff9800;
 }
+
+.responsive-table-container {
+    overflow-x: auto;
+}
+
+.dashboard-btn {
+    margin-bottom: 1rem;
+}
+
+.info-paragraph {
+    background-color: #eee;
+    padding: 10px;
+    max-width: 375px;
+    margin: 0 auto;
+}

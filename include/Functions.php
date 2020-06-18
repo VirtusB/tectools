@@ -24,18 +24,21 @@ class Functions {
 	}
 
     /**
-     * Konvertere et array til et array hvor værdierne er referenced
-     * @param array $arr
-     * @return array
+     * Returnerer data til klienten i JSON format
+     * @param int $status HTTP status kode, ex. 200 eller 404 osv.
+     * @param array $result Array af data som skal udskrives til brugeren
+     * @return void
      */
-	public function makeValuesReferenced(array &$arr): array {
-        $refs = array();
+    public function outputAJAXResult(int $status, array $result): void {
+        ob_get_clean();
+        ob_start();
+        header('Content-Type: application/json');
 
-        foreach($arr as $key => $value) {
-            $refs[$key] = &$arr[$key];
-        }
+        http_response_code($status);
 
-        return $refs;
+        echo json_encode($result);
+
+        die();
     }
 
     /**
