@@ -84,13 +84,11 @@ class TecTools {
 
     /**
      * Tilføj et Check-In af et værktøj på en bruger, via POST request
-     * //TODO: opryd og split ind i funktioner
      * @return void
      * @throws \Stripe\Exception\ApiErrorException
      */
     private function checkIn(): void {
         $userID = $this->RCMS->Login->getUserID();
-        $stripeCustomerID = $this->RCMS->Login->getStripeID();
 
         $response = ['result' => ''];
         $barcode = $_POST['tool_barcode'] ?? null;
@@ -106,27 +104,24 @@ class TecTools {
         }
 
         $tool = $this->getToolByBarcode($barcode);
-
         if (empty($tool)) {
             $response['result'] = 'Intet værktøj fundet med den stregkode';
             $this->RCMS->Functions->outputAJAXResult(200, $response);
         }
 
         $toolID = $tool['ToolID'];
-
         if ($this->isToolCheckedIn($toolID) || $this->isToolReserved($toolID, $userID)) {
             $response['result'] = 'Værktøjet er allerede udlånt eller reserveret';
             $this->RCMS->Functions->outputAJAXResult(200, $response);
         }
 
-        $userProduct = $this->getUserProduct();
-
+        $userProduct = $this->getUserProduct($userID);
         if ($userProduct === false) {
             $response['result'] = 'Du har ikke noget abonnement';
             $this->RCMS->Functions->outputAJAXResult(200, $response);
         }
 
-        if ($this->hasUserReachedMaxCheckouts($userID, $stripeCustomerID)) {
+        if ($this->hasUserReachedMaxCheckouts($userID)) {
             $response['result'] = 'Du har allerede udlånt det antal værktøj som dit abonnement tillader';
             $this->RCMS->Functions->outputAJAXResult(200, $response);
         }
@@ -177,15 +172,16 @@ class TecTools {
 
     /**
      * Returnerer brugerens abonnement
-     * TODO: skal kunne returnere abonnement per bruger, med $userID parameter, bør måske ikke ligge i denne klasse
+     * @param int $userID
      * @return array|bool
      * @throws \Stripe\Exception\ApiErrorException
      */
-    public function getUserProduct() {
+    public function getUserProduct(int $userID) {
         $userProduct = null;
+        $user = $this->getUserByID($userID);
 
-        if ($this->RCMS->Login->getStripeID()) {
-            $productID = $this->RCMS->StripeWrapper->getProductIDForCustomer($this->RCMS->Login->getStripeID());
+        if ($user['StripeID']) {
+            $productID = $this->RCMS->StripeWrapper->getProductIDForCustomer($user['StripeID']);
 
             if ($productID) {
                 $userProduct = $this->RCMS->StripeWrapper->getStripeProduct($productID);
@@ -203,14 +199,12 @@ class TecTools {
 
     /**
      * Tjekker om en bruger har udlånt det antal værktøj som deres abonnement tillader
-     * TODO: skal laves om så stripeCustomerID hentes fra databasen, bør måske ikke ligge i denne klasse. skal bruge $userID
      * @param int $userID
-     * @param string $stripeCustomerID
      * @return bool
      * @throws \Stripe\Exception\ApiErrorException
      */
-    public function hasUserReachedMaxCheckouts(int $userID, string $stripeCustomerID): bool {
-        $userProduct = $this->getUserProduct();
+    public function hasUserReachedMaxCheckouts(int $userID): bool {
+        $userProduct = $this->getUserProduct($userID);
 
         if ($userProduct) {
             $maxCheckOuts = (int) $userProduct['metadata']['MaxCheckouts'];
@@ -261,7 +255,6 @@ class TecTools {
             return;
         }
 
-        //TODO: ændre brugerens email i stripe hvis den ændres her
         //TODO: tilføj et ekstra felt, "confirm password" og tjek at de er ens
 
         $firstname = $_POST['firstname'];
@@ -279,6 +272,17 @@ class TecTools {
 
         $currentUser = $this->getUserByID($userID);
 
+        // Tjek om brugeren vil ændre sin e-mail, og om e-mailen er optaget
+        if ($currentUser['Email'] !== $email) {
+            $exists = $this->RCMS->execute('CALL getUserByEmail(?)', array('s', $email));
+            if ($exists->num_rows !== 0) {
+                // E-mail er allerede taget
+                header("Location: ?userid=$userID&emailtaken");
+                return;
+            }
+        }
+
+        // Tjek om brugeren vil ændre sit password
         if (isset($_POST['password']) && $_POST['password'] !== '') {
             $password = $this->RCMS->Login->saltPass($_POST['password']);
         } else {
@@ -288,10 +292,40 @@ class TecTools {
         $this->RCMS->execute('CALL editUser(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array('issssssssi', $userID, $firstname, $lastname, $email, $password, $phone, $address, $zipcode, $city, $level));
 
         if ($userID === $this->RCMS->Login->getUserID()) {
-            $this->RCMS->Login->log_out('Location: /login?userInfoChanged');
-        } else {
-            header('Location: /dashboard');
+            // Brugerens information har ændret sig, så de skal opdateres i sessionen
+            $user = $this->getUserByID($userID);
+            unset($user['Password']);
+            $_SESSION['user'] = $user;
         }
+
+        $this->editCustomerInStripe($currentUser['StripeID'], $firstname, $lastname, $email, $phone, $address, $zipcode, $city);
+
+        header('Location: /dashboard');
+    }
+
+    public function editCustomerInStripe(string $stripeCustomerID, string $firstname, string $lastname, string $email, string $phone, string $address, string $zipcode, string $city) {
+        $params = [
+            'name' => $firstname . ' ' . $lastname,
+            'email' => $email,
+            'phone' => $phone,
+            'address' => [
+                'line1' => $address,
+                'city' => $city,
+                'postal_code' => $zipcode,
+                'country' => 'DK'
+            ],
+            'shipping' => [
+                'address' => [
+                    'line1' => $address,
+                    'city' => $city,
+                    'postal_code' => $zipcode
+                ],
+                'name' => $firstname . ' ' . $lastname,
+                'phone' => '45' . $phone
+            ]
+        ];
+
+        $this->RCMS->StripeWrapper->editCustomer($stripeCustomerID, $params);
     }
 
     /**
@@ -708,5 +742,11 @@ SQL;
     public function getAllManufacturers(): array {
         $res = $this->RCMS->execute('CALL getAllManufacturers()');
         return $res->fetch_all(MYSQLI_ASSOC) ?? [];
+    }
+
+    public function getUserByEmail(string $email) {
+        $res = $this->RCMS->execute('CALL getUserByEmail(?)', array('s', $email));
+
+        return $res->fetch_array(MYSQLI_ASSOC) ?? false;
     }
 }

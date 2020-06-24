@@ -91,8 +91,11 @@ class RCMS {
     private string $relativeUploadsFolder;
     private string $salt;
 
-    public function __construct(string $host, string $user, string $pass, string $database, string $homefolder, string $templatefolder, string $uploadsfolder, string $salt) {
-        session_start();
+    public function __construct(string $host, string $user, string $pass, string $database, string $homefolder, string $templatefolder, string $uploadsfolder, string $salt, string $secretStripeKey) {
+        if (!headers_sent() && session_status() != PHP_SESSION_NONE) {
+            session_start();
+        }
+
 
         $this->host = $host;
         $this->user = $user;
@@ -111,10 +114,10 @@ class RCMS {
 
         $this->Functions = new Functions($this);
 
+        $this->StripeWrapper = new StripeWrapper($this, $secretStripeKey);
         $this->Login = new Login($this);
         $this->Template = new Template($this);
         $this->Logger = new Logger($this);
-        $this->StripeWrapper = new StripeWrapper($this);
         $this->loadPlugins(__DIR__ . '/plugins/');
 
 
@@ -253,7 +256,7 @@ class RCMS {
      * @return array|null
      */
     public function getRequestedPage(): ?array {
-        $request_url = explode('?', $_SERVER['REQUEST_URI'], 2)[0];
+        $request_url = explode('?', $_SERVER['REQUEST_URI'] ?? '', 2)[0];
         $request_url2 = $request_url . "/";
         if ($request_url === "/index.php" || $request_url === "/index.php/") {
             $request_url = "/";
@@ -267,6 +270,21 @@ class RCMS {
         }
 
         return $row;
+    }
+
+    public function closeRCMS() {
+        $this->mysqli->close();
+
+        $vars = array_keys(get_defined_vars());
+        $count = sizeOf($vars);
+
+        for ($i = 0; $i < $count; $i++) {
+            unset($$vars[$i]);
+        }
+        unset($vars,$i);
+        $GLOBALS = [];
+        $_SESSION = [];
+        //session_destroy();
     }
 
     /**

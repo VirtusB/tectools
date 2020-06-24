@@ -59,18 +59,19 @@ class Login {
                 $_SESSION['logged_in'] = 1;
                 $_SESSION['user'] = $user;
 
-                header('Location: /dashboard');
+                @header('Location: /dashboard');
             } else {
-                header("Location: /login?wrong_email_or_password");
+                @header("Location: /login?wrong_email_or_password");
             }
 		} else {
-			header("Location: /login?wrong_email_or_password");
+			@header("Location: /login?wrong_email_or_password");
 		}
 	}
 
     /**
      * Opretter en bruger via en POST request
-     * @return bool|void
+     * TODO: en bruger skal ikke kunne se andet end abonnement siden indtil de har købt et abonnement
+     * @return void
      * @throws ApiErrorException
      */
 	public function createUser() {
@@ -89,9 +90,9 @@ class Login {
             // brugeren eksisterer allerede
             unset($_POST['password']);
             $_SESSION['createUserPOST'] = $_POST;
-            header('Location: ?emailtaken');
+            @header('Location: ?emailtaken');
 
-            return false;
+            return;
         }
         unset($_SESSION['createUserPOST']);
 
@@ -124,7 +125,17 @@ class Login {
             'address' => [
                 'line1' => $address,
                 'city' => $city,
-                'postal_code' => $zipcode
+                'postal_code' => $zipcode,
+                'country' => 'DK'
+            ],
+            'shipping' => [
+                'address' => [
+                    'line1' => $address,
+                    'city' => $city,
+                    'postal_code' => $zipcode
+                ],
+                'name' => $firstname . ' ' . $lastname,
+                'phone' => '45' . $phone
             ]
         ];
 

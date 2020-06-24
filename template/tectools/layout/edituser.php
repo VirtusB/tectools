@@ -32,6 +32,12 @@ $user = $TecTools->getUserByID($userID);
         <br><br>
         <h1 class="header center orange-text">Rediger bruger</h1>
 
+        <?php
+        if (isset($_GET['emailtaken'])) {
+            $this->RCMS->Functions->outputError('Bruger med den email eksisterer allerede', 'h5', true);
+        }
+        ?>
+
         <div class="row center">
             <div class="col s12 m6 l6 xl6 offset-m3 offset-l3 offset-xl3">
 

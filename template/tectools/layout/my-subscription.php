@@ -14,16 +14,7 @@ $TecTools = $GLOBALS['TecTools'];
 
 $products = $this->RCMS->StripeWrapper->getStripeProducts();
 
-$userProduct = null;
-
-if ($this->RCMS->Login->getStripeID()) {
-    $productID = $this->RCMS->StripeWrapper->getProductIDForCustomer($this->RCMS->Login->getStripeID());
-    if ($productID) {
-        $userProduct = $this->RCMS->StripeWrapper->getStripeProduct($productID);
-    }
-}
-
-
+$userProduct = $TecTools->getUserProduct($this->RCMS->Login->getUserID());
 
 ?>
 

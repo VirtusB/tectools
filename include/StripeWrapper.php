@@ -24,10 +24,11 @@ class StripeWrapper {
     /**
      * StripeWrapper constructor.
      * @param RCMS $RCMS
+     * @param string $secretStripeKey
      */
-    public function __construct(RCMS $RCMS) {
+    public function __construct(RCMS $RCMS, string $secretStripeKey) {
         $this->RCMS = $RCMS;
-        $this->stripe = new StripeClient(STRIPE_SECRET_KEY);
+        $this->stripe = new StripeClient($secretStripeKey);
     }
 
     /**
@@ -48,6 +49,14 @@ class StripeWrapper {
      */
     public function createCustomer(array $params): Customer {
         return $this->getStripeClient()->customers->create($params);
+    }
+
+    public function removeCustomer(string $customerID) {
+        return $this->getStripeClient()->customers->delete($customerID);
+    }
+
+    public function editCustomer(string $customerID, array $params): Customer {
+        return $this->getStripeClient()->customers->update($customerID, $params);
     }
 
     /**
