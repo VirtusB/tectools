@@ -27,7 +27,7 @@ function setupTestDatabase(bool $seed = false, bool $returnRCMS = true) {
     shell_exec($createTestDatabase);
 
     // Hent funktioner og procedures ud af produktions databasen
-    $RCMS = new RCMS(DB_HOST, DB_USER, DB_PASS, DB_NAME, ROOT_FOLDER, TEMPLATE_FOLDER_NAME, UPLOADS_FOLDER, SALT, STRIPE_SECRET_KEY);
+    $RCMS = new RCMS(DB_HOST, DB_USER, DB_PASS, DB_NAME, ROOT_FOLDER, TEMPLATE_FOLDER_NAME, UPLOADS_FOLDER, SALT, STRIPE_SECRET_KEY, 'development');
 
     $res = $RCMS->execute('CALL getAllProcedures()');
 
@@ -55,7 +55,7 @@ function setupTestDatabase(bool $seed = false, bool $returnRCMS = true) {
     unset($RCMS);
 
     // Indsæt funktioner og procedures ind i test databasen
-    $RCMS = new RCMS(TEST_DB_HOST, TEST_DB_USER, TEST_DB_PASS, TEST_DB_NAME, ROOT_FOLDER, TEMPLATE_FOLDER_NAME, UPLOADS_FOLDER, SALT, TEST_STRIPE_SECRET_KEY);
+    $RCMS = new RCMS(TEST_DB_HOST, TEST_DB_USER, TEST_DB_PASS, TEST_DB_NAME, ROOT_FOLDER, TEMPLATE_FOLDER_NAME, UPLOADS_FOLDER, SALT, TEST_STRIPE_SECRET_KEY, 'development');
 
     mysqli_set_charset($RCMS->getMySQLI(), 'utf8mb4');
 

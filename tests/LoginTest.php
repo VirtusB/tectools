@@ -59,15 +59,17 @@ class LoginTest extends TestCase {
      */
     public function test_SignUp_DuplicateEmail_UserIsNotCreated(): void {
         $user = array_replace([], self::$userTemplate);
-        $_POST = $user;
 
+        $_POST = $user;
         $this->RCMS->Login->createUser();
+
+        $_POST = $user;
         $this->RCMS->Login->createUser();
 
         $usersEmailQuery = $this->RCMS->execute('SELECT * FROM Users WHERE Email = ?', array('s', $user['email']));
         $userEmailNumRows = $usersEmailQuery->num_rows;
 
-        // Fjern brugeren fra Stripe, der er ingen grund til at den ligger der
+        //Fjern brugeren fra Stripe, der er ingen grund til at den ligger der
         if ($userEmailNumRows !== 0) {
             $userFromDatabase = $usersEmailQuery->fetch_array(MYSQLI_ASSOC);
             $this->RCMS->StripeWrapper->removeCustomer($userFromDatabase['StripeID']);

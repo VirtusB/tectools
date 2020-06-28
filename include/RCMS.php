@@ -91,8 +91,8 @@ class RCMS {
     private string $relativeUploadsFolder;
     private string $salt;
 
-    public function __construct(string $host, string $user, string $pass, string $database, string $homefolder, string $templatefolder, string $uploadsfolder, string $salt, string $secretStripeKey) {
-        if (!headers_sent() && session_status() != PHP_SESSION_NONE) {
+    public function __construct(string $host, string $user, string $pass, string $database, string $homefolder, string $templatefolder, string $uploadsfolder, string $salt, string $secretStripeKey, string $environment = '') {
+        if (!headers_sent() && session_status() == PHP_SESSION_NONE) {
             session_start();
         }
 
@@ -124,6 +124,12 @@ class RCMS {
         ob_start();
 
         require_once 'template/' . $templatefolder . '/index.php';
+
+        if ($environment === '' || $environment === 'production') {
+            echo ob_get_clean();
+        } else {
+            ob_end_clean();
+        }
     }
 
     /**
@@ -308,6 +314,38 @@ class RCMS {
             header("Location: $questionMarksReplaced");
             exit(0);
         }
+    }
+
+    public static function generateConfigFile() {
+        $tester = getenv('testerto');
+        echo $tester;
+        die();
+
+        $configSecret = getenv('GENERATE_CONFIG_SECRET');
+
+        if (!isset($_POST['secret']) || $_POST['secret'] !== $configSecret) {
+            http_response_code(401);
+            die('Unauthorized');
+        }
+
+        echo 123;
+        die();
+
+//        $host = getenv('DB_HOST_SECRET');
+//        $user = getenv('DB_USER_SECRET');
+//        $pass = getenv('DB_PASS_SECRET');
+//        $db = getenv('DB_NAME_SECRET');
+//
+//        $conn = mysqli_connect($host, $user, $pass, $db) or die("MySQLi Error!");
+//        mysqli_set_charset($conn, "utf8");
+//
+//        // Hent alle koder ud af databasen
+//        $query = <<<SQL
+//
+//SQL;
+
+
+        // Lav config.php fil
     }
 
 }

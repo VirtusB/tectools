@@ -24,3 +24,5 @@ config.php
 .idea
 
 include/vendor
+
+.env
