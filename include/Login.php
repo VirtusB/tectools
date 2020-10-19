@@ -77,6 +77,7 @@ class Login {
 	public function createUser() {
 	    $email = $_POST['email'];
 	    $password = $_POST['password'];
+	    $repeatPassword = $_POST['repeat_password'];
 	    $firstname = $_POST['firstname'];
 	    $lastname = $_POST['lastname'];
 	    $phone = $_POST['phone'];
@@ -87,13 +88,22 @@ class Login {
         $exists = $this->RCMS->execute('CALL getUserByEmail(?)', array('s', $email));
 
         if ($exists->num_rows !== 0) {
-            // brugeren eksisterer allerede
-            unset($_POST['password']);
+            // E-mail er allerede brugt
+            unset($_POST['password'], $_POST['repeat_password']);
             $_SESSION['createUserPOST'] = $_POST;
             @header('Location: ?emailtaken');
 
             return;
         }
+
+        if ($password !== $repeatPassword) {
+            unset($_POST['password'], $_POST['repeat_password']);
+            $_SESSION['createUserPOST'] = $_POST;
+            @header('Location: ?confirm_password');
+
+            return;
+        }
+
         unset($_SESSION['createUserPOST']);
 
         $hashedPass = password_hash($password, PASSWORD_DEFAULT);

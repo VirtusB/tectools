@@ -64,10 +64,6 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                         'label' => "Status"
                     ),
                     array(
-                        'column' => "Description",
-                        'label' => "Beskrivelse"
-                    ),
-                    array(
                         'column' => "Barcode",
                         'label' => "Stregkode",
                         'function' => 'showToolBarcode'
@@ -79,7 +75,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
 
                 $buttons = array(
                     array(
-                        "button" => '<input type="button" class="btn" onclick="location.pathname = \'/edittoolQMARKtoolid=?\'" value="Rediger værktøj" />',
+                        "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = \'/edittoolQMARKtoolid=?\'" value="Rediger værktøj" />',
                         "value" => "ToolID"
                     )
                 );
@@ -129,7 +125,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
 
                 $buttons = array(
                     array(
-                        "button" => '<input type="button" class="btn" onclick="location.pathname = \'/edituserQMARKuserid=?\'" value="Rediger bruger" />',
+                        "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = \'/edituserQMARKuserid=?\'" value="Rediger bruger" />',
                         "value" => "UserID"
                     )
                 );
@@ -166,7 +162,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
 
                 $buttons = array(
                     array(
-                        "button" => '<input type="button" class="btn" onclick="location.pathname = \'/editcategoryQMARKcategoryid=?\'" value="Rediger kategori" />',
+                        "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = \'/editcategoryQMARKcategoryid=?\'" value="Rediger kategori" />',
                         "value" => "CategoryID"
                     )
                 );
@@ -202,7 +198,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
 
                 $buttons = array(
                     array(
-                        "button" => '<input type="button" class="btn" onclick="location.pathname = \'/editmanufacturerQMARKmanufacturerid=?\'" value="Rediger producent" />',
+                        "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = \'/editmanufacturerQMARKmanufacturerid=?\'" value="Rediger producent" />',
                         "value" => "ManufacturerID"
                     )
                 );

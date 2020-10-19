@@ -32,7 +32,7 @@ if (isset($_GET['search-text']) && !empty($_GET['search-text']) || isset($_GET['
 
             <div id="category-select-col" class="col s12 m12 l4 xl4">
                 <select multiple name="categories[]" id="category-select">
-                    <option <?= isset($_GET['categories']) ? '' : 'selected' ?> disabled value="SORT_CATEGORIES">Vælg kategori</option>
+                    <option disabled="disabled" value="">Vælg kategori</option>
                     <?php foreach ($categories as $category): ?>
                         <option <?= isset($_GET['categories']) && in_array($category['CategoryID'], $_GET['categories'], false) ? 'selected' : '' ?> value="<?= $category['CategoryID'] ?>"><?= $category['CategoryName'] ?></option>
                     <?php endforeach; ?>
@@ -40,8 +40,27 @@ if (isset($_GET['search-text']) && !empty($_GET['search-text']) || isset($_GET['
             </div>
 
             <div style="justify-content: flex-end" class="col s12 m12 l4 xl4 valign-wrapper">
+                <div id="only_in_stock_container">
+<!--                    <input type="hidden" name="only_in_stock" value="off">-->
+                    <input id="only_in_stock" name="only_in_stock" type="checkbox">
+                    <label for="only_in_stock">Kun på lager</label>
+                </div>
+
                 <button style="width: 50%;" id="filter-tools-btn" type="submit" class="btn green-btn">Søg</button>
             </div>
+
+            <style>
+                #only_in_stock {
+                    position: initial;
+                    opacity: 1;
+                    pointer-events: initial;
+                    margin-right: 5px;
+                }
+
+                #only_in_stock_container {
+                    width: 50%;
+                }
+            </style>
         </div>
         <div class="row" id="tools-row">
 
@@ -82,5 +101,6 @@ if (isset($_GET['search-text']) && !empty($_GET['search-text']) || isset($_GET['
 <link rel="stylesheet" href="<?= $this->RCMS->getTemplateFolder() ?>/css/frontpage.css">
 
 <script src="<?= $this->RCMS->getTemplateFolder() ?>/js/frontpage/frontpage.js"></script>
+
 
 

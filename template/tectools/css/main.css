@@ -3,14 +3,19 @@ body {
     min-height: 100vh;
     flex-direction: column;
     font-family: 'Open Sans';
+    color: #2d3e50;
 }
 
 main {
     flex: 1 0 auto;
 }
 
+button, a, button:hover, a:hover {
+    /*transition: all .2s ease-in-out;*/
+}
+
 nav, .page-footer {
-    background-color: #FF9800;
+    background-color: #4caf50;
 }
 
 .card .card-image {
@@ -36,6 +41,22 @@ strong {
     display: none;
 }
 
+.tec-btn {
+    background: #ff9100;
+    color: #fff;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+#des-editor {
+    border-bottom: 1px solid #9e9e9e;
+}
+
+nav .brand-logo i {
+    float: none;
+    margin-right: 0;
+}
+
 form.tectool-form input, form.tectool-form select {
     margin-bottom: 2rem !important;
 }
@@ -51,6 +72,20 @@ a.btn, button.btn {
 .card:hover {
     box-shadow: 0 8px 16px 0 rgba(113, 106, 106, 0.2);
     /*box-shadow: 0 4px 16px 0 rgba(113, 106, 106, 0.15);*/
+}
+
+.tec-submit-btn {
+    background-color: #ff9100 !important;
+    border: 2px solid #ff9100 !important;
+    color: #fff !important;
+    outline: none !important;
+    height: 43px !important;
+    width: 100% !important;
+    border-radius: 9px !important;
+    margin-top: 5px !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+    font-weight: 500 !important;
 }
 
 .green-btn {

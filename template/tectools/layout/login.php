@@ -11,28 +11,44 @@ if ($this->RCMS->Login->isLoggedIn()) {
 }
 ?>
 
-<div class="row">
-    <div class="col s12 m8 l4 xl2 offset-m2 offset-l4 offset-xl5">
-        <div id="">
-            <h1>Log ind</h1>
+<div class="container mt4">
+    <div class="row">
 
-            <?php
-            if (isset($_GET['wrong_email_or_password'])) {
-                $this->RCMS->Functions->outputError('Forkert email eller adgangskode', 'h6');
-            }
+        <?php
+        if (isset($_GET['wrong_email_or_password'])) {
+            $this->RCMS->Functions->outputError('Forkert email eller adgangskode', 'h6');
+        }
 
-            if (isset($_GET['userInfoChanged'])) {
-                echo '<h6>Da du har ændret dine brugerinformationer, skal du logge ind igen</h6>';
-            }
-            ?>
+        if (isset($_GET['userInfoChanged'])) {
+            echo '<h6>Da du har ændret dine brugerinformationer, skal du logge ind igen</h6>';
+        }
+        ?>
 
-            <form action="" method="POST">
-                <input autocomplete="off" name="email" type="email" required placeholder="E-mail"><br>
-                <input autocomplete="off" name="password" type="password" required placeholder="Adgangskode"><br>
-                <input name="log_in" type="hidden" value="1"><br>
-                <input class="btn" type="submit" value="Log ind">
-            </form>
-            <br><br><br>
-        </div>
+        <form method="post" class="col s12 m4 offset-m4">
+            <h1 class="center">Log ind</h1>
+            <div>
+                <a style="text-align: center; display: block" href="/register">Ingen konto? Opret her</a>
+            </div>
+
+            <div class="row mt2">
+                <div class="input-field col s12">
+                    <input autocomplete="off" required id="username" name="email" type="email" class="validate">
+                    <label for="username">E-mail</label>
+                </div>
+
+                <div class="input-field col s12">
+                    <input autocomplete="off" required id="password" type="password" name="password" class="validate">
+                    <label for="password">Adgangskode</label>
+                </div>
+            </div>
+
+            <input name="log_in" type="hidden" value="1">
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <input class="tec-submit-btn" type="submit" value="Log ind">
+                </div>
+            </div>
+        </form>
     </div>
 </div>

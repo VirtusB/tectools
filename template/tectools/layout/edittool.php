@@ -24,6 +24,13 @@ $categories = $TecTools->getAllCategories();
 
 ?>
 
+<!-- Main Quill library TODO: skal loades lokalt -->
+<script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+<!-- Theme included stylesheets -->
+<link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
+
 <div class="section no-pad-bot">
     <div class="container">
         <br><br>
@@ -42,8 +49,16 @@ $categories = $TecTools->getAllCategories();
                     <label>Navn</label>
                     <input value="<?= $tool['ToolName'] ?>" id="tool_name" required name="tool_name" type="text" placeholder="Navn på værktøj">
 
-                    <label>Beskrivelse</label>
-                    <input value="<?= $tool['Description'] ?>" required name="description" type="text" placeholder="Kort beskrivelse">
+                    <label for="des-editor">Beskrivelse</label>
+                    <div id="des-editor">
+                        <?= $tool['Description'] ?>
+                    </div>
+
+                    <textarea style="display: none" name="description" id="description" cols="30" rows="10">
+                        <?= $tool['Description'] ?>
+                    </textarea>
+
+                    <br>
 
                     <label>Status</label>
                     <select required class="browser-default" name="status">
@@ -95,5 +110,7 @@ $categories = $TecTools->getAllCategories();
         <br><br>
     </div>
 </div>
+
+<script src="<?= $this->RCMS->getTemplateFolder() ?>/js/tools/edit-create-tool.js"></script>
 
 

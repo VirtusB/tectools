@@ -693,7 +693,6 @@ SQL;
 SQL;
         }
 
-
         $res = $this->RCMS->execute($query, [$types, ...$parameters]);
         $tools = $res->fetch_all(MYSQLI_ASSOC);
 

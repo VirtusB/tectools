@@ -55,6 +55,10 @@ declare(strict_types=1);
     .info-paragraph {
         background-color: #eeeeee24;
     }
+
+    .ql-editor.ql-blank::before {
+        color: #fff !important;
+    }
 </style>
 
 <script src="<?= $this->getTemplateFolder() ?>/js/themes.js"></script>

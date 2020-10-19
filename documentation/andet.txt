@@ -15,3 +15,18 @@ Brug LIMIT N, N til pagination
 
 
 Slet gamle billeder efter upload
+
+custom form location
+account creation errors
+
+rediger bruger
+abonnement siden, gør pænere
+slet værktøj
+
+form validation js?
+
+skriv på siden når en reservation er overskredet
+notifikationer på hjemmesiden
+notifikationer via email
+
+UX test - bruger gruppe som skal teste sidens anvendelighed
