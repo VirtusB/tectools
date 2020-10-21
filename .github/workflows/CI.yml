@@ -22,7 +22,5 @@ jobs:
           composer install --prefer-dist
 
 
-      - uses: php-actions/phpunit@v1
-
       - name: "Run tests with phpunit/phpunit"
         run: "include/vendor/bin/phpunit --testdox tests"
