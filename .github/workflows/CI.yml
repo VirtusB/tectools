@@ -16,8 +16,12 @@ jobs:
       - name: "Checkout"
         uses: "actions/checkout@v1"
 
-        run: "cd include"
-      - uses: php-actions/composer@v1
+      - name: Install Composer Dependencies
+        run: |
+          cd include
+          composer install --prefer-dist
+
+
       - uses: php-actions/phpunit@v1
 
       - name: "Run tests with phpunit/phpunit"
