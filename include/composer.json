@@ -4,8 +4,7 @@
     "ext-mysqli": "*",
     "ext-mbstring": "*",
     "ext-json": "*",
-    "ext-fileinfo": "*",
-    "ext-http": "*"
+    "ext-fileinfo": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^9"
