@@ -630,70 +630,62 @@ class TecTools {
     }
 
     /**
-     * Henter værktøj ud af databasen, med mulighed for at filtrere på kategorier og søgetekst
-     * @param array $filters
+     * Returnerer mængden af værktøj der er i databasen (med filtre), til brug ved pagination
+     * @return int
+     */
+    public function getToolCountWithFilters(): int {
+        $filters = $this->getPaginationFilters();
+
+        return (int) $this->RCMS->execute('SELECT fn_GetToolCountBySearch(?, ?, ?) as toolCount', array('ssi', $filters['search-text'], $filters['categories'], $filters['only_in_stock']))->fetch_object()->toolCount;
+    }
+
+    public function getFilterQueryString() {
+        $vars = explode('&', $_SERVER['QUERY_STRING']);
+
+        $final = array();
+
+        if (!empty($vars)) {
+            foreach($vars as $var) {
+                if (empty($var)) {
+                    continue;
+                }
+
+                $parts = explode('=', $var);
+
+                $key = $parts[0];
+                $val = $parts[1];
+
+                if (!array_key_exists($key, $final) && $key !== 'pagenum') {
+                    $final[$key] = $val;
+                }
+
+            }
+        }
+
+        return http_build_query($final);
+    }
+
+    /**
+     * Returnerer de forskellige filtre der kan bruges til søgning af værktøj
      * @return array
      */
-    public function getAllToolsWithFilters(array $filters): array {
-        $query = <<<SQL
-        SELECT * FROM Tools p1
-        LEFT JOIN Manufacturers p2 ON p1.FK_ManufacturerID = p2.ManufacturerID
-        LEFT JOIN Statuses p3 ON p3.StatusID = p1.FK_StatusID
-        WHERE
-SQL;
+    private function getPaginationFilters(): array {
+        return [
+            'search-text' => isset($_GET['search-text']) ? $_GET['search-text'] : '',
+            'categories' => isset($_GET['categories']) ? implode(',', array_map(static fn($category) => (int)$category, $_GET['categories'])) : '',
+            'only_in_stock' => isset($_GET['only_in_stock']) ? (int)$_GET['only_in_stock'] : 1,
+            'pagenum' => isset($_GET['pagenum']) ? (int)$_GET['pagenum'] : 1
+        ];
+    }
 
+    /**
+     * Henter værktøj ud af databasen, med mulighed for at filtrere på kategorier og søgetekst
+     * @return array
+     */
+    public function getAllToolsWithFilters(): array {
+        $filters = $this->getPaginationFilters();
 
-        $searchText = '';
-        $categories = [];
-        $parameters = [];
-        $types = '';
-
-        $hasSearchText = false;
-        $hasCategories = false;
-
-        if (isset($filters['search-text']) && !empty($filters['search-text'])) {
-            $searchText = $filters['search-text'];
-            $hasSearchText = true;
-        }
-
-        if (isset($filters['categories']) && !empty($filters['categories'])) {
-            $categories = array_map(static fn($category) => (int) $category, $filters['categories']);
-            $hasCategories = true;
-        }
-
-        if ($hasSearchText && !$hasCategories) {
-            $types = 'ssss';
-            $parameters = array_fill(0, 4, "%$searchText%");
-
-            $query .= <<<SQL
-            p1.ToolName LIKE ?
-            OR p1.Description LIKE ?
-            OR p2.ManufacturerName LIKE ?
-            OR p3.StatusName LIKE ?
-SQL;
-        } else if ($hasCategories && !$hasSearchText) {
-            $IN = str_repeat('?,', count($categories) - 1) . '?';
-            $types = str_repeat('i', count($categories));
-            $parameters = $categories;
-
-            $query .= <<<SQL
-            p1.ToolID IN (SELECT FK_ToolID FROM CategoryTools WHERE FK_ToolID = p1.ToolID AND FK_CategoryID IN($IN))
-SQL;
-        } else if ($hasCategories && $hasSearchText) {
-            $IN = str_repeat('?,', count($categories) - 1) . '?';
-            $types = str_repeat('i', count($categories)) . 'ssss';
-            $parameters = array_merge($categories, array_fill(0, 4, "%$searchText%"));
-
-            $query .= <<<SQL
-            p1.ToolID IN (SELECT FK_ToolID FROM CategoryTools WHERE FK_ToolID = p1.ToolID AND FK_CategoryID IN($IN))
-            AND (p1.ToolName LIKE ?
-            OR p1.Description LIKE ?
-            OR p2.ManufacturerName LIKE ?
-            OR p3.StatusName LIKE ?)
-SQL;
-        }
-
-        $res = $this->RCMS->execute($query, [$types, ...$parameters]);
+        $res = $this->RCMS->execute('CALL getToolsBySearch(?, ?, ?, ?)', array('ssii', $filters['search-text'], $filters['categories'], $filters['only_in_stock'], $filters['pagenum']));
         $tools = $res->fetch_all(MYSQLI_ASSOC);
 
         foreach ($tools as $key => $tool) {

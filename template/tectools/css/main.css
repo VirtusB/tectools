@@ -4,6 +4,12 @@ body {
     flex-direction: column;
     font-family: 'Open Sans';
     color: #2d3e50;
+    background: #eee;
+}
+
+.select-wrapper .caret {
+    /*fill: rgba(255,255,255,0.87);*/
+    fill: #2d3e50;
 }
 
 main {
@@ -15,7 +21,7 @@ button, a, button:hover, a:hover {
 }
 
 nav, .page-footer {
-    background-color: #4caf50;
+    background-color: #2C3F50;
 }
 
 .card .card-image {
@@ -89,7 +95,7 @@ a.btn, button.btn {
 }
 
 .green-btn {
-    background-color: #4CAF50;
+    background-color: #2C3F50;
 }
 
 a.btn:hover, button.btn:hover {
@@ -105,7 +111,7 @@ a.btn:hover, button.btn:hover {
 }
 
 .info-paragraph {
-    background-color: #eee;
+    background-color: #fff;
     padding: 10px;
     max-width: 375px;
     margin: 0 auto;

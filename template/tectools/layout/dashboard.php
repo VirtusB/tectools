@@ -136,76 +136,79 @@ $RCMSTables = $GLOBALS['RCMSTables'];
             </div>
 
             <div class="row dashboard-row responsive-table-container">
-                <h3>Kategorier</h3>
+                <div class="col s12 xl6">
+                    <h3>Kategorier</h3>
 
-                <?php
-                $columns = array(
-                    array(
-                        'column' => 'CategoryID',
-                        'label' => 'ID',
-                        'prefix' => 'p1.CategoryID AS'
-                    ),
-                    array(
-                        'column' => "CategoryName",
-                        'label' => "Navn",
-                        'prefix' => 'p1.CategoryName AS'
-                    ),
-                    array(
-                        'column' => "toolCount",
-                        'prefix' => 'COUNT(p2.FK_CategoryID) AS ',
-                        'label' => "Antal værktøj"
-                    )
-                );
+                    <?php
+                    $columns = array(
+                        array(
+                            'column' => 'CategoryID',
+                            'label' => 'ID',
+                            'prefix' => 'p1.CategoryID AS'
+                        ),
+                        array(
+                            'column' => "CategoryName",
+                            'label' => "Navn",
+                            'prefix' => 'p1.CategoryName AS'
+                        ),
+                        array(
+                            'column' => "toolCount",
+                            'prefix' => 'COUNT(p2.FK_CategoryID) AS ',
+                            'label' => "Antal værktøj"
+                        )
+                    );
 
-                $order = "ORDER BY p1.CategoryID DESC";
-                $settings = array('searchbar' => true);
+                    $order = "ORDER BY p1.CategoryID DESC";
+                    $settings = array('searchbar' => true);
 
-                $buttons = array(
-                    array(
-                        "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = \'/editcategoryQMARKcategoryid=?\'" value="Rediger kategori" />',
-                        "value" => "CategoryID"
-                    )
-                );
+                    $buttons = array(
+                        array(
+                            "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = \'/editcategoryQMARKcategoryid=?\'" value="Rediger kategori" />',
+                            "value" => "CategoryID"
+                        )
+                    );
 
-                $RCMSTables->createRCMSTable("categories_table", "Categories p1 LEFT JOIN CategoryTools p2 ON p2.FK_CategoryID = p1.CategoryID GROUP BY p1.CategoryID, p1.CategoryName", $columns, $settings, null, $order, $buttons, null);
-                ?>
+                    $RCMSTables->createRCMSTable("categories_table", "Categories p1 LEFT JOIN CategoryTools p2 ON p2.FK_CategoryID = p1.CategoryID GROUP BY p1.CategoryID, p1.CategoryName", $columns, $settings, null, $order, $buttons, null);
+                    ?>
+                </div>
+
+                <div class="col s12 xl6">
+                    <h3>Producenter</h3>
+
+                    <?php
+                    $columns = array(
+                        array(
+                            'column' => 'ManufacturerID',
+                            'label' => 'ID',
+                            'prefix' => 'p1.ManufacturerID AS'
+                        ),
+                        array(
+                            'column' => "ManufacturerName",
+                            'label' => "Navn",
+                            'prefix' => 'p1.ManufacturerName AS'
+                        ),
+                        array(
+                            'column' => "toolCount",
+                            'prefix' => 'COUNT(p2.FK_ManufacturerID) AS ',
+                            'label' => "Antal værktøj"
+                        )
+                    );
+
+                    $order = "ORDER BY p1.ManufacturerID DESC";
+                    $settings = array('searchbar' => true);
+
+                    $buttons = array(
+                        array(
+                            "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = \'/editmanufacturerQMARKmanufacturerid=?\'" value="Rediger producent" />',
+                            "value" => "ManufacturerID"
+                        )
+                    );
+
+                    $RCMSTables->createRCMSTable("manufacturers_table", "Manufacturers p1 LEFT JOIN Tools p2 ON p2.FK_ManufacturerID = p1.ManufacturerID GROUP BY p1.ManufacturerID, p1.ManufacturerName", $columns, $settings, null, $order, $buttons, null);
+                    ?>
+                </div>
             </div>
 
-            <div class="row dashboard-row responsive-table-container">
-                <h3>Producenter</h3>
-
-                <?php
-                $columns = array(
-                    array(
-                        'column' => 'ManufacturerID',
-                        'label' => 'ID',
-                        'prefix' => 'p1.ManufacturerID AS'
-                    ),
-                    array(
-                        'column' => "ManufacturerName",
-                        'label' => "Navn",
-                        'prefix' => 'p1.ManufacturerName AS'
-                    ),
-                    array(
-                        'column' => "toolCount",
-                        'prefix' => 'COUNT(p2.FK_ManufacturerID) AS ',
-                        'label' => "Antal værktøj"
-                    )
-                );
-
-                $order = "ORDER BY p1.ManufacturerID DESC";
-                $settings = array('searchbar' => true);
-
-                $buttons = array(
-                    array(
-                        "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = \'/editmanufacturerQMARKmanufacturerid=?\'" value="Rediger producent" />',
-                        "value" => "ManufacturerID"
-                    )
-                );
-
-                $RCMSTables->createRCMSTable("manufacturers_table", "Manufacturers p1 LEFT JOIN Tools p2 ON p2.FK_ManufacturerID = p1.ManufacturerID GROUP BY p1.ManufacturerID, p1.ManufacturerName", $columns, $settings, null, $order, $buttons, null);
-                ?>
-            </div>
         <?php elseif ($this->RCMS->Login->isAdmin() === false && $this->RCMS->Login->isLoggedIn() === true): ?>
             <div class="row">
                 <div class="col s12">

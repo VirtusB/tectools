@@ -16,6 +16,37 @@ div.card-action a {
     cursor: pointer;
 }
 
-.select-wrapper .caret {
-    fill: rgba(255,255,255,0.87);
+.card:hover {
+    filter: brightness(0.95);
+}
+
+.pagination-container {
+    margin-left: 5px;
+    margin-top: 5px;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.pagination-container .pageSel {
+    background: #0C8DFF;
+    color: #fff;
+    border: 1px solid #0C8DFF;
+    border-radius: 6px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-right: 5px;
+}
+
+.pagination-container .pageNorm {
+    background: #2C3840;
+    color: #fff;
+    border: 1px solid #2C3840;
+    border-radius: 6px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-right: 5px;
 }

@@ -14,12 +14,7 @@ $GlobalHandlers = $GLOBALS['GlobalHandlers'];
 
 $categories = $TecTools->getAllCategories();
 
-if (isset($_GET['search-text']) && !empty($_GET['search-text']) || isset($_GET['categories'])) {
-    $tools = $TecTools->getAllToolsWithFilters($_GET);
-} else {
-    $tools = $TecTools->getAllTools();
-}
-
+$tools = $TecTools->getAllToolsWithFilters();
 
 ?>
 
@@ -41,8 +36,8 @@ if (isset($_GET['search-text']) && !empty($_GET['search-text']) || isset($_GET['
 
             <div style="justify-content: flex-end" class="col s12 m12 l4 xl4 valign-wrapper">
                 <div id="only_in_stock_container">
-<!--                    <input type="hidden" name="only_in_stock" value="off">-->
-                    <input id="only_in_stock" name="only_in_stock" type="checkbox">
+                    <input type="hidden" name="only_in_stock" value="0" />
+                    <input value="1" <?= isset($_GET['only_in_stock']) ? ($_GET['only_in_stock'] == '1' ? 'checked' : '') : 'checked' ?> id="only_in_stock" name="only_in_stock" type="checkbox">
                     <label for="only_in_stock">Kun på lager</label>
                 </div>
 
@@ -67,7 +62,7 @@ if (isset($_GET['search-text']) && !empty($_GET['search-text']) || isset($_GET['
             <?php foreach ($tools as $tool): ?>
 
                 <div class="col s12 m6 l3 xl3">
-                    <div onclick="location.href = '/tool?toolid=<?= $tool['ToolID'] ?>'" class="card">
+                    <div onclick="location.href = '/tool?toolid=<?= $tool['ToolID'] ?>'" class="card large">
                         <div class="card-image">
                             <img src="<?= $TecTools->RELATIVE_TOOL_IMAGE_FOLDER . '/' . $tool['Image'] ?>" alt="">
                         </div>
@@ -92,6 +87,35 @@ if (isset($_GET['search-text']) && !empty($_GET['search-text']) || isset($_GET['
                 </div>
 
             <?php endforeach; ?>
+
+
+            <div class="col s12">
+                <div class="pagination-container">
+                    Side
+
+                    <?php
+
+                    $pageLimit = 8;
+                    $rowCount = $TecTools->getToolCountWithFilters();
+                    $pages = ceil($rowCount / $pageLimit);
+
+                    $query = $TecTools->getFilterQueryString();
+
+                    echo '<span class="page-pagination">';
+                    for ($i = 1; $i <= $pages; $i++) {
+                        if ((isset($_GET['pagenum']) && (int) $_GET['pagenum'] === $i) || (!isset($_GET['pagenum']) && $i === 1)) {
+                            $href = '?pagenum=' . $i . '&' . $query;
+                            echo "<a class='pageSel' href='{$href}'>{$i}</a>";
+                        } else {
+                            $href = '?pagenum=' . $i . '&' . $query;
+                            echo "<a class='pageNorm' href='{$href}'>{$i}</a>";
+                        }
+                    }
+                    echo '</span>';
+
+                    ?>
+                </div>
+            </div>
 
     </form>
 </div>

@@ -25,7 +25,6 @@ require_once(__DIR__ . "/Template.php");
 require_once(__DIR__ . "/Functions.php");
 require_once(__DIR__ . "/StripeWrapper.php");
 require_once(__DIR__ . "/Login.php");
-require_once(__DIR__ . "/Logger.php");
 
 recursive_require_plugins(__DIR__ . '/plugins/');
 
@@ -80,11 +79,6 @@ class RCMS {
      */
     public StripeWrapper $StripeWrapper;
 
-    /**
-     * @var Logger $Logger
-     */
-    public Logger $Logger;
-
     private string $homefolder;
     private string $templatefolder;
     private string $uploadsfolder;
@@ -117,7 +111,7 @@ class RCMS {
         $this->StripeWrapper = new StripeWrapper($this, $secretStripeKey);
         $this->Login = new Login($this);
         $this->Template = new Template($this);
-        $this->Logger = new Logger($this);
+
         $this->loadPlugins(__DIR__ . '/plugins/');
 
 

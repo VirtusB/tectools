@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     $('#category-select-col').next().height(height);
 
+});
+
+window.addEventListener('load', function () {
     fixCardHeights();
 
     var resizeTimer;
@@ -17,21 +20,24 @@ document.addEventListener('DOMContentLoaded', function() {
             fixCardHeights();
         }, 250);
     });
-
 });
 
 function fixCardHeights() {
     let cards = document.querySelectorAll('#tools-row .card');
     let cardImages = document.querySelectorAll('#tools-row .card .card-image');
+    let cardActions = document.querySelectorAll('#tools-row .card-action');
 
     let highestCard = 0;
     let highestImage = 0;
+    let highestAction = 0;
 
-    cards.forEach(c => c.offsetHeight > highestCard ? highestCard = c.offsetHeight : highestCard = highestCard)
+    // Find højder
+    cards.forEach(c => c.offsetHeight > highestCard ? highestCard = c.offsetHeight : highestCard = highestCard);
+    cardImages.forEach(i => i.offsetHeight > highestImage ? highestImage = i.offsetHeight : highestImage = highestImage);
+    cardActions.forEach(i => i.offsetHeight > highestAction ? highestAction = i.offsetHeight : highestAction = highestAction);
 
-    cardImages.forEach(i => i.offsetHeight > highestImage ? highestImage = i.offsetHeight : highestImage = highestImage)
-
-    cards.forEach(c => c.style.height = highestCard + 'px')
-
-    cardImages.forEach(i => i.style.height = highestImage + 'px')
+    // Sæt højder
+    // cards.forEach(c => c.style.height = highestCard + 'px');
+    cardImages.forEach(i => i.style.height = highestImage + 'px');
+    // cardActions.forEach(i => i.style.height = highestAction + 'px');
 }
