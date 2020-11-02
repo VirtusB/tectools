@@ -53,7 +53,7 @@ $user = $TecTools->getUserByID($userID);
                     <input value="<?= $user['Email'] ?>" required name="email" type="email" placeholder="Email">
 
                     <label>Adgangskode</label>
-                    <input name="password" type="text" placeholder="Adgangskode">
+                    <input name="password" type="password" placeholder="Adgangskode">
 
                     <label>Tlf. nr.</label>
                     <input value="<?= $user['Phone'] ?>" required name="phone" type="number" placeholder="Tlf. nr.">

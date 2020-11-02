@@ -77,5 +77,55 @@ $userProduct = $TecTools->getUserProduct($this->RCMS->Login->getUserID());
 
 <link rel="stylesheet" href="<?= $this->RCMS->getTemplateFolder() ?>/css/my-subscription.css">
 
+<script src="https://js.stripe.com/v3/"></script>
+
+<script>
+    var stripe = Stripe('pk_test_51GxgFXDehEC5bZAdqTODhHU0ptCC2ejKNBhnZUcLQHjr1tsIZpGJGRv7FuZgMla5JYP747dbNNAXg0yRlUH0HP1R00DvkeG6wM'); // test eller production??
+
+    var newSubscriptionBtn = document.getElementById('new-subscription');
+
+    newSubscriptionBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        var formData = new FormData();
+        formData.append('new_subscription', '1');
+
+        fetch(location.origin + location.pathname, {
+            method: 'POST',
+            data: formData
+
+        })
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (session) {
+                return stripe.redirectToCheckout({sessionId: session.id});
+            })
+            .then(function (result) {
+                // If `redirectToCheckout` fails due to a browser or network
+                // error, you should display the localized error message to your
+                // customer using `error.message`.
+                if (result.error) {
+                    alert(result.error.message);
+                }
+            })
+            .catch(function (error) {
+                console.error('Error:', error);
+            });
+    });
+</script>
+
+
+<!-- Modal Structure -->
+<div id="payment-modal" class="modal">
+    <div class="modal-content">
+
+    </div>
+
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Annuller</a>
+    </div>
+</div>
+
 
 

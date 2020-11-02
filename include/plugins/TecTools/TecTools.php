@@ -65,6 +65,31 @@ class TecTools {
         if (isset($_POST['get_tool_by_barcode_ajax'])) {
             $this->getToolByBarcodeAjax();
         }
+
+        if (isset($_POST['new_subscription'])) {
+            $this->newSubscription();
+        }
+    }
+
+    private function newSubscription() {
+        $session = $this->RCMS->StripeWrapper->getStripeClient()->checkout->sessions->create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'usd',
+                    'product_data' => [
+                        'name' => 'T-shirt',
+                    ],
+                    'unit_amount' => 2000,
+                ],
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => 'https://example.com/success',
+            'cancel_url' => 'https://example.com/cancel',
+        ]);
+
+        $this->RCMS->Functions->outputAJAXResult(200, [ 'id' => $session->id ]);
     }
 
     /**
