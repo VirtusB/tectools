@@ -63,7 +63,9 @@ class RCMSTables {
             $settings['pages'] = false;
         }
 
-        $settings['pageLimit'] = 10;
+        if (empty($settings['pageLimit'])) {
+            $settings['pageLimit'] = 10;
+        }
 
         $this->settings[$id] = $settings;
 

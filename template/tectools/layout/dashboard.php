@@ -71,7 +71,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                 );
 
                 $order = "ORDER BY ToolID DESC";
-                $settings = array('searchbar' => true);
+                $settings = array('searchbar' => true, 'pageLimit' => 5);
 
                 $buttons = array(
                     array(
@@ -121,7 +121,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                 );
 
                 $order = "ORDER BY UserID DESC";
-                $settings = array('searchbar' => true);
+                $settings = array('searchbar' => true, 'pageLimit' => 5);
 
                 $buttons = array(
                     array(
@@ -159,7 +159,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                     );
 
                     $order = "ORDER BY p1.CategoryID DESC";
-                    $settings = array('searchbar' => true);
+                    $settings = array('searchbar' => true, 'pageLimit' => 5);
 
                     $buttons = array(
                         array(
@@ -195,7 +195,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                     );
 
                     $order = "ORDER BY p1.ManufacturerID DESC";
-                    $settings = array('searchbar' => true);
+                    $settings = array('searchbar' => true, 'pageLimit' => 5);
 
                     $buttons = array(
                         array(
