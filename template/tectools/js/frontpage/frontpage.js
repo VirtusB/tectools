@@ -22,6 +22,9 @@ window.addEventListener('load', function () {
     });
 });
 
+/**
+ * Denne funktion søger for at at alle de forskellige værktøjer på forsiden har samme højde
+ */
 function fixCardHeights() {
     let cards = document.querySelectorAll('#tools-row .card');
     let cardImages = document.querySelectorAll('#tools-row .card .card-image');

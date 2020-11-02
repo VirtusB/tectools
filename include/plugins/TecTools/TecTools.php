@@ -328,7 +328,18 @@ class TecTools {
         header('Location: /dashboard');
     }
 
-    public function editCustomerInStripe(string $stripeCustomerID, string $firstname, string $lastname, string $email, string $phone, string $address, string $zipcode, string $city) {
+    /**
+     * Wrapper funktion til at redigere en brugers oplysninger i Stripe
+     * @param string $stripeCustomerID
+     * @param string $firstname
+     * @param string $lastname
+     * @param string $email
+     * @param string $phone
+     * @param string $address
+     * @param string $zipcode
+     * @param string $city
+     */
+    public function editCustomerInStripe(string $stripeCustomerID, string $firstname, string $lastname, string $email, string $phone, string $address, string $zipcode, string $city): void {
         $params = [
             'name' => $firstname . ' ' . $lastname,
             'email' => $email,
@@ -621,7 +632,11 @@ class TecTools {
         return $tool;
     }
 
-    private function getToolByBarcodeAjax() {
+    /**
+     * Henter et værktøj ud af databasen via stregkoden, og udskriver resultatet i JSON.
+     * Til brug ved AJAX requests.
+     */
+    private function getToolByBarcodeAjax(): void {
         if (!isset($_POST['tool_barcode']) || strlen($_POST['tool_barcode']) !== 13) {
             $this->RCMS->Functions->outputAJAXResult(400, ['result' => 'Stregkode er forkert']);
         }
@@ -658,13 +673,36 @@ class TecTools {
      * Returnerer mængden af værktøj der er i databasen (med filtre), til brug ved pagination
      * @return int
      */
-    public function getToolCountWithFilters(): int {
+    private function getToolCountWithFilters(): int {
         $filters = $this->getPaginationFilters();
 
         return (int) $this->RCMS->execute('SELECT fn_GetToolCountBySearch(?, ?, ?) as toolCount', array('ssi', $filters['search-text'], $filters['categories'], $filters['only_in_stock']))->fetch_object()->toolCount;
     }
 
-    public function getFilterQueryString() {
+    /**
+     * Udskriver links til forsiden så man kan skifte side og se flere værktøj
+     */
+    public function displayFrontPagePagination(): void {
+        $pageLimit = 8;
+        $rowCount = $this->getToolCountWithFilters();
+        $pages = ceil($rowCount / $pageLimit);
+
+        $query = $this->getFilterQueryString();
+
+        echo '<span class="page-pagination">';
+        for ($i = 1; $i <= $pages; $i++) {
+            if ((isset($_GET['pagenum']) && (int) $_GET['pagenum'] === $i) || (!isset($_GET['pagenum']) && $i === 1)) {
+                $href = '?pagenum=' . $i . '&' . $query;
+                echo "<a class='pageSel' href='{$href}'>{$i}</a>";
+            } else {
+                $href = '?pagenum=' . $i . '&' . $query;
+                echo "<a class='pageNorm' href='{$href}'>{$i}</a>";
+            }
+        }
+        echo '</span>';
+    }
+
+    private function getFilterQueryString(): string {
         $vars = explode('&', $_SERVER['QUERY_STRING']);
 
         $final = array();

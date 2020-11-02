@@ -44,18 +44,6 @@ $tools = $TecTools->getAllToolsWithFilters();
                 <button style="width: 50%;" id="filter-tools-btn" type="submit" class="btn green-btn">Søg</button>
             </div>
 
-            <style>
-                #only_in_stock {
-                    position: initial;
-                    opacity: 1;
-                    pointer-events: initial;
-                    margin-right: 5px;
-                }
-
-                #only_in_stock_container {
-                    width: 50%;
-                }
-            </style>
         </div>
         <div class="row" id="tools-row">
 
@@ -94,32 +82,14 @@ $tools = $TecTools->getAllToolsWithFilters();
                     Side
 
                     <?php
-
-                    $pageLimit = 8;
-                    $rowCount = $TecTools->getToolCountWithFilters();
-                    $pages = ceil($rowCount / $pageLimit);
-
-                    $query = $TecTools->getFilterQueryString();
-
-                    echo '<span class="page-pagination">';
-                    for ($i = 1; $i <= $pages; $i++) {
-                        if ((isset($_GET['pagenum']) && (int) $_GET['pagenum'] === $i) || (!isset($_GET['pagenum']) && $i === 1)) {
-                            $href = '?pagenum=' . $i . '&' . $query;
-                            echo "<a class='pageSel' href='{$href}'>{$i}</a>";
-                        } else {
-                            $href = '?pagenum=' . $i . '&' . $query;
-                            echo "<a class='pageNorm' href='{$href}'>{$i}</a>";
-                        }
-                    }
-                    echo '</span>';
-
+                        $TecTools->displayFrontPagePagination();
                     ?>
                 </div>
             </div>
 
     </form>
 </div>
-</div>
+
 
 
 <link rel="stylesheet" href="<?= $this->RCMS->getTemplateFolder() ?>/css/frontpage.css">
