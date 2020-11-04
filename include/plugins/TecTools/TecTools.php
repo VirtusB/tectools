@@ -641,6 +641,8 @@ class TecTools {
             $this->RCMS->Functions->outputAJAXResult(400, ['result' => 'Stregkode er forkert']);
         }
 
+        // Indsæt hash i session og databasen med bruger ID, tjek efterfølgende på det i checkIn() metoden
+
         $tool = $this->getToolByBarcode($_POST['tool_barcode']);
 
         $tool['Image'] = $this->RELATIVE_TOOL_IMAGE_FOLDER . '/' . $tool['Image'];
