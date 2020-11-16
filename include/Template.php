@@ -61,7 +61,7 @@ class Template {
 	}
 
     /**
-     * Hvis en side ikke eksisterer, bruges den funktion efterfølgende
+     * Hvis en side ikke eksisterer, benyttes denne metode for at give besked til brugeren
      *
      * Sætter den HTTP status som browseren modtager til 404 Page Not Found
      * @return void
@@ -72,7 +72,7 @@ class Template {
 	}
 
     /**
-     * Denne funktion køres kun 1 gang inden indhold i template bliver inkluderet, og sørger for at alt på siden, bortset fra MySQL data, er i UTF-8 format
+     * Denne metode køres kun 1 gang inden indhold i template bliver inkluderet, og sørger for at alt på siden, bortset fra MySQL data, er i UTF-8 format
      * @return void
      */
 	public function initEncoding(): void {

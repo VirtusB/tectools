@@ -95,7 +95,7 @@ $userProduct = $TecTools->getUserProduct($this->RCMS->Login->getUserID());
         e.preventDefault();
 
         var formData = new FormData();
-        formData.append('new_subscription', '1');
+        formData.append('post_endpoint', 'newSubscription');
 
         fetch(location.origin + location.pathname, {
             method: 'POST',

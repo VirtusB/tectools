@@ -80,7 +80,7 @@ Quagga.onDetected(function (data) {
 function showTool(barcode) {
     $.post({
         url: location.origin + location.pathname,
-        data: {'tool_barcode': barcode, 'get_tool_by_barcode_ajax': '1'},
+        data: {'tool_barcode': barcode, 'post_endpoint': 'getToolByBarcodeAjax'},
         dataType: "json",
         cache: false,
         success: function(res) {
@@ -114,7 +114,7 @@ function checkInTool(barcode) {
 
     $.post({
         url: location.origin + location.pathname,
-        data: {'tool_barcode': barcode, 'check_in_tool': '1'},
+        data: {'tool_barcode': barcode, 'post_endpoint': 'checkIn'},
         dataType: "json",
         cache: false,
         success: function(res) {

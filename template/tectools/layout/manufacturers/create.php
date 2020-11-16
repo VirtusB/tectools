@@ -21,7 +21,7 @@ $TecTools = $GLOBALS['TecTools'];
                 </div>
             </div>
 
-            <input type="hidden" name="add_manufacturer" value="1" />
+            <input type="hidden" name="post_endpoint" value="addManufacturer" />
 
             <div class="row mb0">
                 <div class="input-field col s12">

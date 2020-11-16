@@ -27,7 +27,7 @@ $tools = $TecTools->getAllToolsWithFilters();
 <div class="container">
     <div class="hero-container">
         <span>Nem og billig adgang til alle slags værktøj</span>
-        <span>Planer starter fra kun 150 kroner / md.</span>
+        <span>Planer starter fra kun 200 kroner / md.</span>
         <span>100% CO2 neutral</span>
     </div>
 
@@ -68,7 +68,7 @@ $tools = $TecTools->getAllToolsWithFilters();
             <?php foreach ($tools as $tool): ?>
 
                 <div class="col s12 m6 l3 xl3">
-                    <div onclick="location.href = '/tool?toolid=<?= $tool['ToolID'] ?>'" class="card large">
+                    <div onclick="location.href = '/tools/view?toolid=<?= $tool['ToolID'] ?>'" class="card large">
                         <div class="card-image">
                             <img class="" src="<?= $TecTools->RELATIVE_TOOL_IMAGE_FOLDER . '/' . $tool['Image'] ?>" alt="">
                         </div>

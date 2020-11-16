@@ -32,7 +32,7 @@ class Functions {
 
 	    $data = json_encode($data);
 
-	    setcookie('notificationFrontend', $data, time()+3600);
+	    setcookie('notificationFrontend', $data, time()+3600, '/');
     }
 
     /**
@@ -80,6 +80,10 @@ class Functions {
 		$request = $this->RCMS->getRequestedPage();
 		return $request['is_admin_page'] && $this->RCMS->Login->isLoggedIn();
 	}
+
+	public static function redirect($page) {
+	    @header("Location:  $page");
+    }
 
     /**
      * Udskriver en fejl på siden

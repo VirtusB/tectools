@@ -55,7 +55,7 @@
                     <p class="center orange-text info-paragraph">
                         <i class="fas fa-info" style="float: left; color: #2196F3;"></i>
                         Du kan også benytte dig af vores Live Chat, ude i højre side <br>
-                        Vores eksperter er klar til at hjælpe dig med ethvert spørgsmål du måtte have
+                        Vores eksperter er klar til at hjælpe dig, med ethvert spørgsmål du måtte have
                     </p>
 
                     <style>

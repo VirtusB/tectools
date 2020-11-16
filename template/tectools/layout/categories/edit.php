@@ -32,7 +32,7 @@ $category = $TecTools->getCategory((int) $_GET['categoryid']);
                 </div>
             </div>
 
-            <input type="hidden" name="edit_category" value="1" />
+            <input type="hidden" name="post_endpoint" value="editCategory" />
             <input type="hidden" name="category_id" value="<?= $category['CategoryID'] ?>">
 
             <div class="row mb0">

@@ -24,7 +24,7 @@ class RCMSTables {
     }
 
     /**
-     * Denne funktion laver data-tabellen og er den eneste funktion som man er nød til at kalde manuelt
+     * Denne metode laver data-tabellen og er den eneste metode som man er nød til at kalde manuelt
      *
      * Den opsætter konfiguration, udskriver HTML og håndterer AJAX
      * @param string $id
@@ -77,7 +77,7 @@ class RCMSTables {
     }
 
     /**
-     * Denne funktion udskriver HTML tabellen
+     * Denne metode udskriver HTML tabellen
      * @param string $id
      * @return void
      */
@@ -186,7 +186,7 @@ class RCMSTables {
                     $conditionalAttributesString .= $conditionalAttribute['name'] . '="' . $conditionResult . '" ';
                 }
 
-                // Tjek om der skal køres en funktion på kolonnen
+                // Tjek om der skal køres en metode på kolonnen
                 if (!empty($column['function'])) {
                     echo "<td $conditionalAttributesString $attributesString class='$tdClass'>" . $GLOBALS['GlobalHandlers']->callFunction($column['function'], array($row[$column['column']], $row)) . '</td>';
                 } else {
@@ -300,7 +300,7 @@ class RCMSTables {
     }
 
     /**
-     * Denne funktion bygger den komplette SQL query op, der skal køres, på den specifikke tabel i DB med WHERE, ORDER, LIMIT osv. taget i mente
+     * Denne metode bygger den komplette SQL query op, der skal køres, på den specifikke tabel i DB med WHERE, ORDER, LIMIT osv. taget i mente
      * @param string $table
      * @param array $columns
      * @param array $where
@@ -533,7 +533,7 @@ class RCMSTables {
      *
      * Returnerer et array af egenskabsværdierne fra hvert element
      *
-     * Bruges f.eks. i retrieveData funktionen
+     * Bruges f.eks. i retrieveData metoden
      *
      * Reference: linje 515 i https://github.com/DataTables/DataTables/blob/master/examples/server_side/scripts/ssp.class.php
      *

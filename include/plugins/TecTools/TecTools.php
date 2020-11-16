@@ -25,54 +25,65 @@ class TecTools {
      */
     private const TOOLS_PER_PAGE = 8;
 
+    /**
+     * Status værdi for værktøj som er på lager
+     */
     public const TOOL_AVAILABLE_STATUS = 1;
+
+    /**
+     * Status værdi for værktøj som er reserveret
+     */
     public const TOOL_RESERVED_STATUS = 2;
+
+    /**
+     * Status værdi for værktøj som er udlånt
+     * @var int TOOL_AVAILABLE_STATUS
+     */
     public const TOOL_LOANED_OUT_STATUS = 3;
+
+    /**
+     * Status værdi for værktøj som ikke er på lager (ex. demo vare, sendt til reparation, udgået)
+     * @var int TOOL_AVAILABLE_STATUS
+     */
     public const TOOL_NOT_IN_STOCK_STATUS = 4;
+
+    /**
+     * Liste over POST endpoints, som har en metode i denne klase, som kan eksekveres automatisk
+     * Vi er nød til at have en liste over tilladte endpoints, så brugere ikke kan eksekvere andre metoder i denne klasse
+     * @var array|string[]
+     */
+    private static array $allowedEndpoints = [
+        'addTool', 'editTool',
+        'addCategory', 'editCategory',
+        'addManufacturer', 'editManufacturer',
+        'editUser',
+        'checkIn',
+        'getToolByBarcodeAjax',
+        'newSubscription'
+    ];
 
     public function __construct(RCMS $RCMS) {
         $this->RCMS = $RCMS;
         $this->TOOL_IMAGE_FOLDER = $this->RCMS->getUploadsFolder() . '/tools/images';
         $this->RELATIVE_TOOL_IMAGE_FOLDER = $this->RCMS->getRelativeUploadsFolder() . '/tools/images';
 
-        if (isset($_POST['add_tool'])) {
-            $this->addTool();
+        $this->handlePOSTEndpoints();
+    }
+
+    /**
+     * Denne metode tjekker, om $_POST array'et indeholder navnet på en metode i denne klasse,
+     * tjekker derefter om det er en af de tilladte endpoints,
+     * og eksekvere efterfølgende metoden hvis det er tilfældet
+     */
+    private function handlePOSTEndpoints(): void {
+        if (!isset($_POST['post_endpoint'])) {
+            return;
         }
 
-        if (isset($_POST['edit_tool'])) {
-            $this->editTool();
-        }
+        $endpoint = $_POST['post_endpoint'];
 
-        if (isset($_POST['add_category'])) {
-            $this->addCategory();
-        }
-
-        if (isset($_POST['edit_category'])) {
-            $this->editCategory();
-        }
-
-        if (isset($_POST['add_manufacturer'])) {
-            $this->addManufacturer();
-        }
-
-        if (isset($_POST['edit_manufacturer'])) {
-            $this->editManufacturer();
-        }
-
-        if (isset($_POST['edit_user'])) {
-            $this->editUser();
-        }
-
-        if (isset($_POST['check_in_tool'])) {
-            $this->checkIn();
-        }
-
-        if (isset($_POST['get_tool_by_barcode_ajax'])) {
-            $this->getToolByBarcodeAjax();
-        }
-
-        if (isset($_POST['new_subscription'])) {
-            $this->newSubscription();
+        if (method_exists($this, $endpoint) && in_array($endpoint, self::$allowedEndpoints, true)) {
+            $this->$endpoint();
         }
     }
 
@@ -308,7 +319,7 @@ class TecTools {
             $exists = $this->RCMS->execute('CALL getUserByEmail(?)', array('s', $email));
             if ($exists->num_rows !== 0) {
                 // E-mail er allerede taget
-                header("Location: ?userid=$userID&emailtaken");
+                Functions::redirect("?userid=$userID&emailtaken");
                 return;
             }
         }
@@ -333,11 +344,11 @@ class TecTools {
 
         Functions::setNotification('Gemt', 'Dine ændringer blev gemt');
 
-        header('Location: /dashboard');
+        Functions::redirect('/dashboard');
     }
 
     /**
-     * Wrapper funktion til at redigere en brugers oplysninger i Stripe
+     * Wrapper metode til at redigere en brugers oplysninger i Stripe
      * @param string $stripeCustomerID
      * @param string $firstname
      * @param string $lastname
@@ -390,7 +401,7 @@ class TecTools {
      *
      * Personale kan ændre på alle brugere, så $userID må i de tilfælde godt være et andet ID end det som står i databasen.
      *
-     * Funktionen returnerer altid false hvis brugeren ikke er logget ind
+     * Metoden returnerer altid false hvis brugeren ikke er logget ind
      * @param int $userID
      * @return bool
      */
@@ -421,7 +432,7 @@ class TecTools {
 
         Functions::setNotification('Oprettet', 'Producenten blev oprettet');
 
-        header('Location: /dashboard');
+        Functions::redirect('/dashboard');
     }
 
     /**
@@ -450,7 +461,7 @@ class TecTools {
 
         Functions::setNotification('Gemt', 'Dine ændringer blev gemt');
 
-        header('Location: /dashboard');
+        Functions::redirect('/dashboard');
     }
 
     /**
@@ -468,7 +479,7 @@ class TecTools {
 
         Functions::setNotification('Oprettet', 'Kategorien blev oprettet');
 
-        header('Location: /dashboard');
+        Functions::redirect('/dashboard');
     }
 
     /**
@@ -497,7 +508,7 @@ class TecTools {
 
         Functions::setNotification('Gemt', 'Dine ændringer blev gemt');
 
-        header('Location: /dashboard');
+        Functions::redirect('/dashboard');
     }
 
     /**
@@ -524,7 +535,7 @@ class TecTools {
             $currentToolCategoryIDs = array_map(static fn($category) => strval($category['CategoryID']), $currentTool['Categories']);
 
             if ($this->array_equal($categories, $currentToolCategoryIDs) === false) {
-                // opdater kategorier
+                // Opdater kategorier
                 $this->removeAllCategoriesFromTool($toolID);
                 foreach ($categories as $categoryID) {
                     if (!is_numeric($categoryID)) {
@@ -538,13 +549,13 @@ class TecTools {
         // Tjek om billedet skal opdateres
         $imageName = $_FILES['image']['name'] ?? false;
         if ($imageName) {
-            // opdater billede
+            // Opdater billede
             $newImageName = $this->uploadImage($imageName, $_FILES['image']['tmp_name']);
             if (!$newImageName) {
                 return;
             }
         } else {
-            // brug gamle billede
+            // Behold nuværende billede
             $newImageName = $currentTool['Image'];
         }
 
@@ -552,7 +563,7 @@ class TecTools {
 
         Functions::setNotification('Gemt', 'Dine ændringer blev gemt');
 
-        header('Location: /dashboard');
+        Functions::redirect('/dashboard');
     }
 
     /**
@@ -626,7 +637,7 @@ class TecTools {
 
         Functions::setNotification('Oprettet', 'Værktøjet blev oprettet');
 
-        header('Location: /dashboard');
+        Functions::redirect('/dashboard');
     }
 
     /**

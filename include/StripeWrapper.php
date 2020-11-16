@@ -65,7 +65,9 @@ class StripeWrapper {
      * @throws ApiErrorException
      */
     public function getStripeProducts(): array {
-        $products = $this->getStripeClient()->products->all();
+        $products = $this->getStripeClient()->products->all([
+            'created' => ['gt' => strtotime('2020-11-15 12:00:00')]
+        ]);
 
         $products = array_map(function ($product) {
             /**
@@ -91,14 +93,14 @@ class StripeWrapper {
     }
 
     /**
-     * Tjekker om prisen for et produkt er over 50 kroner
+     * Tjekker om prisen for et produkt er over 200 kroner
      *
-     * Vi anser et produkt værende premium hvis det koster mere end 50 kroner
+     * Vi anser et produkt værende premium hvis det koster mere end 200 kroner
      * @param array $product
      * @return bool
      */
     public function isPremiumPlan(array $product): bool {
-        return $product['price'] > 50;
+        return $product['price'] > 200;
     }
 
     /**

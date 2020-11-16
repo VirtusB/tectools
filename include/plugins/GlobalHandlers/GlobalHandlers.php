@@ -10,8 +10,8 @@ class GlobalHandlers {
 	}
 
     /**
-     * Tjekker om $function eksisterer i denne klasse, kalder funktionen hvis den gør og returnerer værdien fra det kald
-     * Hvis funktionen ikke eksisterer bliver false returneret
+     * Tjekker om $function eksisterer i denne klasse, kalder metoden hvis den gør og returnerer værdien fra det kald
+     * Hvis metoden ikke eksisterer bliver false returneret
      * @param string $function
      * @param array $args
      * @return bool|mixed

@@ -61,12 +61,12 @@ class Login {
 
                 Functions::setNotification('Success', 'Du er nu logget på');
 
-                @header('Location: /dashboard');
+                Functions::redirect('/dashboard');
             } else {
-                @header("Location: /login?wrong_email_or_password");
+                Functions::redirect('/login?wrong_email_or_password');
             }
 		} else {
-			@header("Location: /login?wrong_email_or_password");
+			Functions::redirect('/login?wrong_email_or_password');
 		}
 	}
 
@@ -93,7 +93,7 @@ class Login {
             // E-mail er allerede brugt
             unset($_POST['password'], $_POST['repeat_password']);
             $_SESSION['createUserPOST'] = $_POST;
-            @header('Location: ?emailtaken');
+            Functions::redirect('?emailtaken');
 
             return;
         }
@@ -101,7 +101,7 @@ class Login {
         if ($password !== $repeatPassword) {
             unset($_POST['password'], $_POST['repeat_password']);
             $_SESSION['createUserPOST'] = $_POST;
-            @header('Location: ?confirm_password');
+            Functions::redirect('?confirm_password');
 
             return;
         }

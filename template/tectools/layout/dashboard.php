@@ -18,22 +18,26 @@ $RCMSTables = $GLOBALS['RCMSTables'];
 <div class="section no-pad-bot">
     <div class="container">
         <br><br>
-        <h1 class="header center orange-text">Dashboard</h1>
+        <h1 class="header center orange-text mt0">Dashboard</h1>
         <hr style="margin-bottom: 2rem">
 
         <?php if ($this->RCMS->Login->isAdmin()): ?>
             <div class="row">
-                <div class="col s12">
-                    <a class="btn tec-btn dashboard-btn" href="/createtool">Opret værktøj</a>
-                    <a class="btn tec-btn dashboard-btn" href="/createcategory">Opret kategori</a>
-                    <a class="btn tec-btn dashboard-btn" href="/createmanufacturer">Opret producent</a>
+                <div class="col s12 m8 xl6">
+                    <div class="card-panel teal">
+                        <span style="display: block; margin-bottom: 24px" class="white-text">
+                                    Velkommen, <?= $this->RCMS->Login->getFirstName() ?><br>Du er personale
+                        </span>
 
-<!--                    <p style="margin: 0" class="right">Velkommen, --><?//= $this->RCMS->Login->getFirstName() ?><!--<br>Du er personale</p>-->
+                        <a class="btn tec-btn" href="/categories/create">Opret kategori</a>
+                        <a class="btn tec-btn" href="/manufacturers/create">Opret producent</a>
+                        <a class="btn tec-btn" href="/tools/create">Opret værktøj</a>
+                    </div>
                 </div>
             </div>
 
             <div class="row dashboard-row responsive-table-container">
-                <h3>Værktøj</h3>
+                <h3 class="mt0">Værktøj</h3>
 
                 <?php
                 $columns = array(
@@ -73,7 +77,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
 
                 $buttons = array(
                     array(
-                        "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/edittoolQMARKtoolid=?`" value="Rediger værktøj" />',
+                        "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/tools/editQMARKtoolid=?`" value="Rediger værktøj" />',
                         "value" => "ToolID"
                     )
                 );
@@ -123,7 +127,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
 
                 $buttons = array(
                     array(
-                        "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/edituserQMARKuserid=?`" value="Rediger bruger" />',
+                        "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/users/editQMARKuserid=?`" value="Rediger bruger" />',
                         "value" => "UserID"
                     )
                 );
@@ -161,7 +165,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
 
                     $buttons = array(
                         array(
-                            "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/editcategoryQMARKcategoryid=?`" value="Rediger kategori" />',
+                            "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/categories/editQMARKcategoryid=?`" value="Rediger kategori" />',
                             "value" => "CategoryID"
                         )
                     );
@@ -197,7 +201,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
 
                     $buttons = array(
                         array(
-                            "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/editmanufacturerQMARKmanufacturerid=?`" value="Rediger producent" />',
+                            "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/manufacturers/editQMARKmanufacturerid=?`" value="Rediger producent" />',
                             "value" => "ManufacturerID"
                         )
                     );
@@ -210,10 +214,21 @@ $RCMSTables = $GLOBALS['RCMSTables'];
         <?php elseif ($this->RCMS->Login->isAdmin() === false && $this->RCMS->Login->isLoggedIn() === true): ?>
             <div class="row">
                 <div class="col s12">
-                    <a class="btn tec-btn dashboard-btn" href="/my-subscription">Mit abonnement</a>
-                    <a class="btn tec-btn dashboard-btn" href="/edituser?userid=<?= $this->RCMS->Login->getUserID() ?>">Rediger bruger</a>
-                    <!-- TODO: skriv hvilket abonnement brugeren har -->
-<!--                    <p style="margin: 0" class="right">Velkommen, --><?//= $this->RCMS->Login->getFirstName() ?><!--<br>Du er standard bruger</p>-->
+                    <div class="row">
+                        <div class="col s12 m5">
+                            <div class="card-panel teal">
+                                <!-- TODO: skriv hvilket abonnement brugeren har -->
+                                <span style="display: block; margin-bottom: 24px" class="white-text">
+                                    Velkommen, <?= $this->RCMS->Login->getFirstName() ?><br>Du er standard bruger
+                                </span>
+
+                                <a class="btn tec-btn xl-up-mb0" href="/my-subscription">Mit abonnement</a>
+                                <a class="btn tec-btn xl-up-mb0" href="/users/edit?userid=<?= $this->RCMS->Login->getUserID() ?>">Rediger bruger</a>
+
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 

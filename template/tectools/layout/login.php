@@ -7,8 +7,9 @@ declare(strict_types=1);
  */
 
 if ($this->RCMS->Login->isLoggedIn()) {
-    header('Location: /dashboard');
+    Functions::redirect('/dashboard');
 }
+
 ?>
 
 <div class="container mt4">

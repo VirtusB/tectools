@@ -110,7 +110,7 @@ class RCMS {
     }
 
     /**
-     * Instantiere alle de klasser som ligger i plugins mappen, så loadPlugins() funktionen kan tilføje dem til $GLOBALS
+     * Instantiere alle de klasser som ligger i plugins mappen, så loadPlugins() metoden kan tilføje dem til $GLOBALS
      * @param string $path Stien til plugins mappen
      * @return void
      */
@@ -301,7 +301,7 @@ class RCMS {
      *
      * $buttons = array(
      *      array(
-     *          "button" => '<input type="button" class="btn rbooking-btn" onclick="location.pathname = `/admin/edituserQMARKuserid=?`" value="Rediger bruger" />',
+     *          "button" => '<input type="button" class="btn rbooking-btn" onclick="location.pathname = `/admin/users/editQMARKuserid=?`" value="Rediger bruger" />',
      *          "value" => "id"
      *      )
      * );
@@ -312,13 +312,13 @@ class RCMS {
         $questionMarksReplaced = str_replace('QMARK', '?', $uri);
 
         if ($uri !== $questionMarksReplaced) {
-            header("Location: $questionMarksReplaced");
+            Functions::redirect($questionMarksReplaced);
             exit(0);
         }
     }
 
     public static function generateConfigFile(): void {
-        //TODO: fjern denne funktion? skal den bruges til CI/CD eller testing?
+        //TODO: fjern denne metode? skal den bruges til CI/CD eller testing?
         $tester = getenv('testerto');
         echo $tester;
         die();

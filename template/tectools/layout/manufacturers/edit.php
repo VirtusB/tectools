@@ -32,13 +32,13 @@ $manufacturer = $TecTools->getManufacturer((int) $_GET['manufacturerid']);
                 </div>
             </div>
 
-            <input type="hidden" name="edit_manufacturer" value="1" />
+            <input type="hidden" name="post_endpoint" value="editManufacturer" />
 
             <input type="hidden" name="manufacturer_id" value="<?= $manufacturer['ManufacturerID'] ?>">
 
             <div class="row mb0">
                 <div class="input-field col s12">
-                    <input class="tec-submit-btn" type="submit" value="Opret producent">
+                    <input class="tec-submit-btn" type="submit" value="Gem">
                 </div>
             </div>
 

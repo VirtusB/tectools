@@ -6,10 +6,19 @@ declare(strict_types=1);
  * @var Template $this
  */
 
+if (!isset($_GET['toolid']) || !is_numeric($_GET['toolid'])) {
+    Functions::outputError('Tool ID mangler', 'h3', true);
+    return;
+}
+
 /**
  * @var TecTools $TecTools
  */
 $TecTools = $GLOBALS['TecTools'];
+
+$tool = $TecTools->getToolByID((int) $_GET['toolid']);
+
+$toolCategoryIDs = array_map(static fn($category) => $category['CategoryID'], $tool['Categories']);
 
 $categories = $TecTools->getAllCategories();
 
@@ -25,7 +34,7 @@ $categories = $TecTools->getAllCategories();
 <div class="section no-pad-bot">
     <div class="container">
         <br><br>
-        <h1 class="header center mt0">Opret værktøj</h1>
+        <h1 class="header center mt0">Rediger værktøj</h1>
 
         <div class="row center">
             <div class="col s12 m6 l6 xl6 offset-m3 offset-l3 offset-xl3">
@@ -35,18 +44,18 @@ $categories = $TecTools->getAllCategories();
                     unset($_SESSION['tool_image_upload_error']);
                 }
                 ?>
-                <form class="tectool-form" enctype="multipart/form-data" id="add_tool_form" action="" method="POST">
+                <form class="tectool-form" enctype="multipart/form-data" id="edit_tool_form" action="" method="POST">
 
                     <label>Navn</label>
-                    <input id="tool_name" required name="tool_name" type="text" placeholder="Navn på værktøj">
+                    <input value="<?= $tool['ToolName'] ?>" id="tool_name" required name="tool_name" type="text" placeholder="Navn på værktøj">
 
                     <label for="des-editor">Beskrivelse</label>
                     <div id="des-editor">
-
+                        <?= $tool['Description'] ?>
                     </div>
 
                     <textarea style="display: none" name="description" id="description" cols="30" rows="10">
-
+                        <?= $tool['Description'] ?>
                     </textarea>
 
                     <br>
@@ -55,7 +64,7 @@ $categories = $TecTools->getAllCategories();
                     <select required class="mat-select" name="status">
                         <option value="" disabled selected>Vælg status</option>
                         <?php foreach ($TecTools->getAllStatuses() as $status): ?>
-                            <option value="<?= $status['StatusID'] ?>"><?= $status['StatusName'] ?></option>
+                            <option <?= $status['StatusID'] === intval($tool['StatusID']) ? 'selected' : '' ?> value="<?= $status['StatusID'] ?>"><?= $status['StatusName'] ?></option>
                         <?php endforeach; ?>
                     </select>
 
@@ -63,7 +72,7 @@ $categories = $TecTools->getAllCategories();
                     <select id="manufacturer_id" required class="mat-select" name="manufacturer_id">
                         <option value="" disabled selected>Vælg producent</option>
                         <?php foreach ($TecTools->getAllManufacturers() as $manufacturer): ?>
-                            <option value="<?= $manufacturer['ManufacturerID'] ?>"><?= $manufacturer['ManufacturerName'] ?></option>
+                            <option <?= $manufacturer['ManufacturerID'] === intval($tool['FK_ManufacturerID']) ? 'selected' : '' ?> value="<?= $manufacturer['ManufacturerID'] ?>"><?= $manufacturer['ManufacturerName'] ?></option>
                         <?php endforeach; ?>
                     </select>
 
@@ -71,29 +80,29 @@ $categories = $TecTools->getAllCategories();
                     <select style="min-height: 100px;" multiple required class="mat-select" name="categories[]">
                         <option disabled="disabled" value="">Vælg kategorier</option>
                         <?php foreach ($categories as $category): ?>
-                            <option value="<?= $category['CategoryID'] ?>"><?= $category['CategoryName'] ?></option>
+                            <option <?=  in_array($category['CategoryID'], $toolCategoryIDs, false) ? 'selected' : '' ?> value="<?= $category['CategoryID'] ?>"><?= $category['CategoryName'] ?></option>
                         <?php endforeach; ?>
                     </select>
 
                     <div class="file-field input-field">
                         <div class="btn">
                             <span>Billede</span>
-                            <input onchange="updateImagePreview(this, 'tool-image');" required name="image" type="file">
+                            <input onchange="updateImagePreview(this, 'tool-image');" name="image" type="file">
                         </div>
                         <div class="file-path-wrapper">
                             <input class="file-path validate" type="text">
                         </div>
                     </div>
 
-                    <img id="tool-image" style="max-height: 200px;" src="" alt="">
+                    <img id="tool-image" style="max-height: 200px;" src="<?= $TecTools->RELATIVE_TOOL_IMAGE_FOLDER . '/' . $tool['Image'] ?>" alt="">
 
-                    <input type="hidden" name="add_tool" value="1" />
+                    <input type="hidden" name="post_endpoint" value="editTool" />
 
-
+                    <input type="hidden" name="tool_id" value="<?= $tool['ToolID'] ?>">
 
                     <div class="row mb0">
-                        <div class="input-field col s12 ">
-                            <input class="tec-submit-btn" type="submit" value="Opret værktøj">
+                        <div class="input-field col s12 mt0">
+                            <input class="tec-submit-btn" type="submit" value="Gem">
                         </div>
                     </div>
 
@@ -110,5 +119,6 @@ $categories = $TecTools->getAllCategories();
     </div>
 </div>
 
-
 <script src="<?= $this->RCMS->getTemplateFolder() ?>/js/tools/edit-create-tool.js"></script>
+
+

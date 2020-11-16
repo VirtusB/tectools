@@ -94,7 +94,7 @@ $user = $TecTools->getUserByID($userID);
 
             </div>
 
-            <input type="hidden" name="edit_user" value="1" />
+            <input type="hidden" name="post_endpoint" value="editUser" />
 
             <input type="hidden" name="user_id" value="<?= $user['UserID'] ?>">
 
