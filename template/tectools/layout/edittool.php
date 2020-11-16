@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 
 if (!isset($_GET['toolid']) || !is_numeric($_GET['toolid'])) {
-    $this->RCMS->Functions->outputError('Tool ID mangler', 'h3', true);
+    Functions::outputError('Tool ID mangler', 'h3', true);
     return;
 }
 
@@ -34,13 +34,13 @@ $categories = $TecTools->getAllCategories();
 <div class="section no-pad-bot">
     <div class="container">
         <br><br>
-        <h1 class="header center orange-text">Rediger værktøj</h1>
+        <h1 class="header center mt0">Rediger værktøj</h1>
 
         <div class="row center">
             <div class="col s12 m6 l6 xl6 offset-m3 offset-l3 offset-xl3">
                 <?php
                 if (isset($_SESSION['tool_image_upload_error'])) {
-                    $this->RCMS->Functions->outputError($_SESSION['tool_image_upload_error'], 'h5', true);
+                    Functions::outputError($_SESSION['tool_image_upload_error'], 'h5', true);
                     unset($_SESSION['tool_image_upload_error']);
                 }
                 ?>
@@ -61,7 +61,7 @@ $categories = $TecTools->getAllCategories();
                     <br>
 
                     <label>Status</label>
-                    <select required class="browser-default" name="status">
+                    <select required class="mat-select" name="status">
                         <option value="" disabled selected>Vælg status</option>
                         <?php foreach ($TecTools->getAllStatuses() as $status): ?>
                             <option <?= $status['StatusID'] === intval($tool['StatusID']) ? 'selected' : '' ?> value="<?= $status['StatusID'] ?>"><?= $status['StatusName'] ?></option>
@@ -69,7 +69,7 @@ $categories = $TecTools->getAllCategories();
                     </select>
 
                     <label>Producent</label>
-                    <select id="manufacturer_id" required class="browser-default" name="manufacturer_id">
+                    <select id="manufacturer_id" required class="mat-select" name="manufacturer_id">
                         <option value="" disabled selected>Vælg producent</option>
                         <?php foreach ($TecTools->getAllManufacturers() as $manufacturer): ?>
                             <option <?= $manufacturer['ManufacturerID'] === intval($tool['FK_ManufacturerID']) ? 'selected' : '' ?> value="<?= $manufacturer['ManufacturerID'] ?>"><?= $manufacturer['ManufacturerName'] ?></option>
@@ -77,8 +77,8 @@ $categories = $TecTools->getAllCategories();
                     </select>
 
                     <label>Kategorier</label>
-                    <select style="min-height: 100px;" multiple required class="browser-default" name="categories[]">
-                        <option value="" disabled selected>Vælg kategorier</option>
+                    <select style="min-height: 100px;" multiple required class="mat-select" name="categories[]">
+                        <option disabled="disabled" value="">Vælg kategorier</option>
                         <?php foreach ($categories as $category): ?>
                             <option <?=  in_array($category['CategoryID'], $toolCategoryIDs, false) ? 'selected' : '' ?> value="<?= $category['CategoryID'] ?>"><?= $category['CategoryName'] ?></option>
                         <?php endforeach; ?>
@@ -100,9 +100,17 @@ $categories = $TecTools->getAllCategories();
 
                     <input type="hidden" name="tool_id" value="<?= $tool['ToolID'] ?>">
 
-                    <br><br>
-                    <button id="edit_tool_btn" class="btn" type="submit">Gem</button>
-                    <button class="btn" type="button" onclick="history.back()">Tilbage</button>
+                    <div class="row mb0">
+                        <div class="input-field col s12 mt0">
+                            <input class="tec-submit-btn" type="submit" value="Gem">
+                        </div>
+                    </div>
+
+                    <div class="row mb0" style="text-align: left">
+                        <div class="input-field col s6 m0">
+                            <button class="btn tec-btn" type="button" onclick="history.back()">Tilbage</button>
+                        </div>
+                    </div>
 
                 </form>
             </div>

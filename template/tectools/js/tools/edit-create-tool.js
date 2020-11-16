@@ -1,3 +1,8 @@
+/**
+ * Quill er en rich-text editor
+ * WYSIWYG
+ * https://quilljs.com/
+ */
 var quill = new Quill('#des-editor', {
     placeholder: 'Indtast beskrivelse',
     theme: 'bubble',
@@ -20,4 +25,8 @@ var quill = new Quill('#des-editor', {
 quill.on('text-change', function(delta, oldDelta, source) {
     console.log(quill.container.firstChild.innerHTML)
     $('#description').val(quill.container.firstChild.innerHTML);
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    $('select.mat-select').formSelect();
 });

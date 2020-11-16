@@ -12,8 +12,12 @@ document.addEventListener('DOMContentLoaded', function() {
 window.addEventListener('load', function () {
     fixCardHeights();
 
+    /**
+     * setTimeout bruges så vi kan bestemme hvor ofte fixCardHeights funktionen kan køres.
+     * Når man ændre størrelse på browservinduet bliver "resize" eventet triggered flere 100 gange i sekundet.
+     * Der er ikke nogen grund til at køre fixCardHeights så ofte, så vi begrænser det til 4 gange i sekundet.
+     */
     var resizeTimer;
-
     window.addEventListener('resize', function (e) {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function() {

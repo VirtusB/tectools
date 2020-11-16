@@ -40,6 +40,12 @@ $TecTools = $GLOBALS['TecTools'];
 
         <button onclick="checkInTool(this.getAttribute('data-barcode'))" data-barcode="" id="check-in-btn" class="btn green-btn">Lån <i class="fal fa-shopping-basket"></i></button>
 
+        <div style="margin-top: 2rem;" class="row center">
+            <div class="col s12">
+                <h6 id="error-msg" class="red-text"></h6>
+            </div>
+        </div>
+
         <div class="row center" style="margin-top: 4rem;">
             <div class="col s12 m8 l6 xl4 offset-m2 offset-l3 offset-xl4">
                 <img style="max-width: 65%; object-fit: scale-down;" id="tool-name" src="" alt="">

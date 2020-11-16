@@ -23,7 +23,7 @@ $userProduct = $TecTools->getUserProduct($this->RCMS->Login->getUserID());
 <div class="section no-pad-bot">
     <div class="container">
         <br><br>
-        <h2 class="header center orange-text">Abonnement</h2>
+        <h2 class="header center">Dit abonnement</h2>
 
         <div class="row center" style="margin-top: 4rem;">
             <?php foreach ($products as $key => $product): ?>
@@ -34,14 +34,14 @@ $userProduct = $TecTools->getUserProduct($this->RCMS->Login->getUserID());
                         <h5 class=''><?= $product['name'] ?></h5>
                     </div>
                     <div class="card-content center">
-                        <h2 class="<?= $this->RCMS->StripeWrapper->isPremiumPlan($product) ? 'purple-text' : 'red-text' ?>"><small>kr.</small><?= $product['price'] ?>,-</h2>
+                        <h2><small>kr. </small><?= $product['price'] ?>,-</h2>
                         <small class="grey-text">pr. md.</small>
                     </div>
 
                     <ul class='collection center'>
                         <?php foreach ($product['metadata'] as $prop): ?>
                         <li class='collection-item'>
-                            <strong><?= $prop['value'] ?></strong> <?= $prop['description'] ?>
+                            <?= $this->RCMS->StripeWrapper->isPremiumPlan($product) ? "<strong>{$prop['value']} {$prop['description']}</strong>" : "{$prop['value']} {$prop['description']}" ?>
                         </li>
                         <?php endforeach; ?>
                     </ul>
@@ -70,6 +70,13 @@ $userProduct = $TecTools->getUserProduct($this->RCMS->Login->getUserID());
             </div>
             <?php endforeach; ?>
         </div>
+
+        <div class="row">
+            <div class="col s12 m4 offset-m1">
+                <p class="grey-text">*Opsig fra dag til dag - ingen bindinger</p>
+            </div>
+        </div>
+
         <br><br>
     </div>
 </div>

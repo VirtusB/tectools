@@ -23,6 +23,18 @@ class Functions {
 		return false;
 	}
 
+	public static function setNotification($title, $message, $type = 'success'): void {
+	    $data = [
+	        'title' => $title,
+	        'message' => $message,
+            'type' => $type
+        ];
+
+	    $data = json_encode($data);
+
+	    setcookie('notificationFrontend', $data, time()+3600);
+    }
+
     /**
      * Returnerer data til klienten i JSON format
      * @param int $status HTTP status kode, ex. 200 eller 404 osv.
@@ -76,7 +88,7 @@ class Functions {
      * @param bool $centerAlign Kontrollere om beskeden skal centreres
      * @return void
      */
-    public function outputError(string $error, string $htmlTag = 'p', bool $centerAlign = false): void {
+    public static function outputError(string $error, string $htmlTag = 'p', bool $centerAlign = false): void {
         $hideMessageLink = <<<HTML
             <a onclick="$(this.parentElement.parentElement).hide()" style="font-size: 13px; vertical-align: text-top;" href="javascript:void(0)">Skjul</a>
 HTML;

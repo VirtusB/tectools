@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 
 if (!isset($_GET['userid']) || !is_numeric($_GET['userid'])) {
-    $this->RCMS->Functions->outputError('User ID mangler', 'h3', true);
+    Functions::outputError('User ID mangler', 'h3', true);
     return;
 }
 
@@ -19,7 +19,7 @@ $TecTools = $GLOBALS['TecTools'];
 $userID = (int) $_GET['userid'];
 
 if (!$TecTools->authorizeUser($userID)) {
-    $this->RCMS->Functions->outputError('Du har ikke adgang til denne side', 'h3', true);
+    Functions::outputError('Du har ikke adgang til denne side', 'h3', true);
     return;
 }
 
@@ -27,69 +27,102 @@ $user = $TecTools->getUserByID($userID);
 
 ?>
 
-<div class="section no-pad-bot">
-    <div class="container">
-        <br><br>
-        <h1 class="header center orange-text">Rediger bruger</h1>
+<div class="container mt4">
+    <div class="row">
+        <form method="post"  class="col s12 m6 offset-m3 tectool-form">
+            <h1 class="center mb4 mt0">Rediger bruger</h1>
 
-        <?php
-        if (isset($_GET['emailtaken'])) {
-            $this->RCMS->Functions->outputError('Bruger med den email eksisterer allerede', 'h5', true);
-        }
-        ?>
-
-        <div class="row center">
-            <div class="col s12 m6 l6 xl6 offset-m3 offset-l3 offset-xl3">
-
-                <form class="tectool-form" id="edit_user_form" action="" method="POST">
-
-                    <label>Fornavn</label>
-                    <input value="<?= $user['FirstName'] ?>" required name="firstname" type="text" placeholder="Fornavn">
-
-                    <label>Efternavn</label>
-                    <input value="<?= $user['LastName'] ?>" required name="lastname" type="text" placeholder="Efternavn">
-
-                    <label>E-mail</label>
-                    <input value="<?= $user['Email'] ?>" required name="email" type="email" placeholder="Email">
-
-                    <label>Adgangskode</label>
-                    <input name="password" type="password" placeholder="Adgangskode">
-
-                    <label>Tlf. nr.</label>
-                    <input value="<?= $user['Phone'] ?>" required name="phone" type="number" placeholder="Tlf. nr.">
-
-                    <label>Adresse</label>
-                    <input value="<?= $user['Address'] ?>" required name="address" type="text" placeholder="Adresse">
-
-                    <label>Postnr.</label>
-                    <input value="<?= $user['ZipCode'] ?>" required name="zipcode" type="number" placeholder="Postnr.">
-
-                    <label>By</label>
-                    <input value="<?= $user['City'] ?>" required name="city" type="text" placeholder="By">
-
-                    <?php if ($this->RCMS->Login->isAdmin()): ?>
-                    <label>Niveau</label>
-                    <select required class="browser-default" name="level">
-                        <option value="" disabled selected>Vælg brugertype</option>
-                        <option <?= $user['Level'] === 1 ? 'selected' : '' ?> value="1">Standard</option>
-                        <option <?= $user['Level'] === 9 ? 'selected' : '' ?> value="9">Personale</option>
-                    </select>
-                    <?php endif; ?>
-
-                    <input type="hidden" name="edit_user" value="1" />
-
-                    <input type="hidden" name="user_id" value="<?= $user['UserID'] ?>">
-
-                    <br><br>
-                    <button id="edit_user_btn" class="btn" type="submit">Gem</button>
-                    <button class="btn" type="button" onclick="history.back()">Tilbage</button>
-
-                </form>
+            <div style="text-align: center">
+                <?php
+                if (isset($_GET['emailtaken'])) {
+                    Functions::outputError('Bruger med den email eksisterer allerede', 'h6');
+                }
+                ?>
             </div>
-        </div>
-        <br><br>
+
+            <div class="row mt2 mb0">
+                <div class="input-field col s6">
+                    <input autocomplete="off" required value="<?= $user['FirstName'] ?>" id="firstname" name="firstname" type="text" class="validate">
+                    <label for="firstname">Fornavn</label>
+                </div>
+
+                <div class="input-field col s6">
+                    <input autocomplete="off" required value="<?= $user['LastName'] ?>" id="lastname" name="lastname" type="text" class="validate">
+                    <label for="lastname">Efternavn</label>
+                </div>
+
+                <div class="input-field col s12">
+                    <input autocomplete="off" required value="<?= $user['Address'] ?>" id="address" name="address" type="text" class="validate">
+                    <label for="address">Adresse</label>
+                </div>
+
+                <div class="input-field col s6">
+                    <input pattern="\d*" minlength="4" maxlength="4" autocomplete="off" required value="<?= $user['ZipCode'] ?>" id="zipcode" name="zipcode" type="text" class="validate">
+                    <label for="zipcode">Postnr.</label>
+                </div>
+
+                <div class="input-field col s6">
+                    <input autocomplete="off" required value="<?= $user['City'] ?>" id="city" name="city" type="text" class="validate">
+                    <label for="city">By</label>
+                </div>
+
+                <div class="input-field col s6">
+                    <input autocomplete="off" id="email" value="<?= $user['Email'] ?>" name="email" type="email" required class="validate">
+                    <label for="email">E-mail</label>
+                </div>
+
+                <div class="input-field col s6">
+                    <input pattern="\d*" minlength="8" maxlength="8" autocomplete="off" required value="<?= $user['Phone'] ?>" id="phone" name="phone" type="text" class="validate">
+                    <label for="phone">Tlf. nr.</label>
+                </div>
+
+                <div class="input-field col s12">
+                    <input autocomplete="new-password" id="password" name="password" type="password" class="validate">
+                    <label for="password">Adgangskode</label>
+                </div>
+
+                <?php if ($this->RCMS->Login->isAdmin()): ?>
+                    <div class="input-field col s6">
+                        <select id="user-level" required  name="level">
+                            <option value="" disabled selected>Vælg brugertype</option>
+                            <option <?= $user['Level'] === 1 ? 'selected' : '' ?> value="1">Standard</option>
+                            <option <?= $user['Level'] === 9 ? 'selected' : '' ?> value="9">Personale</option>
+                        </select>
+                        <label for="user-level">Niveau</label>
+                    </div>
+                <?php endif; ?>
+
+            </div>
+
+            <input type="hidden" name="edit_user" value="1" />
+
+            <input type="hidden" name="user_id" value="<?= $user['UserID'] ?>">
+
+            <div class="row mb0">
+                <div class="input-field col s12">
+                    <input class="tec-submit-btn" type="submit" value="Gem">
+                </div>
+            </div>
+
+            <div class="row mb0">
+                <div class="input-field col s6 m0">
+                    <button class="btn tec-btn" type="button" onclick="history.back()">Tilbage</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s6 m0">
+                    <button class="btn tec-btn red" type="button">Slet bruger</button>
+                </div>
+            </div>
+
+        </form>
     </div>
 </div>
 
-
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        $('select').formSelect();
+    });
+</script>
 

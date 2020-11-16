@@ -98,13 +98,13 @@ class RCMSTables {
         // Start udskrivning af tabel og udskriv søgefelt hvis det er aktiveret
         echo "<table id='$id' class='RCMSTable $hasSorting' style='width: 100%'>";
         if(!empty($settings['searchbar']) && $settings['searchbar']) {
-            echo '<tr>';
+            echo '<tr class="search-tr">';
             echo '<td class="searchtd" colspan="' . (count($columns) + count($buttons)) . '"><input type="text" class="searchbar" placeholder="Søgefelt..." /></td>';
             echo '</tr>';
         }
 
         // Udskriv tabel hovedet
-        echo '<tr>';
+        echo '<tr class="table-head">';
         foreach ($columns as $column) {
             $sortKey = $column['column'] ?? '';
             $initialSortDir = $column['initial_sort_dir'] ?? '';
@@ -163,6 +163,8 @@ class RCMSTables {
                 $tdClass = $column['tdclass'] ?? '';
                 $tdAttributes = $column['tdattributes'] ?? [];
                 $attributesString = '';
+                $conditionalAttributes = $column['conditional_attributes'] ?? [];
+                $conditionalAttributesString = '';
 
                 // Tjek om der er sat attributter som skal udskrives på kolonnen
                 foreach ($tdAttributes as $tdAttribute) {
@@ -175,11 +177,20 @@ class RCMSTables {
                     }
                 }
 
+                // Tjek om der er attributter med betingelser
+                foreach ($conditionalAttributes as $conditionalAttribute) {
+                    $columnName = $conditionalAttribute['valuefromcolumn'];
+                    $columnValue = $row[$columnName];
+
+                    $conditionResult = (string) $conditionalAttribute['condition']($columnValue);
+                    $conditionalAttributesString .= $conditionalAttribute['name'] . '="' . $conditionResult . '" ';
+                }
+
                 // Tjek om der skal køres en funktion på kolonnen
                 if (!empty($column['function'])) {
-                    echo "<td $attributesString class='$tdClass'>" . $GLOBALS['GlobalHandlers']->callFunction($column['function'], array($row[$column['column']], $row)) . '</td>';
+                    echo "<td $conditionalAttributesString $attributesString class='$tdClass'>" . $GLOBALS['GlobalHandlers']->callFunction($column['function'], array($row[$column['column']], $row)) . '</td>';
                 } else {
-                    echo "<td $attributesString class='$tdClass'>" . $row[$column['column']] . '</td>';
+                    echo "<td $conditionalAttributesString $attributesString class='$tdClass'>" . $row[$column['column']] . '</td>';
                 }
             }
 
@@ -201,7 +212,7 @@ class RCMSTables {
         $rowCount = $this->countRows($table, $columns, $where, $order, $settings);
         $pages = ceil($rowCount / $settings['pageLimit']);
 
-        echo '<tr class="dataRow">';
+        echo '<tr class="dataRow pagination-tr">';
         echo '<td class="pagestd" colspan="' . (count($columns) + count($buttons)) . '">Side';
         for ($i = 1; $i <= $pages; $i++) {
             if ((isset($settings['pageNum']) && (int) $settings['pageNum'] === $i) || (!isset($settings['pageNum']) && $i === 1)) {

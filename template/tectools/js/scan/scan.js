@@ -6,12 +6,16 @@ let toolContainer = document.getElementById('tool-container');
 
 //TODO: tilføj kommentarer
 
+// Tjek om browseren har mulighed for at åbne en video-stream
 if (navigator.getUserMedia) {
     navigator.getUserMedia({video: true, audio: false}, addScanBtnClickListener, noVideoCameraError);
 } else {
     noVideoCameraError();
 }
 
+/**
+ * Hvis browseren ikke understøtter video-streaming får brugeren en fejl
+ */
 function noVideoCameraError() {
     alert('Din enhed eller browser understøtter ikke scanning');
     scanBtn.setAttribute('disabled', 'disabled');
@@ -27,6 +31,10 @@ function scanBtnClickHandler(event) {
     barcodeScanner.style.border = 'none';
 }
 
+/**
+ * Åbner video-streaming på enheden og starter Quagga
+ * Quagga konfigureres til at scanne EAN stregkoder
+ */
 function startScan() {
     Quagga.init({
         inputStream : {
@@ -49,6 +57,9 @@ function startScan() {
     });
 }
 
+/**
+ * Denne funktion kører når Quagga har fundet en stregkode
+ */
 Quagga.onDetected(function (data) {
     Quagga.stop();
 
@@ -62,6 +73,10 @@ Quagga.onDetected(function (data) {
     showTool(tool_barcode);
 });
 
+/**
+ * Henter et værktøj via AJAX og viser værktøjet på siden
+ * @param {string} barcode
+ */
 function showTool(barcode) {
     $.post({
         url: location.origin + location.pathname,
@@ -89,6 +104,10 @@ function showTool(barcode) {
     });
 }
 
+/**
+ * Sender en AJAX request til serveren og udlåner et værktøj til brugeren
+ * @param {string} barcode
+ */
 function checkInTool(barcode) {
     toolContainer.querySelector('#check-in-btn').setAttribute('disabled', 'disabled');
     showLoader('#check-in-btn');
@@ -100,10 +119,12 @@ function checkInTool(barcode) {
         cache: false,
         success: function(res) {
             if (res.result === 'success') {
-                alert('Værktøjet er nu udlånt til dig');
+                NotificationControl.success('Udlånt', 'Værktøjet er nu udlånt til dig');
                 showSuccessIcon('#check-in-btn');
             } else {
-                alert(res.result);
+                NotificationControl.error('Fejl', res.result);
+                document.getElementById('error-msg').innerText = res.result;
+                document.getElementById('error-msg').style.display = 'initial';
                 showErrorIcon('#check-in-btn');
             }
         },

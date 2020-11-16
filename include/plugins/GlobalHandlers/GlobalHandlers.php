@@ -71,7 +71,6 @@ HTML;
     private function showToolBarcode(array $barcode): string {
         $barcode = $barcode[0];
 
-
         return <<<HTML
             <svg class="barcode" style=" width: 48mm; height: 10mm; background-color: white;margin: 0; padding: 0; " 
             jsbarcode-format="ean13"

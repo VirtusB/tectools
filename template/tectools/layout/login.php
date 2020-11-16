@@ -14,21 +14,21 @@ if ($this->RCMS->Login->isLoggedIn()) {
 <div class="container mt4">
     <div class="row">
 
-        <?php
-        if (isset($_GET['wrong_email_or_password'])) {
-            $this->RCMS->Functions->outputError('Forkert email eller adgangskode', 'h6');
-        }
-
-        if (isset($_GET['userInfoChanged'])) {
-            echo '<h6>Da du har ændret dine brugerinformationer, skal du logge ind igen</h6>';
-        }
-        ?>
-
         <form method="post" class="col s12 m4 offset-m4">
             <h1 class="center">Log ind</h1>
             <div>
                 <a style="text-align: center; display: block" href="/register">Ingen konto? Opret her</a>
             </div>
+
+            <?php
+            if (isset($_GET['wrong_email_or_password'])) {
+                Functions::outputError('Forkert email eller adgangskode', 'h6', true);
+            }
+
+            if (isset($_GET['userInfoChanged'])) {
+                echo '<h6>Da du har ændret dine brugerinformationer, skal du logge ind igen</h6>';
+            }
+            ?>
 
             <div class="row mt2">
                 <div class="input-field col s12">

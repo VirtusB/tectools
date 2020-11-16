@@ -18,9 +18,21 @@ $tools = $TecTools->getAllToolsWithFilters();
 
 ?>
 
+<style>
+    .hero-container:before {
+        background-image: url(<?= $this->RCMS->getTemplateFolder() ?>/images/top_pic_hero.jpg);
+    }
+</style>
+
 <div class="container">
+    <div class="hero-container">
+        <span>Nem og billig adgang til alle slags værktøj</span>
+        <span>Planer starter fra kun 150 kroner / md.</span>
+        <span>100% CO2 neutral</span>
+    </div>
+
     <form action="" method="get">
-        <div class="row" style="margin-top: 2rem;">
+        <div class="row" style="margin-top: 2rem; margin-bottom: 0">
             <div class="col s12 m12 l4 xl4">
                 <input value="<?= isset($_GET['search-text']) ? $_GET['search-text'] : '' ?>" name="search-text" type="text" placeholder="Fritekst...">
             </div>
@@ -47,12 +59,18 @@ $tools = $TecTools->getAllToolsWithFilters();
         </div>
         <div class="row" id="tools-row">
 
+            <div class="col s12">
+                <?php
+                $TecTools->displayToolCountMessage();
+                ?>
+            </div>
+
             <?php foreach ($tools as $tool): ?>
 
                 <div class="col s12 m6 l3 xl3">
                     <div onclick="location.href = '/tool?toolid=<?= $tool['ToolID'] ?>'" class="card large">
                         <div class="card-image">
-                            <img src="<?= $TecTools->RELATIVE_TOOL_IMAGE_FOLDER . '/' . $tool['Image'] ?>" alt="">
+                            <img class="" src="<?= $TecTools->RELATIVE_TOOL_IMAGE_FOLDER . '/' . $tool['Image'] ?>" alt="">
                         </div>
                         <div class="card-content">
                             <span class="card-title black-text"><?= $tool['ToolName'] ?></span>
@@ -76,6 +94,7 @@ $tools = $TecTools->getAllToolsWithFilters();
 
             <?php endforeach; ?>
 
+            <?php if (count($tools)): ?>
 
             <div class="col s12">
                 <div class="pagination-container">
@@ -86,6 +105,14 @@ $tools = $TecTools->getAllToolsWithFilters();
                     ?>
                 </div>
             </div>
+
+            <?php else: ?>
+
+            <div class="col s12">
+                <h5>Der er ingen værktøj, der matcher dit filter</h5>
+            </div>
+
+            <?php endif; ?>
 
     </form>
 </div>

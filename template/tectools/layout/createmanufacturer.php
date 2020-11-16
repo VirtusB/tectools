@@ -9,29 +9,32 @@ $TecTools = $GLOBALS['TecTools'];
 
 ?>
 
-<div class="section no-pad-bot">
-    <div class="container">
-        <br><br>
-        <h1 class="header center orange-text">Opret producent</h1>
+<div class="container mt4">
+    <div class="row">
+        <form method="post"  class="col s12 m6 offset-m3 tectool-form">
+            <h1 class="center mb4 mt0">Opret producent</h1>
 
-        <div class="row center">
-            <div class="col s12 m6 l6 xl6 offset-m3 offset-l3 offset-xl3">
-                <form class="tectool-form" id="add_manufacturer_form" action="" method="POST">
-
-                    <label>Navn</label>
-                    <input id="manufacturer_name" required name="manufacturer_name" type="text" placeholder="Navn på producent">
-
-                    <input type="hidden" name="add_manufacturer" value="1" />
-
-                    <br><br>
-                    <button id="add_manufacturer_btn" class="btn" type="submit">Opret producent</button>
-                    <button class="btn" type="button" onclick="history.back()">Tilbage</button>
-
-                </form>
+            <div class="row mt2 mb0">
+                <div class="input-field col s12">
+                    <input required id="manufacturer_name" name="manufacturer_name" type="text" class="validate">
+                    <label for="manufacturer_name">Navn</label>
+                </div>
             </div>
-        </div>
-        <br><br>
+
+            <input type="hidden" name="add_manufacturer" value="1" />
+
+            <div class="row mb0">
+                <div class="input-field col s12">
+                    <input class="tec-submit-btn" type="submit" value="Opret producent">
+                </div>
+            </div>
+
+            <div class="row mb0">
+                <div class="input-field col s6 m0">
+                    <button class="btn tec-btn" type="button" onclick="history.back()">Tilbage</button>
+                </div>
+            </div>
+
+        </form>
     </div>
 </div>
-
-

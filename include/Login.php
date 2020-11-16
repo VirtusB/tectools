@@ -59,6 +59,8 @@ class Login {
                 $_SESSION['logged_in'] = 1;
                 $_SESSION['user'] = $user;
 
+                Functions::setNotification('Success', 'Du er nu logget på');
+
                 @header('Location: /dashboard');
             } else {
                 @header("Location: /login?wrong_email_or_password");
@@ -70,11 +72,11 @@ class Login {
 
     /**
      * Opretter en bruger via en POST request
-     * TODO: en bruger skal ikke kunne se andet end abonnement siden indtil de har købt et abonnement
+     * TODO: En bruger skal ikke kunne se andet end abonnement siden indtil de har købt et abonnement
      * @return void
      * @throws ApiErrorException
      */
-	public function createUser() {
+	public function createUser(): void {
 	    $email = $_POST['email'];
 	    $password = $_POST['password'];
 	    $repeatPassword = $_POST['repeat_password'];

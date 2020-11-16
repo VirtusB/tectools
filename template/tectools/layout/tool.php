@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 
 if (!isset($_GET['toolid']) || !is_numeric($_GET['toolid'])) {
-    $this->RCMS->Functions->outputError('Tool ID mangler', 'h3', true);
+    Functions::outputError('Tool ID mangler', 'h3', true);
     return;
 }
 

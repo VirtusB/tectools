@@ -22,11 +22,11 @@ if ($this->RCMS->Login->isLoggedIn()) {
             <div style="text-align: center">
                 <?php
                 if (isset($_GET['emailtaken'])) {
-                    $this->RCMS->Functions->outputError('Bruger med den email eksisterer allerede', 'h6');
+                    Functions::outputError('Bruger med den email eksisterer allerede', 'h6');
                 }
 
                 if (isset($_GET['confirm_password'])) {
-                    $this->RCMS->Functions->outputError('Adgangskoder er ikke ens', 'h6');
+                    Functions::outputError('Adgangskoder er ikke ens', 'h6');
                 }
                 ?>
             </div>
@@ -68,12 +68,12 @@ if ($this->RCMS->Login->isLoggedIn()) {
                 </div>
 
                 <div class="input-field col s6">
-                    <input autocomplete="off" required id="password" name="password" type="password" class="validate">
+                    <input autocomplete="new-password" required id="password" name="password" type="password" class="validate">
                     <label for="password">Adgangskode</label>
                 </div>
 
                 <div class="input-field col s6">
-                    <input autocomplete="off" required id="repeat_password" name="repeat_password" type="password" class="validate">
+                    <input autocomplete="new-password" required id="repeat_password" name="repeat_password" type="password" class="validate">
                     <label for="repeat_password">Gentag adgangskode</label>
                 </div>
 

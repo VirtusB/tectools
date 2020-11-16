@@ -13,12 +13,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
 
 ?>
 
-<style>
-    .dashboard-row {
-        margin-top: 4rem;
-    }
-</style>
-
+<link rel="stylesheet" href="<?= $this->RCMS->getTemplateFolder() ?>/css/dashboard.css">
 
 <div class="section no-pad-bot">
     <div class="container">
@@ -29,9 +24,9 @@ $RCMSTables = $GLOBALS['RCMSTables'];
         <?php if ($this->RCMS->Login->isAdmin()): ?>
             <div class="row">
                 <div class="col s12">
-                    <a class="btn dashboard-btn" href="/createtool">Opret værktøj</a>
-                    <a class="btn dashboard-btn" href="/createcategory">Opret kategori</a>
-                    <a class="btn dashboard-btn" href="/createmanufacturer">Opret producent</a>
+                    <a class="btn tec-btn dashboard-btn" href="/createtool">Opret værktøj</a>
+                    <a class="btn tec-btn dashboard-btn" href="/createcategory">Opret kategori</a>
+                    <a class="btn tec-btn dashboard-btn" href="/createmanufacturer">Opret producent</a>
 
 <!--                    <p style="margin: 0" class="right">Velkommen, --><?//= $this->RCMS->Login->getFirstName() ?><!--<br>Du er personale</p>-->
                 </div>
@@ -70,12 +65,15 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                     )
                 );
 
+
+
+
                 $order = "ORDER BY ToolID DESC";
                 $settings = array('searchbar' => true, 'pageLimit' => 5);
 
                 $buttons = array(
                     array(
-                        "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = \'/edittoolQMARKtoolid=?\'" value="Rediger værktøj" />',
+                        "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/edittoolQMARKtoolid=?`" value="Rediger værktøj" />',
                         "value" => "ToolID"
                     )
                 );
@@ -125,7 +123,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
 
                 $buttons = array(
                     array(
-                        "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = \'/edituserQMARKuserid=?\'" value="Rediger bruger" />',
+                        "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/edituserQMARKuserid=?`" value="Rediger bruger" />',
                         "value" => "UserID"
                     )
                 );
@@ -163,7 +161,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
 
                     $buttons = array(
                         array(
-                            "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = \'/editcategoryQMARKcategoryid=?\'" value="Rediger kategori" />',
+                            "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/editcategoryQMARKcategoryid=?`" value="Rediger kategori" />',
                             "value" => "CategoryID"
                         )
                     );
@@ -199,7 +197,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
 
                     $buttons = array(
                         array(
-                            "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = \'/editmanufacturerQMARKmanufacturerid=?\'" value="Rediger producent" />',
+                            "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/editmanufacturerQMARKmanufacturerid=?`" value="Rediger producent" />',
                             "value" => "ManufacturerID"
                         )
                     );
@@ -212,8 +210,8 @@ $RCMSTables = $GLOBALS['RCMSTables'];
         <?php elseif ($this->RCMS->Login->isAdmin() === false && $this->RCMS->Login->isLoggedIn() === true): ?>
             <div class="row">
                 <div class="col s12">
-                    <a class="btn dashboard-btn" href="/my-subscription">Mit abonnement</a>
-                    <a class="btn dashboard-btn" href="/edituser?userid=<?= $this->RCMS->Login->getUserID() ?>">Rediger bruger</a>
+                    <a class="btn tec-btn dashboard-btn" href="/my-subscription">Mit abonnement</a>
+                    <a class="btn tec-btn dashboard-btn" href="/edituser?userid=<?= $this->RCMS->Login->getUserID() ?>">Rediger bruger</a>
                     <!-- TODO: skriv hvilket abonnement brugeren har -->
 <!--                    <p style="margin: 0" class="right">Velkommen, --><?//= $this->RCMS->Login->getFirstName() ?><!--<br>Du er standard bruger</p>-->
                 </div>
@@ -257,12 +255,21 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                                 'name' => 'datetime',
                                 'valuefromcolumn' => 'EndDate'
                             ]
+                        ],
+                        'conditional_attributes' => [
+                            [
+                                'name' => 'data-exceeded-date',
+                                'valuefromcolumn' => 'EndDate',
+                                'condition' => static function ($valuefromcolumn) {
+                                    return new DateTime() > new DateTime($valuefromcolumn);
+                                }
+                            ]
                         ]
                     )
                 );
 
                 $order = "ORDER BY EndDate DESC, CheckedOut DESC";
-                $settings = array('searchbar' => true);
+                $settings = array('searchbar' => true, 'pageLimit' => 5);
 
                 $where = [
                     [
@@ -328,7 +335,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                 );
 
                 $order = "ORDER BY r.EndDate DESC";
-                $settings = array('searchbar' => true, 'querylogger' => true, 'queryloggerpath' => '/home/virtusbc/tectools.virtusb.com/querylogger.txt');
+                $settings = array('searchbar' => true, 'pageLimit' => 5);
 
                 $where = [
                     [
@@ -389,7 +396,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                 );
 
                 $order = "ORDER BY EndDate DESC, CheckedOut DESC";
-                $settings = array('searchbar' => true);
+                $settings = array('searchbar' => true, 'pageLimit' => 5);
 
                 $where = [
                     [

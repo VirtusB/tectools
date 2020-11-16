@@ -20,6 +20,11 @@ class TecTools {
      */
     public string $RELATIVE_TOOL_IMAGE_FOLDER;
 
+    /**
+     * Antal værktøj der bliver vist på forsiden per side
+     */
+    private const TOOLS_PER_PAGE = 8;
+
     public const TOOL_AVAILABLE_STATUS = 1;
     public const TOOL_RESERVED_STATUS = 2;
     public const TOOL_LOANED_OUT_STATUS = 3;
@@ -71,7 +76,7 @@ class TecTools {
         }
     }
 
-    private function newSubscription() {
+    private function newSubscription(): void {
         $session = $this->RCMS->StripeWrapper->getStripeClient()->checkout->sessions->create([
             'payment_method_types' => ['card'],
             'line_items' => [[
@@ -267,6 +272,7 @@ class TecTools {
 
     /**
      * Redigerer en bruger via en POST request
+     * Bruges både når almindelige brugere ændre deres profil, og når personale ændre på andre brugeres profil
      * @return void
      */
     private function editUser(): void {
@@ -280,7 +286,7 @@ class TecTools {
             return;
         }
 
-        //TODO: tilføj et ekstra felt, "confirm password" og tjek at de er ens
+        //TODO: Tilføj et ekstra felt, "confirm password" og tjek at de er ens
 
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
@@ -325,6 +331,8 @@ class TecTools {
 
         $this->editCustomerInStripe($currentUser['StripeID'], $firstname, $lastname, $email, $phone, $address, $zipcode, $city);
 
+        Functions::setNotification('Gemt', 'Dine ændringer blev gemt');
+
         header('Location: /dashboard');
     }
 
@@ -339,7 +347,7 @@ class TecTools {
      * @param string $zipcode
      * @param string $city
      */
-    public function editCustomerInStripe(string $stripeCustomerID, string $firstname, string $lastname, string $email, string $phone, string $address, string $zipcode, string $city): void {
+    private function editCustomerInStripe(string $stripeCustomerID, string $firstname, string $lastname, string $email, string $phone, string $address, string $zipcode, string $city): void {
         $params = [
             'name' => $firstname . ' ' . $lastname,
             'email' => $email,
@@ -369,7 +377,7 @@ class TecTools {
      * @param int $toolID
      * @return void
      */
-    public function removeAllCategoriesFromTool(int $toolID): void {
+    private function removeAllCategoriesFromTool(int $toolID): void {
         if (!$this->RCMS->Login->isAdmin()) {
             return;
         }
@@ -410,6 +418,9 @@ class TecTools {
         $manufacturerName = $_POST['manufacturer_name'];
 
         $this->RCMS->execute('CALL addManufacturer(?)', array('s', $manufacturerName));
+
+        Functions::setNotification('Oprettet', 'Producenten blev oprettet');
+
         header('Location: /dashboard');
     }
 
@@ -436,6 +447,9 @@ class TecTools {
         $manufacturerName = $_POST['manufacturer_name'];
 
         $this->RCMS->execute('CALL editManufacturer(?, ?)', array('is', $manufacturerID, $manufacturerName));
+
+        Functions::setNotification('Gemt', 'Dine ændringer blev gemt');
+
         header('Location: /dashboard');
     }
 
@@ -451,6 +465,9 @@ class TecTools {
         $categoryName = $_POST['category_name'];
 
         $this->RCMS->execute('CALL addCategory(?)', array('s', $categoryName));
+
+        Functions::setNotification('Oprettet', 'Kategorien blev oprettet');
+
         header('Location: /dashboard');
     }
 
@@ -477,6 +494,9 @@ class TecTools {
         $categoryName = $_POST['category_name'];
 
         $this->RCMS->execute('CALL editCategory(?, ?)', array('is', $categoryID, $categoryName));
+
+        Functions::setNotification('Gemt', 'Dine ændringer blev gemt');
+
         header('Location: /dashboard');
     }
 
@@ -529,6 +549,9 @@ class TecTools {
         }
 
         $this->RCMS->execute('CALL editTool(?, ?, ?, ?, ?, ?)', array('issisi', $manufacturerID, $toolName, $description, $status, $newImageName, $toolID));
+
+        Functions::setNotification('Gemt', 'Dine ændringer blev gemt');
+
         header('Location: /dashboard');
     }
 
@@ -601,6 +624,8 @@ class TecTools {
             $this->addToolToCategory($toolID, (int) $categoryID);
         }
 
+        Functions::setNotification('Oprettet', 'Værktøjet blev oprettet');
+
         header('Location: /dashboard');
     }
 
@@ -610,7 +635,7 @@ class TecTools {
      * @param int $categoryID
      * @return void
      */
-    public function addToolToCategory(int $toolID, int $categoryID): void {
+    private function addToolToCategory(int $toolID, int $categoryID): void {
         $this->RCMS->execute('CALL addToolToCategory(?, ?)', array('ii', $toolID, $categoryID));
     }
 
@@ -675,7 +700,7 @@ class TecTools {
      * Returnerer mængden af værktøj der er i databasen (med filtre), til brug ved pagination
      * @return int
      */
-    private function getToolCountWithFilters(): int {
+    public function getToolCountWithFilters(): int {
         $filters = $this->getPaginationFilters();
 
         return (int) $this->RCMS->execute('SELECT fn_GetToolCountBySearch(?, ?, ?) as toolCount', array('ssi', $filters['search-text'], $filters['categories'], $filters['only_in_stock']))->fetch_object()->toolCount;
@@ -685,9 +710,8 @@ class TecTools {
      * Udskriver links til forsiden så man kan skifte side og se flere værktøj
      */
     public function displayFrontPagePagination(): void {
-        $pageLimit = 8;
         $rowCount = $this->getToolCountWithFilters();
-        $pages = ceil($rowCount / $pageLimit);
+        $pages = ceil($rowCount / self::TOOLS_PER_PAGE);
 
         $query = $this->getFilterQueryString();
 
@@ -704,6 +728,25 @@ class TecTools {
         echo '</span>';
     }
 
+    /**
+     * Udskriver beskeden på forsiden hvor der står "Viser 1 - x af x på side x"
+     */
+    public function displayToolCountMessage(): void {
+        $page = $_GET['pagenum'] ?? 1;
+        $totalToolCount = $this->getToolCountWithFilters();
+
+        $upper = min($totalToolCount, $page * self::TOOLS_PER_PAGE);
+        $lower = ($page - 1) * self::TOOLS_PER_PAGE + 1;
+        $msg = sprintf( "Viser %d - %d af %d på side %d\n", $lower, $upper, $totalToolCount, $page);
+        echo "<p style='margin-top: 0' class='grey-text right'>$msg</p>";
+    }
+
+    /**
+     * Bygger og formaterer de URL søge parametre vi bruger til at filtrere på forsiden
+     * Bruges også til paginering, så man kan skifte side og se flere værktøj
+     * Den string man får tilbage kunne f.eks. være "&search-text=test&only_in_stock=1"
+     * @return string
+     */
     private function getFilterQueryString(): string {
         $vars = explode('&', $_SERVER['QUERY_STRING']);
 
@@ -800,6 +843,11 @@ class TecTools {
         return $res->fetch_all(MYSQLI_ASSOC) ?? [];
     }
 
+    /**
+     * Henter en bruger ud af databasen via deres e-mail
+     * @param string $email
+     * @return bool|array
+     */
     public function getUserByEmail(string $email) {
         $res = $this->RCMS->execute('CALL getUserByEmail(?)', array('s', $email));
 

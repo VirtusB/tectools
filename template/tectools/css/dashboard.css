@@ -1,0 +1,25 @@
+.dashboard-row {
+    margin-top: 4rem;
+}
+
+td[data-exceeded-date="1"] {
+    color: #FF0000;
+    font-weight: bold;
+}
+
+td[data-exceeded-date="1"]::after {
+    content: "(!)";
+    margin-left: 10px;
+    font-size: 15px;
+    color: #FF0000;
+    text-transform: uppercase;
+}
+
+@media screen and (max-width: 395px) {
+    h3 {
+        font-size: 2rem;
+        text-align: center;
+    }
+}
+
+

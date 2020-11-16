@@ -2,31 +2,12 @@
 
 declare(strict_types=1);
 
-/**
- * Instantiere alle de klasser som ligger i plugins mappen, så loadPlugins() funktionen kan tilføje dem til $GLOBALS
- * @param string $path Stien til plugins mappen
- * @return void
- */
-function recursive_require_plugins(string $path) {
-    $dir = new DirectoryIterator($path);
-
-    foreach ($dir as $fileinfo) {
-        if ($fileinfo->isDir() && !$fileinfo->isDot()) {
-            recursive_require_plugins($fileinfo->getPath() . '/' . $fileinfo->getFilename() . '/');
-        } else if (!$fileinfo->isDot() && $fileinfo->getExtension() === 'php') {
-            require_once $fileinfo->getPath() . '/' . $fileinfo->getFilename();
-        }
-    }
-}
-
 require __DIR__ . '/vendor/autoload.php';
 
 require_once(__DIR__ . "/Template.php");
 require_once(__DIR__ . "/Functions.php");
 require_once(__DIR__ . "/StripeWrapper.php");
 require_once(__DIR__ . "/Login.php");
-
-recursive_require_plugins(__DIR__ . '/plugins/');
 
 class RCMS {
     /**
@@ -90,6 +71,8 @@ class RCMS {
             session_start();
         }
 
+        self::recursive_require_plugins(__DIR__ . '/plugins/');
+
 
         $this->host = $host;
         $this->user = $user;
@@ -123,6 +106,23 @@ class RCMS {
             echo ob_get_clean();
         } else {
             ob_end_clean();
+        }
+    }
+
+    /**
+     * Instantiere alle de klasser som ligger i plugins mappen, så loadPlugins() funktionen kan tilføje dem til $GLOBALS
+     * @param string $path Stien til plugins mappen
+     * @return void
+     */
+    private static function recursive_require_plugins(string $path): void {
+        $dir = new DirectoryIterator($path);
+
+        foreach ($dir as $fileinfo) {
+            if ($fileinfo->isDir() && !$fileinfo->isDot()) {
+                self::recursive_require_plugins($fileinfo->getPath() . '/' . $fileinfo->getFilename() . '/');
+            } else if (!$fileinfo->isDot() && $fileinfo->getExtension() === 'php') {
+                require_once $fileinfo->getPath() . '/' . $fileinfo->getFilename();
+            }
         }
     }
 
@@ -258,6 +258,7 @@ class RCMS {
     public function getRequestedPage(): ?array {
         $request_url = explode('?', $_SERVER['REQUEST_URI'] ?? '', 2)[0];
         $request_url2 = $request_url . "/";
+
         if ($request_url === "/index.php" || $request_url === "/index.php/") {
             $request_url = "/";
         }
@@ -272,7 +273,11 @@ class RCMS {
         return $row;
     }
 
-    public function closeRCMS() {
+    /**
+     * Lukker for en RCMS instans
+     * Bruges til development og testing
+     */
+    public function closeRCMS(): void {
         $this->mysqli->close();
 
         $vars = array_keys(get_defined_vars());
@@ -288,13 +293,15 @@ class RCMS {
     }
 
     /**
-     * Gør så man kan skrive QMARK i en URL i stedet for et spørgsmålstegn
+     * Giver mulighed for at skrive "QMARK" i en URL i stedet for et spørgsmålstegn (?)
+     *
+     * Nødvendig da RCMSTables erstatter spørgsmålstegn med specifikke værdier, men vi skal også bruge spørgsmålstegn for at betegne URL parametre
      *
      * Eksempel:
      *
      * $buttons = array(
      *      array(
-     *          "button" => '<input type="button" class="btn rbooking-btn" onclick="location.pathname = \'/admin/edituserQMARKuserid=?\'" value="Rediger bruger" />',
+     *          "button" => '<input type="button" class="btn rbooking-btn" onclick="location.pathname = `/admin/edituserQMARKuserid=?`" value="Rediger bruger" />',
      *          "value" => "id"
      *      )
      * );
@@ -310,7 +317,8 @@ class RCMS {
         }
     }
 
-    public static function generateConfigFile() {
+    public static function generateConfigFile(): void {
+        //TODO: fjern denne funktion? skal den bruges til CI/CD eller testing?
         $tester = getenv('testerto');
         echo $tester;
         die();

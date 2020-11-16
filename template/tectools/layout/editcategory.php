@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 
 if (!isset($_GET['categoryid']) || !is_numeric($_GET['categoryid'])) {
-    $this->RCMS->Functions->outputError('Category ID mangler', 'h3', true);
+    Functions::outputError('Category ID mangler', 'h3', true);
     return;
 }
 
@@ -20,33 +20,33 @@ $category = $TecTools->getCategory((int) $_GET['categoryid']);
 
 ?>
 
+<div class="container mt4">
+    <div class="row">
+        <form method="post"  class="col s12 m6 offset-m3 tectool-form">
+            <h1 class="center mb4 mt0">Rediger kategori</h1>
 
-<div class="section no-pad-bot">
-    <div class="container">
-        <br><br>
-        <h1 class="header center orange-text">Rediger kategori</h1>
-
-        <div class="row center">
-            <div class="col s12 m6 l6 xl6 offset-m3 offset-l3 offset-xl3">
-                <form class="tectool-form" id="edit_category_form" action="" method="POST">
-
-                    <label>Navn</label>
-                    <input value="<?= $category['CategoryName'] ?>" id="category_name" required name="category_name" type="text" placeholder="Navn på kategori">
-
-
-                    <input type="hidden" name="edit_category" value="1" />
-
-                    <input type="hidden" name="category_id" value="<?= $category['CategoryID'] ?>">
-
-                    <br><br>
-                    <button id="edit_category_btn" class="btn" type="submit">Gem</button>
-                    <button class="btn" type="button" onclick="history.back()">Tilbage</button>
-
-                </form>
+            <div class="row mt2 mb0">
+                <div class="input-field col s12">
+                    <input value="<?= $category['CategoryName'] ?>" required id="category_name" name="category_name" type="text" class="validate">
+                    <label for="category_name">Navn</label>
+                </div>
             </div>
-        </div>
-        <br><br>
+
+            <input type="hidden" name="edit_category" value="1" />
+            <input type="hidden" name="category_id" value="<?= $category['CategoryID'] ?>">
+
+            <div class="row mb0">
+                <div class="input-field col s12">
+                    <input class="tec-submit-btn" type="submit" value="Gem">
+                </div>
+            </div>
+
+            <div class="row mb0">
+                <div class="input-field col s6 m0">
+                    <button class="btn tec-btn" type="button" onclick="history.back()">Tilbage</button>
+                </div>
+            </div>
+
+        </form>
     </div>
 </div>
-
-
