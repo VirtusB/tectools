@@ -1,6 +1,5 @@
 let scanBtn = document.getElementById('scan-btn');
 let barcodeScanner = document.getElementById('barcode-scanner');
-let checkInButton = document.getElementById('check-in-btn');
 let scanContainer = document.getElementById('scan-container');
 let toolContainer = document.getElementById('tool-container');
 
@@ -8,7 +7,7 @@ let toolContainer = document.getElementById('tool-container');
 
 // Tjek om browseren har mulighed for at åbne en video-stream
 if (navigator.getUserMedia) {
-    navigator.getUserMedia({video: true, audio: false}, addScanBtnClickListener, noVideoCameraError);
+    navigator.mediaDevices.getUserMedia({video: true, audio: false}).then(addScanBtnClickListener, noVideoCameraError);
 } else {
     noVideoCameraError();
 }
@@ -29,6 +28,30 @@ function addScanBtnClickListener(stream) {
 function scanBtnClickHandler(event) {
     startScan();
     barcodeScanner.style.border = 'none';
+}
+
+/**
+ * Kontrollerer, at brugeren er inden for en radius på 1500 meter fra en af vores butikker
+ * 1500 meter er en stor og gavmild radius, men er nødvendig da Geolocation API'et ikke er 100% præcis
+ */
+function startGeofence(barcode) {
+    let storeLocations = JSON.parse(document.getElementById('store-locations-json').innerHTML.trim());
+
+    Geofence.getUserLocation(() => {
+        let userNearByAStore = Geofence.oneWithin(storeLocations, 1500);
+
+        if (!userNearByAStore) {
+            alert('Det ser ikke ud til, at du ikke er i nærheden af en af vores butikker. Du kan derfor ikke udlåne værktøjet på nuværende tidspunkt');
+            return;
+        }
+
+        // Brugeren er i nærheden af en af vores butikker. Fortsæt udlåning.
+        checkInTool(barcode);
+    }, positionReadingError);
+}
+
+function positionReadingError() {
+    alert('Vi kunne ikke finde dine koordinater. Sørg for at placeringstjenesten er aktiv på din smartphone, og at du har gives TecTools adgang til at bruge din lokation');
 }
 
 /**
@@ -104,12 +127,20 @@ function showTool(barcode) {
     });
 }
 
+function disableCheckInBtn() {
+    toolContainer.querySelector('#check-in-btn').setAttribute('disabled', 'disabled');
+}
+
+function enableCheckInBtn() {
+    toolContainer.querySelector('#check-in-btn').removeAttribute('disabled');
+}
+
 /**
  * Sender en AJAX request til serveren og udlåner et værktøj til brugeren
  * @param {string} barcode
  */
 function checkInTool(barcode) {
-    toolContainer.querySelector('#check-in-btn').setAttribute('disabled', 'disabled');
+    disableCheckInBtn();
     showLoader('#check-in-btn');
 
     $.post({

@@ -174,6 +174,8 @@ class TecTools {
 
         $this->RCMS->execute('CALL addCheckIn(?, ?, ?)', array('iii', $userID, $toolID, $checkInDuration));
 
+        $this->RCMS->addLog(LogTypes::CHECK_IN_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
+
         $response['result'] = 'success';
         $this->RCMS->Functions->outputAJAXResult(200, $response);
     }
@@ -430,6 +432,8 @@ class TecTools {
 
         $this->RCMS->execute('CALL addManufacturer(?)', array('s', $manufacturerName));
 
+        $this->RCMS->addLog(LogTypes::CREATE_MANUFACTURER_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
+
         Functions::setNotification('Oprettet', 'Producenten blev oprettet');
 
         Functions::redirect('/dashboard');
@@ -459,6 +463,8 @@ class TecTools {
 
         $this->RCMS->execute('CALL editManufacturer(?, ?)', array('is', $manufacturerID, $manufacturerName));
 
+        $this->RCMS->addLog(LogTypes::EDIT_MANUFACTURER_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
+
         Functions::setNotification('Gemt', 'Dine ændringer blev gemt');
 
         Functions::redirect('/dashboard');
@@ -476,6 +482,8 @@ class TecTools {
         $categoryName = $_POST['category_name'];
 
         $this->RCMS->execute('CALL addCategory(?)', array('s', $categoryName));
+
+        $this->RCMS->addLog(LogTypes::CREATE_CATEGORY_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
         Functions::setNotification('Oprettet', 'Kategorien blev oprettet');
 
@@ -505,6 +513,8 @@ class TecTools {
         $categoryName = $_POST['category_name'];
 
         $this->RCMS->execute('CALL editCategory(?, ?)', array('is', $categoryID, $categoryName));
+
+        $this->RCMS->addLog(LogTypes::EDIT_CATEGORY_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
         Functions::setNotification('Gemt', 'Dine ændringer blev gemt');
 
@@ -560,6 +570,8 @@ class TecTools {
         }
 
         $this->RCMS->execute('CALL editTool(?, ?, ?, ?, ?, ?)', array('issisi', $manufacturerID, $toolName, $description, $status, $newImageName, $toolID));
+
+        $this->RCMS->addLog(LogTypes::EDIT_TOOL_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
         Functions::setNotification('Gemt', 'Dine ændringer blev gemt');
 
@@ -635,6 +647,8 @@ class TecTools {
             $this->addToolToCategory($toolID, (int) $categoryID);
         }
 
+        $this->RCMS->addLog(LogTypes::CREATE_TOOL_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
+
         Functions::setNotification('Oprettet', 'Værktøjet blev oprettet');
 
         Functions::redirect('/dashboard');
@@ -677,7 +691,7 @@ class TecTools {
             $this->RCMS->Functions->outputAJAXResult(400, ['result' => 'Stregkode er forkert']);
         }
 
-        // Indsæt hash i session og databasen med bruger ID, tjek efterfølgende på det i checkIn() metoden
+        // TODO: Indsæt hash i session og databasen med bruger ID, tjek efterfølgende på det i checkIn() metoden
 
         $tool = $this->getToolByBarcode($_POST['tool_barcode']);
 
@@ -688,7 +702,39 @@ class TecTools {
             'tool' => $tool
         ];
 
+        $this->RCMS->addLog(LogTypes::SCAN_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
+
         $this->RCMS->Functions->outputAJAXResult(200, $result);
+    }
+
+    private function getAllStoresAjax(): void {
+        $stores = $this->getAllStores();
+
+        $locations = [];
+
+        foreach ($stores as $store) {
+            $locations[] = ['lat' => $store['Latitude'], 'long' => $store['Longitude']];
+        }
+
+        $stores['locations'] = $locations;
+
+        $this->RCMS->Functions->outputAJAXResult(200, $stores);
+    }
+
+    public function getAllStores() {
+        return $this->RCMS->execute('CALL getAllStores()')->fetch_all(MYSQLI_ASSOC) ?? [];
+    }
+
+    public function getStoreLocations() {
+        $stores = $this->getAllStores();
+
+        $locations = [];
+
+        foreach ($stores as $store) {
+            $locations[] = ['lat' => $store['Latitude'], 'long' => $store['Longitude']];
+        }
+
+        return $locations;
     }
 
     /**

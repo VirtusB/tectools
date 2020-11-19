@@ -59,8 +59,9 @@ class Login {
                 $_SESSION['logged_in'] = 1;
                 $_SESSION['user'] = $user;
 
-                Functions::setNotification('Success', 'Du er nu logget på');
+                $this->RCMS->addLog(LogTypes::LOG_IN_TYPE_ID, ['UserID' => $user['UserID']]);
 
+                Functions::setNotification('Success', 'Du er nu logget på');
                 Functions::redirect('/dashboard');
             } else {
                 Functions::redirect('/login?wrong_email_or_password');
@@ -75,17 +76,10 @@ class Login {
      * TODO: En bruger skal ikke kunne se andet end abonnement siden indtil de har købt et abonnement
      * @return void
      * @throws ApiErrorException
+     * @noinspection PhpUndefinedVariableInspection
      */
 	public function createUser(): void {
-	    $email = $_POST['email'];
-	    $password = $_POST['password'];
-	    $repeatPassword = $_POST['repeat_password'];
-	    $firstname = $_POST['firstname'];
-	    $lastname = $_POST['lastname'];
-	    $phone = $_POST['phone'];
-	    $address = $_POST['address'];
-	    $city = $_POST['city'];
-	    $zipcode = $_POST['zipcode'];
+        extract($_POST, EXTR_OVERWRITE);
 
         $exists = $this->RCMS->execute('CALL getUserByEmail(?)', array('s', $email));
 
@@ -98,7 +92,7 @@ class Login {
             return;
         }
 
-        if ($password !== $repeatPassword) {
+        if ($password !== $repeat_password) {
             unset($_POST['password'], $_POST['repeat_password']);
             $_SESSION['createUserPOST'] = $_POST;
             Functions::redirect('?confirm_password');
@@ -210,6 +204,8 @@ class Login {
      * @return void
      */
 	public function log_out(string $customLocation = ''): void {
+        $this->RCMS->addLog(LogTypes::LOG_OUT_TYPE_ID, ['UserID' => $this->getUserID()]);
+
         unset($_SESSION['logged_in'], $_SESSION['user']);
         if ($customLocation !== '') {
             header($customLocation);

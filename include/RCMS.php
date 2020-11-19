@@ -8,6 +8,7 @@ require_once(__DIR__ . "/Template.php");
 require_once(__DIR__ . "/Functions.php");
 require_once(__DIR__ . "/StripeWrapper.php");
 require_once(__DIR__ . "/Login.php");
+require_once(__DIR__ . "/LogTypes.php");
 
 class RCMS {
     /**
@@ -315,6 +316,12 @@ class RCMS {
             Functions::redirect($questionMarksReplaced);
             exit(0);
         }
+    }
+
+    public function addLog(int $LogTypeID, array $data) {
+        $json = json_encode($data);
+
+        $this->execute('CALL addLog(?, ?)', array('is', $LogTypeID, $json));
     }
 
     public static function generateConfigFile(): void {
