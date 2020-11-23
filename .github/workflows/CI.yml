@@ -26,8 +26,3 @@ jobs:
           run: |
             cd include/vendor/bin
             phpunit --testdox tests
-
-
-#      - name: "Run tests with phpunit"
-#        working-directory: "/home/runner/work/tectools/"
-#        run: "include/vendor/bin/phpunit --testdox tests"
