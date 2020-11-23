@@ -707,25 +707,19 @@ class TecTools {
         $this->RCMS->Functions->outputAJAXResult(200, $result);
     }
 
-    private function getAllStoresAjax(): void {
-        $stores = $this->getAllStores();
-
-        $locations = [];
-
-        foreach ($stores as $store) {
-            $locations[] = ['lat' => $store['Latitude'], 'long' => $store['Longitude']];
-        }
-
-        $stores['locations'] = $locations;
-
-        $this->RCMS->Functions->outputAJAXResult(200, $stores);
-    }
-
+    /**
+     * Henter alle vores butikker ud af databasen
+     * @return array|mixed
+     */
     public function getAllStores() {
         return $this->RCMS->execute('CALL getAllStores()')->fetch_all(MYSQLI_ASSOC) ?? [];
     }
 
-    public function getStoreLocations() {
+    /**
+     * Returnerer et array med lokationer for vores butikker
+     * @return array
+     */
+    public function getStoreLocations(): array {
         $stores = $this->getAllStores();
 
         $locations = [];

@@ -22,7 +22,12 @@ jobs:
           cd include
           composer install --prefer-dist
 
+      - name: Run tests with phpunit
+          run: |
+            cd include/vendor/bin
+            phpunit --testdox tests
 
-      - name: "Run tests with phpunit/phpunit"
-        working-directory: "/home/runner/work/tectools/"
-        run: "include/vendor/bin/phpunit --testdox tests"
+
+#      - name: "Run tests with phpunit"
+#        working-directory: "/home/runner/work/tectools/"
+#        run: "include/vendor/bin/phpunit --testdox tests"

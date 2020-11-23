@@ -35,23 +35,20 @@ function scanBtnClickHandler(event) {
  * 1500 meter er en stor og gavmild radius, men er nødvendig da Geolocation API'et ikke er 100% præcis
  */
 function startGeofence(barcode) {
+    // Ex. [{lat: 55.12, long: 12.6}, {lat: 54.24, long: 12.9}]
     let storeLocations = JSON.parse(document.getElementById('store-locations-json').innerHTML.trim());
 
     Geofence.getUserLocation(() => {
-        let userNearByAStore = Geofence.oneWithin(storeLocations, 1500);
+        let isUserNearbyAStore = Geofence.oneWithinRadius(storeLocations, 1500);
 
-        if (!userNearByAStore) {
+        if (!isUserNearbyAStore) {
             alert('Det ser ikke ud til, at du ikke er i nærheden af en af vores butikker. Du kan derfor ikke udlåne værktøjet på nuværende tidspunkt');
             return;
         }
 
         // Brugeren er i nærheden af en af vores butikker. Fortsæt udlåning.
         checkInTool(barcode);
-    }, positionReadingError);
-}
-
-function positionReadingError() {
-    alert('Vi kunne ikke finde dine koordinater. Sørg for at placeringstjenesten er aktiv på din smartphone, og at du har gives TecTools adgang til at bruge din lokation');
+    }, () => alert('Vi kunne ikke finde dine koordinater. Sørg for at placeringstjenesten er aktiv på din smartphone, og at du har gives TecTools adgang til at bruge din lokation'));
 }
 
 /**

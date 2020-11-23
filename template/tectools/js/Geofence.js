@@ -9,7 +9,7 @@ class Geofence {
     /**
      * Brugerens longitude
      * @type {number}
-     * @name userLat
+     * @name userLong
      */
     static userLong;
 
@@ -41,7 +41,7 @@ class Geofence {
      * @param {number} maxDistance Maks distance, i meter, der må være mellem brugerens koordinater og koordinaterne der gives til metoden
      * @return {boolean}
      */
-    static isUserWithin(locationLat, locationLong, maxDistance) {
+    static isUserWithinRadius(locationLat, locationLong, maxDistance) {
         if (this.userLat === undefined || this.userLong === undefined) {
             console.log('User location missing');
             return false;
@@ -58,18 +58,14 @@ class Geofence {
     }
 
     /**
-     * Køre isUserWithin for hver lokation angivet i "arr" argumentet
+     * Køre isUserWithinRadius for hver lokation angivet i "arr" argumentet
      *
      * Hvis ikke brugeren er i nærheden af en af lokationerne, returnere metoden false
      * @param arr
      * @param maxDistance
      * @return {boolean}
      */
-    static oneWithin(arr, maxDistance) {
-        return arr.some(location => this.isUserWithin(location.lat, location.long, maxDistance));
-    }
-
-    static isUserLocationKnown() {
-        return this.userLat !== undefined && this.userLong !== undefined;
+    static oneWithinRadius(arr, maxDistance) {
+        return arr.some(location => this.isUserWithinRadius(location.lat, location.long, maxDistance));
     }
 }
