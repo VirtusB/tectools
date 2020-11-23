@@ -9,3 +9,5 @@ declare(strict_types=1);
 
     <button id="new-subscription" class='btn green'>Køb</button>
 </form>
+
+<script src="https://js.stripe.com/v3/"></script>

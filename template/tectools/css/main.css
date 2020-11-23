@@ -142,6 +142,10 @@ a.btn, button.btn {
     transition: all .2s ease-in-out;
 }
 
+.tec-submit-btn[disabled] {
+    border: none !important;
+}
+
 .green-btn {
     background-color: #2C3F50;
 }

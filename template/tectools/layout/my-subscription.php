@@ -18,8 +18,6 @@ $userProduct = $TecTools->getUserProduct($this->RCMS->Login->getUserID());
 
 ?>
 
-
-
 <div class="section no-pad-bot">
     <div class="container">
         <br><br>
@@ -27,47 +25,74 @@ $userProduct = $TecTools->getUserProduct($this->RCMS->Login->getUserID());
 
         <div class="row center" style="margin-top: 4rem;">
             <?php foreach ($products as $key => $product): ?>
-            <div class="col s12 m4 <?= $key % 2 === 0 ? 'offset-m1' : 'offset-m2' ?>">
-                <div class="card">
+                <div class="col s12 m4 <?= $key % 2 === 0 ? 'offset-m1' : 'offset-m2' ?>">
+                    <div class="card">
 
-                    <div class="card-content center">
-                        <h5 class=''><?= $product['name'] ?></h5>
-                    </div>
-                    <div class="card-content center">
-                        <h2><small>kr. </small><?= $product['price'] ?>,-</h2>
-                        <small class="grey-text">pr. md.</small>
-                    </div>
+                        <div class="card-content center">
+                            <h5 class=''><?= $product['name'] ?></h5>
+                        </div>
+                        <div class="card-content center">
+                            <h2><small>kr. </small><?= $product['price'] ?>,-</h2>
+                            <small class="grey-text">pr. md.</small>
+                        </div>
 
-                    <ul class='collection center'>
-                        <?php foreach ($product['metadata'] as $prop): ?>
-                        <li class='collection-item'>
-                            <?= $this->RCMS->StripeWrapper->isPremiumPlan($product) ? "<strong>{$prop['value']} {$prop['description']}</strong>" : "{$prop['value']} {$prop['description']}" ?>
-                        </li>
-                        <?php endforeach; ?>
-                    </ul>
+                        <ul class='collection center'>
+                            <?php foreach ($product['metadata'] as $prop): ?>
+                                <li class='collection-item'>
+                                    <?= $this->RCMS->StripeWrapper->isPremiumPlan($product) ? "<strong>{$prop['value']} {$prop['description']}</strong>" : "{$prop['value']} {$prop['description']}" ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
 
-                    <div class="card-content center">
-                        <div class="row">
-                            <div class="col s12">
-                                    <?php
-                                    if ($userProduct) {
-                                        if ($userProduct['id'] === $product['id']) {
-                                            include __DIR__ . '/partials/cancel-subscription-form.php';
-                                        } else if ($product['price'] > $userProduct['price']) {
-                                            include __DIR__ . '/partials/upgrade-subscription-form.php';
-                                        } else {
-                                            include __DIR__ . '/partials/downgrade-subscription-form.php';
-                                        }
-                                    } else {
-                                        include __DIR__ . '/partials/new-subscription-form.php';
-                                    }
-                                    ?>
+                        <div class="card-content center">
+                            <div class="row">
+                                <div class="col s12">
+                                    <?php if ($userProduct): ?>
+                                        <?php if ($userProduct['id'] === $product['id']): ?>
+                                            <form action="" method="post">
+                                                <input type="hidden" name="cancel_subscription" value="1">
+
+                                                <input type="hidden" name="post_endpoint" value="cancelSubscription">
+
+                                                <button class='btn red cancel-subscription'>Opsig</button>
+                                            </form>
+                                        <?php elseif ($product['price'] > $userProduct['price']): ?>
+                                            <form action="" method="post">
+                                                <input type="hidden" name="upgrade_subscription" value="1">
+
+                                                <input type="hidden" name="post_endpoint" value="upgradeSubscription">
+
+                                                <button class='btn green upgrade-subscription'>Opgrader</button>
+                                            </form>
+                                        <?php else: ?>
+                                            <form action="" method="post">
+                                                <input type="hidden" name="downgrade_subscription" value="1">
+
+                                                <input type="hidden" name="post_endpoint" value="downgradeSubscription">
+
+                                                <button class='btn orange downgrade-subscription'>Nedgrader
+                                                </button>
+                                            </form>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <form class="newSubscriptionForm" action="/buy-subscription" method="get">
+                                            <input type="hidden" name="post_endpoint" value="newSubscription">
+
+                                            <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+
+                                            <input type="hidden" name="price_id" value="<?= $this->RCMS->StripeWrapper->getPlan($product['id'])->id ?>">
+
+                                            <input type="hidden" name="customer_id" value="<?= $this->RCMS->Login->getStripeID() ?>">
+
+                                            <button type="submit" class='btn green new-subscription'>Vælg</button>
+                                        </form>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
-            </div>
             <?php endforeach; ?>
         </div>
 
@@ -84,55 +109,8 @@ $userProduct = $TecTools->getUserProduct($this->RCMS->Login->getUserID());
 
 <link rel="stylesheet" href="<?= $this->RCMS->getTemplateFolder() ?>/css/my-subscription.css">
 
-<script src="https://js.stripe.com/v3/"></script>
-
-<script>
-    var stripe = Stripe('pk_test_51GxgFXDehEC5bZAdqTODhHU0ptCC2ejKNBhnZUcLQHjr1tsIZpGJGRv7FuZgMla5JYP747dbNNAXg0yRlUH0HP1R00DvkeG6wM'); // test eller production??
-
-    var newSubscriptionBtn = document.getElementById('new-subscription');
-
-    newSubscriptionBtn.addEventListener('click', function (e) {
-        e.preventDefault();
-
-        var formData = new FormData();
-        formData.append('post_endpoint', 'newSubscription');
-
-        fetch(location.origin + location.pathname, {
-            method: 'POST',
-            data: formData
-
-        })
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (session) {
-                return stripe.redirectToCheckout({sessionId: session.id});
-            })
-            .then(function (result) {
-                // If `redirectToCheckout` fails due to a browser or network
-                // error, you should display the localized error message to your
-                // customer using `error.message`.
-                if (result.error) {
-                    alert(result.error.message);
-                }
-            })
-            .catch(function (error) {
-                console.error('Error:', error);
-            });
-    });
-</script>
 
 
-<!-- Modal Structure -->
-<div id="payment-modal" class="modal">
-    <div class="modal-content">
-
-    </div>
-
-    <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Annuller</a>
-    </div>
-</div>
 
 
 

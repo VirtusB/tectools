@@ -131,6 +131,28 @@ class StripeWrapper {
     }
 
     /**
+     * Returnerer en Stripe plan
+     *
+     * Reference for plan: https://stripe.com/docs/api/plans
+     *
+     * Reference for produkt: https://stripe.com/docs/api/products
+     * @param string $productID ID på et Stripe produkt, F.eks. prod_HQWzfyxLdAjwWo
+     * @return \Stripe\StripeObject[]|null
+     * @throws ApiErrorException
+     */
+    public function getPlan(string $productID) {
+        $plans = $this->getStripeClient()->plans->all()->data;
+
+        $plan = array_filter($plans, static fn($plan) => $plan['product'] === $productID);
+
+        if ($plan) {
+            $plan = reset($plan);
+        }
+
+        return $plan ?? null;
+    }
+
+    /**
      * Returnerer et Stripe produkt
      *
      * Reference for produkt: https://stripe.com/docs/api/products

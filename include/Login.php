@@ -183,6 +183,14 @@ class Login {
     }
 
     /**
+     * Returnerer brugerens efternavn
+     * @return bool|string
+     */
+    public function getLastName() {
+        return $_SESSION['user']['LastName'] ?? false;
+    }
+
+    /**
      * Returnerer brugerens ID
      * @return bool|int
      */

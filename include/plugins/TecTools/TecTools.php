@@ -59,7 +59,7 @@ class TecTools {
         'editUser',
         'checkIn',
         'getToolByBarcodeAjax',
-        'newSubscription'
+        'newSubscription', 'cancelSubscription', 'upgradeSubscription', 'downgradeSubscription'
     ];
 
     public function __construct(RCMS $RCMS) {
@@ -87,25 +87,56 @@ class TecTools {
         }
     }
 
+    private function cancelSubscription(): void {
+
+    }
+
+    private function upgradeSubscription(): void {
+
+    }
+
+    private function downgradeSubscription(): void {
+
+    }
+
     private function newSubscription(): void {
-        $session = $this->RCMS->StripeWrapper->getStripeClient()->checkout->sessions->create([
-            'payment_method_types' => ['card'],
-            'line_items' => [[
-                'price_data' => [
-                    'currency' => 'usd',
-                    'product_data' => [
-                        'name' => 'T-shirt',
-                    ],
-                    'unit_amount' => 2000,
-                ],
-                'quantity' => 1,
-            ]],
-            'mode' => 'payment',
-            'success_url' => 'https://example.com/success',
-            'cancel_url' => 'https://example.com/cancel',
+        $customerID = $this->RCMS->Login->getStripeID();
+        $priceID = $_POST['priceID'];
+        $paymentMethodID = $_POST['paymentMethodID'];
+
+        $client = $this->RCMS->StripeWrapper->getStripeClient();
+
+        try {
+            $payment_method = $client->paymentMethods->retrieve(
+                $paymentMethodID
+            );
+
+            $payment_method->attach([
+                'customer' => $customerID
+            ]);
+        } catch (Exception $e) {
+            $this->RCMS->Functions->outputAJAXResult(400, ['message' => $e->getMessage(), 'data' => [$customerID, $priceID, $paymentMethodID]]);
+        }
+
+        // Set the default payment method on the customer
+        $client->customers->update($customerID, [
+            'invoice_settings' => [
+                'default_payment_method' => $paymentMethodID
+            ]
         ]);
 
-        $this->RCMS->Functions->outputAJAXResult(200, [ 'id' => $session->id ]);
+        // Create the subscription
+        $subscription = $client->subscriptions->create([
+            'customer' => $customerID,
+            'items' => [
+                [
+                    'price' => $priceID,
+                ],
+            ],
+            'expand' => ['latest_invoice.payment_intent'],
+        ]);
+
+        $this->RCMS->Functions->outputAJAXResult(200, ['subscription' => $subscription]);
     }
 
     /**
