@@ -22,6 +22,6 @@ jobs:
           cd include
           composer install --prefer-dist
 
-      - name: Run tests with phpunit
+      - name: "Run tests with phpunit"
         - run: "cd include/vendor/bin"
         - run: "phpunit --testdox tests"
