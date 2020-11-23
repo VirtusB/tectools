@@ -12,8 +12,8 @@ mb_http_output('UTF-8');
 //require_once __DIR__ . '/../config.php';
 //require_once __DIR__ . '/../include/RCMS.php';
 
-require_once '../config.php';
-require_once '../include/RCMS.php';
+require_once './../config.php';
+require_once './../include/RCMS.php';
 
 /**
  * @param bool $seed
