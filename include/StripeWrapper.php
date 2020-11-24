@@ -51,10 +51,23 @@ class StripeWrapper {
         return $this->getStripeClient()->customers->create($params);
     }
 
+    /**
+     * Sletter en kunde i Stripe
+     * @param string $customerID Kundens ID
+     * @return Customer
+     * @throws ApiErrorException
+     */
     public function removeCustomer(string $customerID) {
         return $this->getStripeClient()->customers->delete($customerID);
     }
 
+    /**
+     * Ændrer brugeroplysninger for en kunde
+     * @param string $customerID Kundens ID
+     * @param array $params
+     * @return Customer
+     * @throws ApiErrorException
+     */
     public function editCustomer(string $customerID, array $params): Customer {
         return $this->getStripeClient()->customers->update($customerID, $params);
     }
@@ -150,6 +163,27 @@ class StripeWrapper {
         }
 
         return $plan ?? null;
+    }
+
+    /**
+     * Returnerer ID'et for et abonnement for kunden med $customerID
+     * @param string $customerID Kundens ID
+     * @return mixed|null
+     * @throws ApiErrorException
+     */
+    public function getSubscriptionID(string $customerID) {
+        $subscription = $this->getStripeClient()->subscriptions->all(['customer' => $customerID]);
+        return $subscription->data[0]->id;
+    }
+
+    /**
+     * Returnerer abonnementet for kunden med $customerID
+     * @param string $customerID Kundens ID
+     * @return \Stripe\StripeObject
+     * @throws ApiErrorException
+     */
+    public function getSubscription(string $customerID) {
+        return $this->getStripeClient()->subscriptions->all(['customer' => $customerID])->data[0];
     }
 
     /**

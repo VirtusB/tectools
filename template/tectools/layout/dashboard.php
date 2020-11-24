@@ -219,7 +219,9 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                             <div class="card-panel teal">
                                 <!-- TODO: skriv hvilket abonnement brugeren har -->
                                 <span style="display: block; margin-bottom: 24px" class="white-text">
-                                    Velkommen, <?= $this->RCMS->Login->getFirstName() ?><br>Du er standard bruger
+                                    Velkommen, <?= $this->RCMS->Login->getFirstName() ?>
+                                    <br>
+                                    <?= empty($this->RCMS->Login->getSubName()) ? 'Du har ikke noget abonnement' : "Du er {$this->RCMS->Login->getSubName()} bruger" ?>
                                 </span>
 
                                 <a class="btn tec-btn xl-up-mb0" href="/my-subscription">Mit abonnement</a>
@@ -289,7 +291,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                 $where = [
                     [
                         'column' => 'FK_UserID',
-                        'eq' => $userID = $this->RCMS->Login->getUserID(),
+                        'eq' => $this->RCMS->Login->getUserID(),
                         'type' => 'i'
                     ],
                     [
@@ -350,17 +352,28 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                 );
 
                 $order = "ORDER BY r.EndDate DESC";
-                $settings = array('searchbar' => true, 'pageLimit' => 5);
+                $settings = array('searchbar' => true, 'pageLimit' => 5, 'querylogger' => true, 'queryloggerpath' => '/home/virtusbc/tectools.virtusb.com/querylogger.txt');
 
                 $where = [
                     [
-                        'column' => 'r.FK_UserID',
-                        'eq' => $userID = $this->RCMS->Login->getUserID(),
+                        'column' => 'FK_UserID',
+                        'eq' => $this->RCMS->Login->getUserID(),
                         'type' => 'i'
+                    ],
+                    [
+                        'column' => 'EndDate',
+                        'direct_gteq' => 'NOW()'
                     ]
                 ];
 
-                $RCMSTables->createRCMSTable("reservations_table", "Reservations r LEFT JOIN Tools t ON t.ToolID = r.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID LEFT JOIN Statuses s ON s.StatusID = t.FK_StatusID LEFT JOIN Reservations ON r.FK_ToolID = t.ToolID", $columns, $settings, $where, $order, [], null);
+                $buttons = [
+                    [
+                        'button' => '<button onclick="deleteReservation(?)" class="btn tec-btn red">Slet</button>',
+                        'value' => 'ReservationID'
+                    ]
+                ];
+
+                $RCMSTables->createRCMSTable("reservations_table", "Reservations r LEFT JOIN Tools t ON t.ToolID = r.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID LEFT JOIN Statuses s ON s.StatusID = t.FK_StatusID", $columns, $settings, $where, $order, $buttons, null);
                 ?>
             </div>
 
@@ -416,7 +429,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                 $where = [
                     [
                         'column' => 'FK_UserID',
-                        'eq' => $userID = $this->RCMS->Login->getUserID(),
+                        'eq' => $this->RCMS->Login->getUserID(),
                         'type' => 'i'
                     ],
                     [

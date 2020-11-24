@@ -41,7 +41,7 @@ class Functions {
      * @param array $result Array af data som skal udskrives til brugeren
      * @return void
      */
-    public function outputAJAXResult(int $status, array $result): void {
+    public static function outputAJAXResult(int $status, array $result): void {
         ob_get_clean();
         ob_start();
         header('Content-Type: application/json');

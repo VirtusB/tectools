@@ -33,7 +33,7 @@ class Template {
 		if (isset($request['is_admin_page']) && $request['is_admin_page'] && !$this->RCMS->Login->isAdmin()) {
 			$request = __DIR__ . '/..' . $this->RCMS->getTemplateFolder() . "/layout/login.php";
 			if (!file_exists($request)) {
-				echo "Fejl ved loading af side! Kontakt en administrator hvis problemet genopstår.";
+				echo "Fejl ved loading af side! Kontakt en administrator hvis problemet genopstår. (siden eksisterer ikke)";
 				return;
 			}
 			require_once($request);
@@ -41,7 +41,7 @@ class Template {
 		} else if (isset($request['require_login']) && $request['require_login'] && !$this->RCMS->Login->isLoggedIn()) {
 			$request = __DIR__ . '/..' . $this->RCMS->getTemplateFolder() . "/layout/login.php";
 			if (!file_exists($request)) {
-				echo "Fejl ved loading af side! Kontakt en administrator hvis problemet genopstår.";
+				echo "Fejl ved loading af side! Kontakt en administrator hvis problemet genopstår. (Du er ikke logget ind)";
 				return;
 			}
 			require_once($request);
@@ -51,7 +51,7 @@ class Template {
 		if ($request['include']) {
 			$request = __DIR__ . '/..' . $this->RCMS->getTemplateFolder() . "/layout" . $request['content'];
 			if (!file_exists($request)) {
-				echo "Fejl ved loading af side! Kontakt en administrator hvis problemet genopstår.";
+				echo "Fejl ved loading af side! Kontakt en administrator hvis problemet genopstår. (Indhold mangler)";
 				return;
 			}
 			require_once($request);

@@ -12,5 +12,11 @@ class LogTypes {
     public const EDIT_MANUFACTURER_TYPE_ID = 7;
     public const LOG_IN_TYPE_ID = 8;
     public const LOG_OUT_TYPE_ID = 9;
-    public const CHECK_IN_TYPE_ID = 9;
+    public const CHECK_IN_TYPE_ID = 10;
+    public const NEW_SUBSCRIPTION_TYPE_ID = 11;
+    public const CANCEL_SUBSCRIPTION_TYPE_ID = 12;
+    public const UPGRADE_SUBSCRIPTION_TYPE_ID = 13;
+    public const DOWNGRADE_SUBSCRIPTION_TYPE_ID = 14;
+    public const DELETE_USER_TYPE_ID = 15;
+    public const ADD_RESERVATION_TYPE_ID = 16;
 }

@@ -25,4 +25,19 @@ function handleExceededRentals() {
     let instances = M.Tooltip.init(elems);
 }
 
+function deleteReservation(id) {
+    if (!confirm('Er du helt sikker?')) {
+        return;
+    }
+
+    let form = `
+    <form style="display: none;" method="POST">
+        <input type="hidden" name="post_endpoint" value="deleteReservation">
+        <input type="hidden" name="reservation_id" value="${id}">
+    </form>
+    `;
+
+    $(document.body).append(form);
+    $(`input[value=${id}]`).parent().submit();
+}
 

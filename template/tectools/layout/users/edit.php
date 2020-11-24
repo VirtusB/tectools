@@ -110,13 +110,20 @@ $user = $TecTools->getUserByID($userID);
                 </div>
             </div>
 
-            <div class="row">
-                <div class="input-field col s6 m0">
-                    <button class="btn tec-btn red" type="button">Slet bruger</button>
-                </div>
-            </div>
-
         </form>
+
+        <div class="row">
+            <div class="input-field col s12 m6 offset-m3">
+                <form onsubmit="confirm('Er du helt sikker?') === false && event.preventDefault()" action="" method="post">
+                    <input type="hidden" name="post_endpoint" value="deleteUser">
+                    <input type="hidden" name="userID" value="<?= $user['UserID'] ?>">
+
+                    <button class="btn tec-btn red" type="submit">Slet bruger</button>
+                </form>
+            </div>
+        </div>
+
+
     </div>
 </div>
 

@@ -73,7 +73,6 @@ class Login {
 
     /**
      * Opretter en bruger via en POST request
-     * TODO: En bruger skal ikke kunne se andet end abonnement siden indtil de har købt et abonnement
      * @return void
      * @throws ApiErrorException
      * @noinspection PhpUndefinedVariableInspection
@@ -102,7 +101,7 @@ class Login {
 
         unset($_SESSION['createUserPOST']);
 
-        $hashedPass = password_hash($password, PASSWORD_DEFAULT);
+        $hashedPass = $this->hashPass($password);
 
         $stripeID = $this->addUserToStripe($firstname, $lastname, $email, $phone, $address, $zipcode, $city);
 
@@ -191,6 +190,14 @@ class Login {
     }
 
     /**
+     * Returnerer brugerens abonnement navn
+     * @return bool|string
+     */
+    public function getSubName() {
+        return $_SESSION['user']['SubName'] ?? false;
+    }
+
+    /**
      * Returnerer brugerens ID
      * @return bool|int
      */
@@ -227,7 +234,7 @@ class Login {
      * @param string $pass Brugerens adgangskode
      * @return string
      */
-	public function saltPass(string $pass): string {
-		return md5($this->RCMS->getSalt() . $pass . $this->RCMS->getSalt());
+	public function hashPass(string $pass): string {
+		return password_hash($pass, PASSWORD_DEFAULT);
 	}
 }

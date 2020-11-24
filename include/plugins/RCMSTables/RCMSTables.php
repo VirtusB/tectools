@@ -386,7 +386,9 @@ class RCMSTables {
             'lteq' => '<=',     // lower than or equal to
             'gteq' => '>=',     // greater than or equal to
             'direct_eq' => '=', // direkte SQL equal =, bliver ikke bindet/prepared
-            'direct_in' => 'IN' // direkte SQL IN, bliver ikke bindet/prepared
+            'direct_in' => 'IN', // direkte SQL IN, bliver ikke bindet/prepared
+            'direct_lteq' => '<=',
+            'direct_gteq' => '>='
         ];
 
         $whereClause = "";
@@ -413,7 +415,7 @@ class RCMSTables {
 
             // direct_eq eller direct_in kan bruges til at slippe uden om prepared statements, så vi kan tjekke på værdier eller køre en IN direkte
             // Hvis direct_eq eller direct_in ikke bruges, bliver parametrene bundet med spørgsmålstegn, ?
-            $directs = ['direct_eq', 'direct_in'];
+            $directs = ['direct_eq', 'direct_in', 'direct_lteq', 'direct_gteq'];
             if (in_array($operatorKey, $directs, true)) {
                 $whereClause .= $w['column'] . ' ' . $operator[$operatorKey] . ' ' . $w[$operatorKey] . ' ';
             } else {

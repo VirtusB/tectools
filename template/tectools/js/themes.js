@@ -8,6 +8,17 @@ document.addEventListener('DOMContentLoaded', e => {
     addThemeSwitchListener();
 });
 
+function isDarkTheme() {
+    const themeSwitch = document.getElementById('dark-theme-input');
+    const darkThemeSelected = (localStorage.getItem('LS_THEME') !== null && localStorage.getItem('LS_THEME') === 'dark');
+
+    if (!themeSwitch) {
+        return darkThemeSelected;
+    } else {
+        return themeSwitch.checked;
+    }
+}
+
 
 /**
  * Tilføjer en EventListener til tema-kontakten

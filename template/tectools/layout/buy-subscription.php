@@ -31,6 +31,18 @@ $product = $this->RCMS->StripeWrapper->getStripeProduct($productID);
             font-size: 3rem;
         }
     }
+
+    .card-panel.teal {
+        width: 90%;
+        display: flex;
+        justify-content: center;
+        color: #eee;
+    }
+
+    li:nth-child(2) {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
 </style>
 
 <div class="section no-pad-bot">
@@ -38,20 +50,18 @@ $product = $this->RCMS->StripeWrapper->getStripeProduct($productID);
         <br><br>
         <h2 class="header center"><?= $product['name'] ?>-abonnementet</h2>
 
-        <h5 class="center">I dette abonnement får du følgende services:</h5>
-
         <div class="row">
-            <div class="col s12 m6 offset-m3">
-                <ul class="">
-                    <?php foreach ($product['metadata'] as $prop): ?>
-                        <li>
-                            <div style="display: flex; justify-content: center" class="valign-wrapper">
+            <div class="col s12 m6 offset-m3" style="display: flex; justify-content: center">
+                <div class="card-panel teal">
+                    <ul class="">
+                        <?php foreach ($product['metadata'] as $prop): ?>
+                            <li class="valign-wrapper">
                                 <i class="material-icons">grade</i>
                                 <span class="title"><?= $prop['value'] . ' ' . $prop['description'] ?></span>
-                            </div>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -78,6 +88,8 @@ $product = $this->RCMS->StripeWrapper->getStripeProduct($productID);
                     <input type="hidden" id="product_id" name="product_id" value="<?= $_GET['product_id'] ?>">
 
                     <input type="hidden" id="price_id" name="price_id" value="<?= $_GET['price_id'] ?>">
+
+                    <input type="hidden" id="product_name" name="product_name" value="<?= $_GET['product_name'] ?>">
 
                     <input type="hidden" id="customer_id" name="customer_id" value="<?= $_GET['customer_id'] ?>">
                 </form>

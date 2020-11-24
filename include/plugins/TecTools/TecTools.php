@@ -59,7 +59,9 @@ class TecTools {
         'editUser',
         'checkIn',
         'getToolByBarcodeAjax',
-        'newSubscription', 'cancelSubscription', 'upgradeSubscription', 'downgradeSubscription'
+        'newSubscription', 'cancelSubscription', 'upgradeDowngradeSubscription',
+        'deleteUser',
+        'addReservation', 'deleteReservation'
     ];
 
     public function __construct(RCMS $RCMS) {
@@ -87,18 +89,181 @@ class TecTools {
         }
     }
 
+    private function deleteReservation(): void {
+        $reservationID = (int) $_POST['reservation_id'];
+
+        if (!$this->userOwnsReservation($reservationID)) {
+            Functions::setNotification('Fejl', 'Du ejer ikke denne reservation', 'error');
+            return;
+        }
+
+        $userID = $this->RCMS->Login->getUserID();
+
+        $this->RCMS->execute('CALL removeReservation(?, ?)', array('ii', $userID, $reservationID));
+
+        Functions::setNotification('Success', 'Reservationen blev slettet');
+    }
+
+    private function userOwnsReservation(int $reservationID): bool {
+        $reservation = $this->RCMS->execute('CALL getReservationByID(?)', array('i', $reservationID))->fetch_array(MYSQLI_ASSOC);
+
+        if (!$reservation) {
+            return false;
+        }
+
+        if ($reservation['FK_UserID'] !== $this->RCMS->Login->getUserID()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Tilføjer en reservation for en bruger via POST request
+     * @throws \Stripe\Exception\ApiErrorException
+     */
+    private function addReservation(): void {
+        $toolID = (int) $_POST['tool_id'];
+        $userID = $this->RCMS->Login->getUserID();
+
+        if ($this->RCMS->Login->isLoggedIn() === false) {
+            Functions::setNotification('Fejl', 'Du er ikke logget ind', 'error');
+            return;
+        }
+
+        if ($this->isToolCheckedIn($toolID) || $this->isToolReserved($toolID, $userID)) {
+            Functions::setNotification('Fejl', 'Værktøjet er allerede udlånt eller reserveret', 'error');
+            return;
+        }
+
+        $userProduct = $this->getUserProduct($userID);
+        if ($userProduct === false) {
+            Functions::setNotification('Fejl', 'Du har ikke noget abonnement', 'error');
+            return;
+        }
+
+        if ($this->hasUserReachedMaxReservations($userID)) {
+            Functions::setNotification('Fejl', 'Du har allerede reserveret det antal værktøj som dit abonnement tillader', 'error');
+            return;
+        }
+
+        // Alt validering foretaget
+        // Tilføj reservation
+
+        $reservationDuration = (int) $userProduct['metadata']['ReservationHours']['value'];
+
+        $this->RCMS->execute('CALL addReservation(?, ?, ?)', array('iii', $userID, $toolID, $reservationDuration));
+
+        $this->RCMS->addLog(LogTypes::ADD_RESERVATION_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
+
+        Functions::setNotification('Success', 'Værktøjet er nu reserveret til dig');
+    }
+
+    /**
+     * Sletter en bruger via POST request
+     * Tjekker om brugeren stadig har aktive udlejninger
+     * Hvis brugeren har et abonnement, opsiges det
+     * @throws \Stripe\Exception\ApiErrorException
+     */
+    private function deleteUser(): void {
+        $userIDPost = (int) $_POST['userID'];
+
+        if ($userIDPost !== $this->RCMS->Login->getUserID() && !$this->RCMS->Login->isAdmin()) {
+            return;
+        }
+
+        // Tjek om brugeren har nogen aktive check ins
+        if ($this->getCheckInCountForUser($userIDPost) !== 0) {
+            Functions::setNotification('Fejl', 'Brugeren har stadig aktive udlejninger', 'error');
+            return;
+        }
+
+        $this->cancelSubscription();
+
+        $this->RCMS->execute('CALL removeUser(?)', array('i', $userIDPost));
+
+        $this->RCMS->addLog(LogTypes::DELETE_USER_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
+
+        Functions::setNotification('Success', 'Brugeren blev slettet');
+
+        // Log ud hvis det er brugeren selv der sletter kontoen
+        if ($userIDPost === $this->RCMS->Login->getUserID()) {
+            $this->RCMS->Login->log_out();
+        } else {
+            Functions::redirect('/dashboard');
+        }
+    }
+
+    /**
+     * Gemmer navnet på abonnementet som brugeren har
+     * @param $subName
+     */
+    private function setSubName($subName): void {
+        $userID = $this->RCMS->Login->getUserID();
+
+        $this->RCMS->execute('UPDATE Users SET SubName = ? WHERE UserID = ?', array('si', $subName, $userID));
+
+        $_SESSION['user']['SubName'] = $subName;
+    }
+
+    /**
+     * Sender en API request til Stripe, og annullerer et abonnement
+     * @throws \Stripe\Exception\ApiErrorException
+     */
     private function cancelSubscription(): void {
+        // Tjek om brugeren har nogen aktive check ins
+        if ($this->getCheckInCountForUser($this->RCMS->Login->getUserID()) !== 0) {
+            Functions::setNotification('Fejl', 'Brugeren har stadig aktive udlejninger', 'error');
+            return;
+        }
 
+        $customerID = $this->RCMS->Login->getStripeID();
+        $subscriptionID = $this->RCMS->StripeWrapper->getSubscriptionID($customerID);
+
+        $this->RCMS->StripeWrapper->getStripeClient()->subscriptions->cancel($subscriptionID);
+
+        $this->setSubName('');
+
+        $this->RCMS->addLog(LogTypes::CANCEL_SUBSCRIPTION_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
+
+        Functions::setNotification('Success', 'Abonnementet er blevet opsagt');
     }
 
-    private function upgradeSubscription(): void {
+    /**
+     * Sender en API request til Stripe, og opgraderer eller nedgraderer et abonnement
+     * @throws \Stripe\Exception\ApiErrorException
+     */
+    private function upgradeDowngradeSubscription(): void {
+        $priceID = $_POST['price_id'];
+        $productName = $_POST['product_name'];
 
+        $subscription = $this->RCMS->StripeWrapper->getSubscription('cus_HUiDUdDo6sHbRV');
+        $subscriptionID = $subscription->id;
+        $client = $this->RCMS->StripeWrapper->getStripeClient();
+
+        $client->subscriptions->update($subscriptionID, [
+            'cancel_at_period_end' => false,
+            'proration_behavior' => 'create_prorations',
+            'items' => [
+                [
+                    'id' => $subscription->items->data[0]->id,
+                    'price' => $priceID,
+                ],
+            ],
+        ]);
+
+        $this->setSubName($productName);
+
+        $logType = $productName === 'Basis' ? LogTypes::DOWNGRADE_SUBSCRIPTION_TYPE_ID : LogTypes::UPGRADE_SUBSCRIPTION_TYPE_ID;
+        $this->RCMS->addLog($logType, ['UserID' => $this->RCMS->Login->getUserID()]);
+
+        Functions::setNotification('Success', 'Dit abonnement er blevet ændret og gemt!');
     }
 
-    private function downgradeSubscription(): void {
-
-    }
-
+    /**
+     * Sender en API request til Stripe, og opretter et abonnement for en eksisterende kunde
+     * @throws \Stripe\Exception\ApiErrorException
+     */
     private function newSubscription(): void {
         $customerID = $this->RCMS->Login->getStripeID();
         $priceID = $_POST['priceID'];
@@ -115,17 +280,17 @@ class TecTools {
                 'customer' => $customerID
             ]);
         } catch (Exception $e) {
-            $this->RCMS->Functions->outputAJAXResult(400, ['message' => $e->getMessage(), 'data' => [$customerID, $priceID, $paymentMethodID]]);
+            Functions::outputAJAXResult(400, ['message' => $e->getMessage(), 'data' => [$customerID, $priceID, $paymentMethodID]]);
         }
 
-        // Set the default payment method on the customer
+        // Sæt standard betalingsmetode for kunden
         $client->customers->update($customerID, [
             'invoice_settings' => [
                 'default_payment_method' => $paymentMethodID
             ]
         ]);
 
-        // Create the subscription
+        // Opret abonnementet
         $subscription = $client->subscriptions->create([
             'customer' => $customerID,
             'items' => [
@@ -136,7 +301,13 @@ class TecTools {
             'expand' => ['latest_invoice.payment_intent'],
         ]);
 
-        $this->RCMS->Functions->outputAJAXResult(200, ['subscription' => $subscription]);
+        Functions::setNotification('Success', 'Du er nu abonneret!❤');
+
+        $this->setSubName($_POST['product_name']);
+
+        $this->RCMS->addLog(LogTypes::NEW_SUBSCRIPTION_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
+
+        Functions::outputAJAXResult(200, ['subscription' => $subscription]);
     }
 
     /**
@@ -167,48 +338,48 @@ class TecTools {
 
         if ($this->RCMS->Login->isLoggedIn() === false) {
             $response['result'] = 'Du er ikke logget ind';
-            $this->RCMS->Functions->outputAJAXResult(200, $response);
+            Functions::outputAJAXResult(200, $response);
         }
 
         if (is_string($barcode) === false || strlen($barcode) !== 13) {
             $response['result'] = 'Stregkode er ikke 13 karakterer';
-            $this->RCMS->Functions->outputAJAXResult(200, $response);
+            Functions::outputAJAXResult(200, $response);
         }
 
         $tool = $this->getToolByBarcode($barcode);
         if (empty($tool)) {
             $response['result'] = 'Intet værktøj fundet med den stregkode';
-            $this->RCMS->Functions->outputAJAXResult(200, $response);
+            Functions::outputAJAXResult(200, $response);
         }
 
         $toolID = $tool['ToolID'];
         if ($this->isToolCheckedIn($toolID) || $this->isToolReserved($toolID, $userID)) {
             $response['result'] = 'Værktøjet er allerede udlånt eller reserveret';
-            $this->RCMS->Functions->outputAJAXResult(200, $response);
+            Functions::outputAJAXResult(200, $response);
         }
 
         $userProduct = $this->getUserProduct($userID);
         if ($userProduct === false) {
             $response['result'] = 'Du har ikke noget abonnement';
-            $this->RCMS->Functions->outputAJAXResult(200, $response);
+            Functions::outputAJAXResult(200, $response);
         }
 
         if ($this->hasUserReachedMaxCheckouts($userID)) {
             $response['result'] = 'Du har allerede udlånt det antal værktøj som dit abonnement tillader';
-            $this->RCMS->Functions->outputAJAXResult(200, $response);
+            Functions::outputAJAXResult(200, $response);
         }
 
         // Alt validering foretaget
         // Tilføj checkin
 
-        $checkInDuration = (int) $userProduct['metadata']['MaxCheckoutDays'];
+        $checkInDuration = (int) $userProduct['metadata']['MaxCheckoutDays']['value'];
 
         $this->RCMS->execute('CALL addCheckIn(?, ?, ?)', array('iii', $userID, $toolID, $checkInDuration));
 
         $this->RCMS->addLog(LogTypes::CHECK_IN_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
         $response['result'] = 'success';
-        $this->RCMS->Functions->outputAJAXResult(200, $response);
+        Functions::outputAJAXResult(200, $response);
     }
 
     /**
@@ -237,11 +408,21 @@ class TecTools {
     /**
      * Returnerer hvor mange udlån brugeren har
      * @param int $userID
-     * @return bool
+     * @return int
      */
-    public function getCheckInCountForUser(int $userID): bool {
+    public function getCheckInCountForUser(int $userID): int {
         $res = $this->RCMS->execute('SELECT fn_getCheckInCountForUser(?) AS TOOL_COUNT', array('i', $userID));
-        return (bool) $res->fetch_object()->TOOL_COUNT;
+        return (int) $res->fetch_object()->TOOL_COUNT;
+    }
+
+    /**
+     * Returnerer hvor mange reservationer brugeren har
+     * @param int $userID
+     * @return int
+     */
+    public function getReservationCountForUser(int $userID): int {
+        $res = $this->RCMS->execute('SELECT fn_getReservationCountForUser(?) AS count', array('i', $userID));
+        return (int) $res->fetch_object()->count;
     }
 
     /**
@@ -277,14 +458,47 @@ class TecTools {
      * @return bool
      * @throws \Stripe\Exception\ApiErrorException
      */
-    public function hasUserReachedMaxCheckouts(int $userID): bool {
+    public function hasUserReachedMaxCheckouts(int $userID = 0): bool {
+        if ($userID === 0) {
+            $userID = $this->RCMS->Login->getUserID();
+        }
+
         $userProduct = $this->getUserProduct($userID);
 
         if ($userProduct) {
-            $maxCheckOuts = (int) $userProduct['metadata']['MaxCheckouts'];
+            $maxCheckOuts = (int) $userProduct['metadata']['MaxCheckouts']['value'];
+
             $userCurrentCheckOut = $this->getCheckInCountForUser($userID);
 
-            if ($userCurrentCheckOut >= $maxCheckOuts) {
+            if ($userCurrentCheckOut < $maxCheckOuts) {
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Tjekker om en bruger har reserveret det antal værktøj som deres abonnement tillader
+     * @param int $userID
+     * @return bool
+     * @throws \Stripe\Exception\ApiErrorException
+     */
+    public function hasUserReachedMaxReservations(int $userID = 0): bool {
+        if ($userID === 0) {
+            $userID = $this->RCMS->Login->getUserID();
+        }
+
+        $userProduct = $this->getUserProduct($userID);
+
+        if ($userProduct) {
+            $maxReservations = (int) $userProduct['metadata']['MaxReservations']['value'];
+
+            $userCurrentReservationCount = $this->getReservationCountForUser($userID);
+
+            if ($userCurrentReservationCount < $maxReservations) {
                 return false;
             }
 
@@ -359,7 +573,7 @@ class TecTools {
 
         // Tjek om brugeren vil ændre sit password
         if (isset($_POST['password']) && $_POST['password'] !== '') {
-            $password = $this->RCMS->Login->saltPass($_POST['password']);
+            $password = $this->RCMS->Login->hashPass($_POST['password']);
         } else {
             $password = $currentUser['Password'];
         }
@@ -719,7 +933,7 @@ class TecTools {
      */
     private function getToolByBarcodeAjax(): void {
         if (!isset($_POST['tool_barcode']) || strlen($_POST['tool_barcode']) !== 13) {
-            $this->RCMS->Functions->outputAJAXResult(400, ['result' => 'Stregkode er forkert']);
+            Functions::outputAJAXResult(400, ['result' => 'Stregkode er forkert']);
         }
 
         // TODO: Indsæt hash i session og databasen med bruger ID, tjek efterfølgende på det i checkIn() metoden
@@ -735,7 +949,7 @@ class TecTools {
 
         $this->RCMS->addLog(LogTypes::SCAN_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        $this->RCMS->Functions->outputAJAXResult(200, $result);
+        Functions::outputAJAXResult(200, $result);
     }
 
     /**

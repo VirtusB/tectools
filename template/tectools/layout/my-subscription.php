@@ -49,7 +49,7 @@ $userProduct = $TecTools->getUserProduct($this->RCMS->Login->getUserID());
                                 <div class="col s12">
                                     <?php if ($userProduct): ?>
                                         <?php if ($userProduct['id'] === $product['id']): ?>
-                                            <form action="" method="post">
+                                            <form onsubmit="confirm('Er du helt sikker?') === false && event.preventDefault()" action="" method="post">
                                                 <input type="hidden" name="cancel_subscription" value="1">
 
                                                 <input type="hidden" name="post_endpoint" value="cancelSubscription">
@@ -60,7 +60,11 @@ $userProduct = $TecTools->getUserProduct($this->RCMS->Login->getUserID());
                                             <form action="" method="post">
                                                 <input type="hidden" name="upgrade_subscription" value="1">
 
-                                                <input type="hidden" name="post_endpoint" value="upgradeSubscription">
+                                                <input type="hidden" name="post_endpoint" value="upgradeDowngradeSubscription">
+
+                                                <input type="hidden" name="price_id" value="<?= $this->RCMS->StripeWrapper->getPlan($product['id'])->id ?>">
+
+                                                <input type="hidden" name="product_name" value="<?= $product['name'] ?>">
 
                                                 <button class='btn green upgrade-subscription'>Opgrader</button>
                                             </form>
@@ -68,7 +72,11 @@ $userProduct = $TecTools->getUserProduct($this->RCMS->Login->getUserID());
                                             <form action="" method="post">
                                                 <input type="hidden" name="downgrade_subscription" value="1">
 
-                                                <input type="hidden" name="post_endpoint" value="downgradeSubscription">
+                                                <input type="hidden" name="post_endpoint" value="upgradeDowngradeSubscription">
+
+                                                <input type="hidden" name="price_id" value="<?= $this->RCMS->StripeWrapper->getPlan($product['id'])->id ?>">
+
+                                                <input type="hidden" name="product_name" value="<?= $product['name'] ?>">
 
                                                 <button class='btn orange downgrade-subscription'>Nedgrader
                                                 </button>
@@ -79,6 +87,8 @@ $userProduct = $TecTools->getUserProduct($this->RCMS->Login->getUserID());
                                             <input type="hidden" name="post_endpoint" value="newSubscription">
 
                                             <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+
+                                            <input type="hidden" name="product_name" value="<?= $product['name'] ?>">
 
                                             <input type="hidden" name="price_id" value="<?= $this->RCMS->StripeWrapper->getPlan($product['id'])->id ?>">
 

@@ -1,16 +1,16 @@
-var stripe = Stripe('pk_test_YqYxaJ8NiGPQHhVuuNpkIGca'); // test eller production??
+var stripe = Stripe('pk_test_YqYxaJ8NiGPQHhVuuNpkIGca');
 var elements = stripe.elements();
 var form = document.getElementById('payment-form');
 
 // CSS til kort informationer input
 var style = {
     base: {
-        color: "#32325d",
-        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+        color: "#039be5",
+        fontFamily: '"Open Sans"',
         fontSmoothing: "antialiased",
         fontSize: "16px",
         "::placeholder": {
-            color: "#aab7c4"
+            color: "#9e9e9e"
         }
     },
     invalid: {
@@ -18,6 +18,7 @@ var style = {
         iconColor: "#fa755a"
     }
 };
+
 
 // Opret element på siden hvor brugeren kan indtaste kort indformationer
 var cardElement = elements.create("card", {style: style, hidePostalCode: true});
@@ -34,18 +35,18 @@ cardElement.on('change', function (event) {
 });
 
 
+
 // Tilføj en event listener, som skal oprette abonnementet når brugeren klikker køb
 form.addEventListener('submit', function (ev) {
     ev.preventDefault();
 
-    // create new payment method & create subscription
     createPaymentMethod(cardElement);
 });
 
 function createPaymentMethod(card) {
-    // Set up payment method for recurring usage
     let billingName = document.getElementById('billing-name').value;
     let productID = document.getElementById('product_id').value;
+    let productName = document.getElementById('product_name').value;
     let priceID = document.getElementById('price_id').value;
     let customerID = document.getElementById('customer_id').value;
 
@@ -67,19 +68,23 @@ function createPaymentMethod(card) {
                   customerID,
                   result.paymentMethod.id,
                   priceID,
+                  productName
               );
           }
       });
 }
 
-function createSubscription(customerId, paymentMethodId, priceId ) {
+function createSubscription(customerId, paymentMethodId, priceId, productName) {
+    showLoader('#submitBtn');
+
     $.post({
         url: location.origin + location.pathname,
-        data: {'post_endpoint': 'newSubscription', 'customerID': customerId, 'paymentMethodID': paymentMethodId, 'priceID': priceId},
+        data: {'post_endpoint': 'newSubscription', 'customerID': customerId, 'paymentMethodID': paymentMethodId, 'priceID': priceId, 'product_name': productName},
         dataType: "json",
         cache: false,
         success: function(res) {
             console.log(res)
+            location.href = '/dashboard';
         },
         error: function (err) {
             console.error(err);
