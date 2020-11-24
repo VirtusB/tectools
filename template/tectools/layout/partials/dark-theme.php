@@ -59,6 +59,14 @@ declare(strict_types=1);
     .ql-editor.ql-blank::before {
         color: #fff !important;
     }
+
+    div.modal {
+        background: #1d1d1d !important;
+    }
+
+    div.modal textarea.materialize-textarea {
+        color: #eee;
+    }
 </style>
 
 <script src="<?= $this->getTemplateFolder() ?>/js/themes.js"></script>

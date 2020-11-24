@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 
 ini_set( 'serialize_precision', '-1' );
 date_default_timezone_set('Europe/Copenhagen');
-
+setlocale(LC_ALL, 'da_DK');
 
 require_once 'config.php';
 require_once 'include/RCMS.php';

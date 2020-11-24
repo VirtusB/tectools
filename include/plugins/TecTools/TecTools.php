@@ -9,7 +9,7 @@ class TecTools {
     public RCMS $RCMS;
 
     /**
-     * Absolut sti til mappen hvor billeder af værktøj ligger
+     * Absolutte sti til mappen hvor billeder af værktøj ligger
      * @var string $TOOL_IMAGE_FOLDER
      */
     public string $TOOL_IMAGE_FOLDER;
@@ -57,7 +57,7 @@ class TecTools {
         'addCategory', 'editCategory',
         'addManufacturer', 'editManufacturer',
         'editUser',
-        'checkIn',
+        'checkIn', 'getCheckInComment', 'saveCheckInComment',
         'getToolByBarcodeAjax',
         'newSubscription', 'cancelSubscription', 'upgradeDowngradeSubscription',
         'deleteUser',
@@ -89,6 +89,63 @@ class TecTools {
         }
     }
 
+    /**
+     * Gemmer en kommentar for en udlejning
+     */
+    private function saveCheckInComment(): void {
+        $checkInID = $_POST['check_in_id'];
+        $comment = $_POST['comment'];
+        $userID = $this->RCMS->Login->getUserID();
+
+        $checkIn = $this->getCheckIn($checkInID);
+
+        if (!$checkIn) {
+            Functions::outputAJAXResult(400, ['message' => 'Udlejningen kunne ikke findes']);
+        }
+
+        if ($checkIn['FK_UserID'] !== $userID && !$this->RCMS->Login->isAdmin()) {
+            Functions::outputAJAXResult(400, ['message' => 'Du ejer ikke denne udlejning']);
+        }
+
+        $logType = empty($checkIn['Comment']) ? LogTypes::ADD_COMMENT_TYPE_ID : LogTypes::EDIT_COMMENT_TYPE_ID;
+        $this->RCMS->addLog($logType, ['UserID' => $this->RCMS->Login->getUserID()]);
+
+        $this->RCMS->execute('CALL saveCheckInComment(?, ?)', array('is', $checkInID, $comment));
+        Functions::outputAJAXResult(200, ['OK']);
+    }
+
+    /**
+     * Henter kommentaren for en specifik udlejning og udskriver den via POST request
+     */
+    private function getCheckInComment(): void {
+        $checkInID = $_POST['check_in_id'];
+        $userID = $this->RCMS->Login->getUserID();
+
+        $checkIn = $this->getCheckIn($checkInID);
+
+        if (!$checkIn) {
+            Functions::outputAJAXResult(400, ['message' => 'Udlejningen kunne ikke findes']);
+        }
+
+        if ($checkIn['FK_UserID'] !== $userID && !$this->RCMS->Login->isAdmin()) {
+            Functions::outputAJAXResult(400, ['message' => 'Du ejer ikke denne udlejning']);
+        }
+
+        Functions::outputAJAXResult(200, ['comment' => $checkIn['Comment']]);
+    }
+
+    /**
+     * Returnerer et CheckIn fra databasen
+     * @param $checkInID
+     * @return array|false
+     */
+    private function getCheckIn($checkInID) {
+        return $this->RCMS->execute('CALL getCheckIn(?)', array('i', $checkInID))->fetch_array(MYSQLI_ASSOC) ?? false;
+    }
+
+    /**
+     * Sletter en reservation via POST request
+     */
     private function deleteReservation(): void {
         $reservationID = (int) $_POST['reservation_id'];
 
@@ -101,9 +158,16 @@ class TecTools {
 
         $this->RCMS->execute('CALL removeReservation(?, ?)', array('ii', $userID, $reservationID));
 
+        $this->RCMS->addLog(LogTypes::DELETE_RESERVATION_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
+
         Functions::setNotification('Success', 'Reservationen blev slettet');
     }
 
+    /**
+     * Tjekker om en bruger ejer en reservation
+     * @param int $reservationID
+     * @return bool
+     */
     private function userOwnsReservation(int $reservationID): bool {
         $reservation = $this->RCMS->execute('CALL getReservationByID(?)', array('i', $reservationID))->fetch_array(MYSQLI_ASSOC);
 
@@ -1148,5 +1212,31 @@ class TecTools {
         $res = $this->RCMS->execute('CALL getUserByEmail(?)', array('s', $email));
 
         return $res->fetch_array(MYSQLI_ASSOC) ?? false;
+    }
+
+    /**
+     * Returnerer alle log typer fra databasen
+     * @return array
+     */
+    public function getLogTypes(): array {
+        return $this->RCMS->execute('CALL getLogTypes()')->fetch_all(MYSQLI_ASSOC) ?? [];
+    }
+
+    /**
+     * Returnerer alle logs fra databasen
+     * @return array
+     */
+    public function getLogs(): array {
+        $logs = $this->RCMS->execute('CALL getLogs()')->fetch_all(MYSQLI_ASSOC) ?? [];
+
+        foreach ($logs as &$log) {
+            if (!is_object(json_decode($log['Data']))) {
+                continue;
+            }
+
+            $log['Data'] = json_decode($log['Data'], true);
+        }
+
+        return $logs;
     }
 }

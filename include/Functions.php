@@ -38,7 +38,7 @@ class Functions {
     /**
      * Returnerer data til klienten i JSON format
      * @param int $status HTTP status kode, ex. 200 eller 404 osv.
-     * @param array $result Array af data som skal udskrives til brugeren
+     * @param array $result
      * @return void
      */
     public static function outputAJAXResult(int $status, array $result): void {

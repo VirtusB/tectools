@@ -32,6 +32,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                         <a class="btn tec-btn" href="/categories/create">Opret kategori</a>
                         <a class="btn tec-btn" href="/manufacturers/create">Opret producent</a>
                         <a class="btn tec-btn" href="/tools/create">Opret værktøj</a>
+                        <a class="btn tec-btn" href="/activity-center">Aktivitetscenter</a>
                     </div>
                 </div>
             </div>
@@ -234,6 +235,18 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                 </div>
             </div>
 
+            <!-- Kommentar modal til aktive og afsluttede udlejninger -->
+            <div id="comment-modal" class="modal">
+                <div class="modal-content">
+                    <h4>Kommentar til udlejning</h4>
+
+                    <label for="comment-textarea">Din kommentar</label>
+                    <textarea class="materialize-textarea" id="comment-textarea" cols="30" rows="10"></textarea>
+
+                    <button onclick="saveCheckInComment(this.getAttribute('data-checkin-id'), this)" class="btn tec-btn right modal-close">Gem</button>
+                </div>
+            </div>
+
             <div class="row responsive-table-container">
                 <h3>Aktive udlejninger</h3>
 
@@ -301,7 +314,14 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                     ]
                 ];
 
-                $RCMSTables->createRCMSTable("active_checkins_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, [], null);
+                $buttons = [
+                    [
+                        'button' => '<button onclick="commentCheckIn(?, this)" class="btn tec-btn">Kommentar</button>',
+                        'value' => 'CheckInID'
+                    ]
+                ];
+
+                $RCMSTables->createRCMSTable("active_checkins_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, $buttons, null);
                 ?>
             </div>
 
@@ -439,7 +459,14 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                     ]
                 ];
 
-                $RCMSTables->createRCMSTable("ended_checkins_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, [], null);
+                $buttons = [
+                    [
+                        'button' => '<button onclick="commentCheckIn(?, this)" class="btn tec-btn">Kommentar</button>',
+                        'value' => 'CheckInID'
+                    ]
+                ];
+
+                $RCMSTables->createRCMSTable("ended_checkins_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, $buttons, null);
                 ?>
             </div>
         <?php endif; ?>

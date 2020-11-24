@@ -19,4 +19,7 @@ class LogTypes {
     public const DOWNGRADE_SUBSCRIPTION_TYPE_ID = 14;
     public const DELETE_USER_TYPE_ID = 15;
     public const ADD_RESERVATION_TYPE_ID = 16;
+    public const DELETE_RESERVATION_TYPE_ID = 17;
+    public const ADD_COMMENT_TYPE_ID = 18;
+    public const EDIT_COMMENT_TYPE_ID = 19;
 }
