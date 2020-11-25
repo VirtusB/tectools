@@ -19,7 +19,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
     <div class="container">
         <br><br>
         <h1 class="header center orange-text mt0">Dashboard</h1>
-        <hr style="margin-bottom: 2rem">
+        <hr class="mb2">
 
         <?php if ($this->RCMS->Login->isAdmin()): ?>
             <div class="row">
@@ -212,6 +212,155 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                 </div>
             </div>
 
+            <!-- Kommentar modal for personale til aktive og afsluttede udlejninger -->
+            <div id="comment-modal" class="modal">
+                <div class="modal-content">
+                    <h4>Kommentar til udlejning</h4>
+
+                    <label for="comment-textarea">Kommentar</label>
+                    <textarea readonly class="materialize-textarea" id="comment-textarea" cols="30" rows="10"></textarea>
+
+                    <button class="btn tec-btn right modal-close">Luk</button>
+                </div>
+            </div>
+
+            <div class="row dashboard-row responsive-table-container">
+                <h3>Aktive udlejninger</h3>
+
+                <?php
+                $columns = array(
+                    array(
+                        'column' => 'Image',
+                        'label' => 'Billede',
+                        'function' => 'showToolImage'
+                    ),
+                    array(
+                        'column' => 'ToolName',
+                        'label' => 'Navn'
+                    ),
+                    array(
+                        'column' => "ManufacturerName",
+                        'label' => "Producent"
+                    ),
+                    array(
+                        'column' => "StartDate",
+                        'label' => "Udlejning start",
+                        'tdclass' => 'render-datetime',
+                        'tdattributes' => [
+                            [
+                                'name' => 'datetime',
+                                'valuefromcolumn' => 'StartDate'
+                            ]
+                        ]
+                    ),
+                    array(
+                        'column' => "EndDate",
+                        'label' => "Udlejning slut",
+                        'tdclass' => 'render-datetime',
+                        'tdattributes' => [
+                            [
+                                'name' => 'datetime',
+                                'valuefromcolumn' => 'EndDate'
+                            ]
+                        ],
+                        'conditional_attributes' => [
+                            [
+                                'name' => 'data-exceeded-date',
+                                'valuefromcolumn' => 'EndDate',
+                                'condition' => static function ($valuefromcolumn) {
+                                    return new DateTime() > new DateTime($valuefromcolumn);
+                                }
+                            ]
+                        ]
+                    )
+                );
+
+                $order = "ORDER BY EndDate DESC, CheckedOut DESC";
+                $settings = array('searchbar' => true, 'pageLimit' => 5);
+
+                $where = [
+                    [
+                        'column' => 'CheckedOut',
+                        'eq' => 0,
+                        'type' => 'i'
+                    ]
+                ];
+
+                $buttons = [
+                    [
+                        'button' => '<button onclick="commentCheckIn(?, this)" class="btn tec-btn">Vis kommentar</button>',
+                        'value' => 'CheckInID'
+                    ]
+                ];
+
+                $RCMSTables->createRCMSTable("active_checkins_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, $buttons, null);
+                ?>
+            </div>
+
+            <div class="row dashboard-row responsive-table-container">
+                <h3>Afsluttede udlejninger</h3>
+
+                <?php
+                $columns = array(
+                    array(
+                        'column' => 'Image',
+                        'label' => 'Billede',
+                        'function' => 'showToolImage'
+                    ),
+                    array(
+                        'column' => 'ToolName',
+                        'label' => 'Navn'
+                    ),
+                    array(
+                        'column' => "ManufacturerName",
+                        'label' => "Producent"
+                    ),
+                    array(
+                        'column' => "StartDate",
+                        'label' => "Udlejning start",
+                        'tdclass' => 'render-datetime',
+                        'tdattributes' => [
+                            [
+                                'name' => 'datetime',
+                                'valuefromcolumn' => 'StartDate'
+                            ]
+                        ]
+                    ),
+                    array(
+                        'column' => "EndDate",
+                        'label' => "Udlejning slut",
+                        'tdclass' => 'render-datetime',
+                        'tdattributes' => [
+                            [
+                                'name' => 'datetime',
+                                'valuefromcolumn' => 'EndDate'
+                            ]
+                        ]
+                    )
+                );
+
+                $order = "ORDER BY EndDate DESC, CheckedOut DESC";
+                $settings = array('searchbar' => true, 'pageLimit' => 5);
+
+                $where = [
+                    [
+                        'column' => 'CheckedOut',
+                        'eq' => 1,
+                        'type' => 'i'
+                    ]
+                ];
+
+                $buttons = [
+                    [
+                        'button' => '<button onclick="commentCheckIn(?, this)" class="btn tec-btn">Vis kommentar</button>',
+                        'value' => 'CheckInID'
+                    ]
+                ];
+
+                $RCMSTables->createRCMSTable("ended_checkins_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, $buttons, null);
+                ?>
+            </div>
+
         <?php elseif ($this->RCMS->Login->isAdmin() === false && $this->RCMS->Login->isLoggedIn() === true): ?>
             <div class="row">
                 <div class="col s12">
@@ -235,7 +384,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                 </div>
             </div>
 
-            <!-- Kommentar modal til aktive og afsluttede udlejninger -->
+            <!-- Kommentar modal for brugere til aktive og afsluttede udlejninger -->
             <div id="comment-modal" class="modal">
                 <div class="modal-content">
                     <h4>Kommentar til udlejning</h4>

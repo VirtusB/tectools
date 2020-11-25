@@ -69,27 +69,4 @@ $pages = ceil(count($logs) / 10);
 
 <script src="<?= $this->RCMS->getTemplateFolder() ?>/js/activity-center/activity-center.js"></script>
 
-<style>
-    .log-type {
-        background: #ccc;
-        margin-top: 5px;
-        margin-bottom: 5px;
-        padding: 5px;
-        text-align: center;
-        border-radius: 8px;
-        user-select: none;
-        cursor: pointer;
-        transition: all .2s ease-in-out;
-    }
-
-    .log-type:hover {
-        background: #ff9100;
-        color: #eee;
-        transition: all .2s ease-in-out;
-    }
-
-    .log-type.selected {
-        background: #ff9100;
-        color: #eee;
-    }
-</style>
+<link rel="stylesheet" href="<?= $this->RCMS->getTemplateFolder() ?>/css/activity-center.css">

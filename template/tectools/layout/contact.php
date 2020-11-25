@@ -57,20 +57,11 @@
                         Du kan også benytte dig af vores Live Chat, ude i højre side <br>
                         Vores eksperter er klar til at hjælpe dig, med ethvert spørgsmål du måtte have
                     </p>
-
-                    <style>
-                        .info-paragraph {
-                            margin: initial;
-                            max-width: 100%;
-                            width: fit-content;
-                            border-radius: 3px;
-                        }
-                    </style>
-
-
                 </div>
 
             </div>
         </div>
     </div>
 </div>
+
+<link rel="stylesheet" href="<?= $this->RCMS->getTemplateFolder() ?>/css/contact.css">

@@ -739,6 +739,11 @@ class TecTools {
 
         $manufacturerName = $_POST['manufacturer_name'];
 
+        if ($this->manufacturerExists($manufacturerName)) {
+            Functions::setNotification('Fejl', 'Producenten eksisterer allerede', 'error');
+            return;
+        }
+
         $this->RCMS->execute('CALL addManufacturer(?)', array('s', $manufacturerName));
 
         $this->RCMS->addLog(LogTypes::CREATE_MANUFACTURER_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
@@ -746,6 +751,16 @@ class TecTools {
         Functions::setNotification('Oprettet', 'Producenten blev oprettet');
 
         Functions::redirect('/dashboard');
+    }
+
+    /**
+     * Tjekker om en producent med samme navn allerede eksisterer i databasen
+     * @param $name
+     * @return bool
+     */
+    private function manufacturerExists($name): bool {
+        $exists = $this->RCMS->execute('SELECT COUNT(*) AS count FROM Manufacturers WHERE ManufacturerName = ?', array('s', $name))->fetch_object()->count;
+        return $exists !== 0;
     }
 
     /**
@@ -770,6 +785,11 @@ class TecTools {
         $manufacturerID = (int) $_POST['manufacturer_id'];
         $manufacturerName = $_POST['manufacturer_name'];
 
+        if ($this->manufacturerExists($manufacturerName)) {
+            Functions::setNotification('Fejl', 'Producenten eksisterer allerede', 'error');
+            return;
+        }
+
         $this->RCMS->execute('CALL editManufacturer(?, ?)', array('is', $manufacturerID, $manufacturerName));
 
         $this->RCMS->addLog(LogTypes::EDIT_MANUFACTURER_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
@@ -790,6 +810,11 @@ class TecTools {
 
         $categoryName = $_POST['category_name'];
 
+        if ($this->categoryExists($categoryName)) {
+            Functions::setNotification('Fejl', 'Kategorien eksisterer allerede', 'error');
+            return;
+        }
+
         $this->RCMS->execute('CALL addCategory(?)', array('s', $categoryName));
 
         $this->RCMS->addLog(LogTypes::CREATE_CATEGORY_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
@@ -797,6 +822,16 @@ class TecTools {
         Functions::setNotification('Oprettet', 'Kategorien blev oprettet');
 
         Functions::redirect('/dashboard');
+    }
+
+    /**
+     * Tjekker om en kategori med samme navn allerede eksisterer i databasen
+     * @param $name
+     * @return bool
+     */
+    private function categoryExists($name): bool {
+        $exists = $this->RCMS->execute('SELECT COUNT(*) AS count FROM Categories WHERE CategoryName = ?', array('s', $name))->fetch_object()->count;
+        return $exists !== 0;
     }
 
     /**
@@ -820,6 +855,11 @@ class TecTools {
 
         $categoryID = (int) $_POST['category_id'];
         $categoryName = $_POST['category_name'];
+
+        if ($this->categoryExists($categoryName)) {
+            Functions::setNotification('Fejl', 'Kategorien eksisterer allerede', 'error');
+            return;
+        }
 
         $this->RCMS->execute('CALL editCategory(?, ?)', array('is', $categoryID, $categoryName));
 

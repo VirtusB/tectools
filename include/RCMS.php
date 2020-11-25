@@ -56,6 +56,8 @@ class RCMS {
      */
     public Login $Login;
 
+    private $cron;
+
     /**
      * @var StripeWrapper $StripeWrapper
      */
@@ -65,15 +67,17 @@ class RCMS {
     private string $templatefolder;
     private string $uploadsfolder;
     private string $relativeUploadsFolder;
-    private string $salt;
 
-    public function __construct(string $host, string $user, string $pass, string $database, string $homefolder, string $templatefolder, string $uploadsfolder, string $salt, string $secretStripeKey, string $environment = '') {
+    public function __construct(string $host, string $user, string $pass, string $database, string $homefolder, string $templatefolder, string $uploadsfolder, string $secretStripeKey, string $environment = '') {
         if (!headers_sent() && session_status() == PHP_SESSION_NONE) {
             session_start();
         }
 
         self::recursive_require_plugins(__DIR__ . '/plugins/');
 
+        if (class_exists('Cron')) {
+            $this->cron = new Cron($this);
+        }
 
         $this->host = $host;
         $this->user = $user;
@@ -84,9 +88,6 @@ class RCMS {
         $this->templatefolder = $homefolder . 'template/' . $templatefolder;
         $this->uploadsfolder = __DIR__ . '/../' . $uploadsfolder;
         $this->relativeUploadsFolder = '/' . $uploadsfolder;
-
-
-        $this->salt = $salt;
 
         $this->connect();
 
@@ -100,6 +101,10 @@ class RCMS {
 
 
         ob_start();
+
+        if ($this->cron !== null) {
+            $this->cron->runCronJobs();
+        }
 
         require_once 'template/' . $templatefolder . '/index.php';
 
@@ -193,16 +198,6 @@ class RCMS {
     }
 
     /**
-     * Returnere det salt som bruges til adgangskoder for at øge sikkerheden
-     *
-     * F.eks. hvis salt er "secretsalt" og brugeren ved oprettelse skriver "12356" som adgangskode, bliver deres adgangskode gemt som "secretsalt123456" i databasen
-     * @return string
-     */
-    public function getSalt(): string {
-        return $this->salt;
-    }
-
-    /**
      * Returnere den oprettede MySQL forbindelse
      * @return mysqli
      */
@@ -275,6 +270,14 @@ class RCMS {
     }
 
     /**
+     * Returnerer instansen af Cron klassen
+     * @return Cron
+     */
+    public function getCron(): \Cron {
+        return $this->cron;
+    }
+
+    /**
      * Lukker for en RCMS instans
      * Bruges til development og testing
      */
@@ -290,7 +293,6 @@ class RCMS {
         unset($vars,$i);
         $GLOBALS = [];
         $_SESSION = [];
-        //session_destroy();
     }
 
     /**
@@ -309,7 +311,11 @@ class RCMS {
      * @return void
      */
     public static function fixURLQueryQuestionMarks(): void {
-        $uri = $_SERVER['REQUEST_URI'];
+        $uri = $_SERVER['REQUEST_URI'] ?? null;
+        if (!$uri) {
+            return;
+        }
+
         $questionMarksReplaced = str_replace('QMARK', '?', $uri);
 
         if ($uri !== $questionMarksReplaced) {
@@ -323,38 +329,4 @@ class RCMS {
 
         $this->execute('CALL addLog(?, ?)', array('is', $LogTypeID, $json));
     }
-
-    public static function generateConfigFile(): void {
-        //TODO: fjern denne metode? skal den bruges til CI/CD eller testing?
-        $tester = getenv('testerto');
-        echo $tester;
-        die();
-
-        $configSecret = getenv('GENERATE_CONFIG_SECRET');
-
-        if (!isset($_POST['secret']) || $_POST['secret'] !== $configSecret) {
-            http_response_code(401);
-            die('Unauthorized');
-        }
-
-        echo 123;
-        die();
-
-//        $host = getenv('DB_HOST_SECRET');
-//        $user = getenv('DB_USER_SECRET');
-//        $pass = getenv('DB_PASS_SECRET');
-//        $db = getenv('DB_NAME_SECRET');
-//
-//        $conn = mysqli_connect($host, $user, $pass, $db) or die("MySQLi Error!");
-//        mysqli_set_charset($conn, "utf8");
-//
-//        // Hent alle koder ud af databasen
-//        $query = <<<SQL
-//
-//SQL;
-
-
-        // Lav config.php fil
-    }
-
 }

@@ -23,43 +23,8 @@ $listColumnCount = count($tool['Categories']) > 1 ? 2 : 1;
 ?>
 
 <style>
-    .image-container {
-        padding: 10px;
-        text-align: center;
-    }
-
-    @media all and (max-width: 600px) {
-        h1 {
-            font-size: 2rem;
-        }
-    }
-
-    .image-container img {
-        max-width: 65%;
-        object-fit: scale-down;
-    }
-
-    #tool-image-col {
-        border: 2px solid #EEE;
-        max-height: 400px;
-        border-radius: 5px;
-    }
-
-    @media screen and (max-width: 992px) {
-        h1 {
-            margin-top: 0;
-        }
-    }
-
     #category-list {
         column-count: <?= $listColumnCount ?>;
-        text-align: center;
-        border-top: 1px solid #1d1d1d;
-        margin-bottom: 2rem;
-    }
-
-    #category-list li {
-        padding-top: 2rem;
     }
 </style>
 
@@ -121,6 +86,6 @@ $listColumnCount = count($tool['Categories']) > 1 ? 2 : 1;
     </div>
 </div>
 
-
 <script src="<?= $this->RCMS->getTemplateFolder() ?>/js/tools/tool.js"></script>
 
+<link rel="stylesheet" href="<?= $this->RCMS->getTemplateFolder() ?>/css/tools-view.css">

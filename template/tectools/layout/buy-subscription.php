@@ -21,30 +21,6 @@ $product = $this->RCMS->StripeWrapper->getStripeProduct($productID);
 
 <input type="hidden" id="billing-name" value="<?= $this->RCMS->Login->getFirstName() . ' ' . $TecTools->RCMS->Login->getLastName() ?>">
 
-<style>
-    span.title {
-        margin-left: 10px;
-    }
-
-    @media screen and (max-width: 380px) {
-        h2 {
-            font-size: 3rem;
-        }
-    }
-
-    .card-panel.teal {
-        width: 90%;
-        display: flex;
-        justify-content: center;
-        color: #eee;
-    }
-
-    li:nth-child(2) {
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-</style>
-
 <div class="section no-pad-bot">
     <div class="container">
         <br><br>
@@ -103,3 +79,4 @@ $product = $this->RCMS->StripeWrapper->getStripeProduct($productID);
 
 <script src="<?= $this->RCMS->getTemplateFolder() ?>/js/buy-subscription/buy-subscription.js"></script>
 
+<link rel="stylesheet" href="<?= $this->RCMS->getTemplateFolder() ?>/css/buy-subscription.css">

@@ -1,0 +1,21 @@
+span.title {
+    margin-left: 10px;
+}
+
+@media screen and (max-width: 380px) {
+    h2 {
+        font-size: 3rem;
+    }
+}
+
+.card-panel.teal {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    color: #eee;
+}
+
+li:nth-child(2) {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
