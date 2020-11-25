@@ -5,7 +5,7 @@ declare(strict_types=1);
 require __DIR__ . '/vendor/autoload.php';
 
 require_once(__DIR__ . "/Template.php");
-require_once(__DIR__ . "/Functions.php");
+require_once(__DIR__ . "/Helpers.php");
 require_once(__DIR__ . "/StripeWrapper.php");
 require_once(__DIR__ . "/Login.php");
 require_once(__DIR__ . "/LogTypes.php");
@@ -42,9 +42,9 @@ class RCMS {
     private mysqli $mysqli;
 
     /**
-     * @var Functions $Functions
+     * @var Helpers $Functions
      */
-    public Functions $Functions;
+    public Helpers $Functions;
 
     /**
      * @var Template $Template
@@ -56,6 +56,10 @@ class RCMS {
      */
     public Login $Login;
 
+    /**
+     * Cron klassen, hvis den eksisterer
+     * @var Cron $cron
+     */
     private $cron;
 
     /**
@@ -68,12 +72,14 @@ class RCMS {
     private string $uploadsfolder;
     private string $relativeUploadsFolder;
 
+    private array $pluginsToLoad = [];
+
     public function __construct(string $host, string $user, string $pass, string $database, string $homefolder, string $templatefolder, string $uploadsfolder, string $secretStripeKey, string $environment = '') {
         if (!headers_sent() && session_status() == PHP_SESSION_NONE) {
             session_start();
         }
 
-        self::recursive_require_plugins(__DIR__ . '/plugins/');
+        $this->recursive_require_plugins(__DIR__ . '/plugins/');
 
         if (class_exists('Cron')) {
             $this->cron = new Cron($this);
@@ -91,14 +97,13 @@ class RCMS {
 
         $this->connect();
 
-        $this->Functions = new Functions($this);
+        $this->Functions = new Helpers($this);
 
         $this->StripeWrapper = new StripeWrapper($this, $secretStripeKey);
         $this->Login = new Login($this);
         $this->Template = new Template($this);
 
         $this->loadPlugins(__DIR__ . '/plugins/');
-
 
         ob_start();
 
@@ -120,15 +125,30 @@ class RCMS {
      * @param string $path Stien til plugins mappen
      * @return void
      */
-    private static function recursive_require_plugins(string $path): void {
-        $dir = new DirectoryIterator($path);
+    private function recursive_require_plugins(string $path): void {
+        $dir = new RecursiveDirectoryIterator($path);
+        $dir->setFlags(RecursiveDirectoryIterator::SKIP_DOTS);
 
-        foreach ($dir as $fileinfo) {
-            if ($fileinfo->isDir() && !$fileinfo->isDot()) {
-                self::recursive_require_plugins($fileinfo->getPath() . '/' . $fileinfo->getFilename() . '/');
-            } else if (!$fileinfo->isDot() && $fileinfo->getExtension() === 'php') {
-                require_once $fileinfo->getPath() . '/' . $fileinfo->getFilename();
+        $directory = new RecursiveDirectoryIterator($path);
+        $iterator = new RecursiveIteratorIterator($directory);
+
+        foreach ($iterator as $fileInfo) {
+            if ($fileInfo->getExtension() === 'php') {
+                $this->pluginsToLoad[] = [
+                    'path' => $fileInfo->getPath(),
+                    'name' => $fileInfo->getFilename(),
+                    'basename' => $fileInfo->getBasename('.php')
+                ];
             }
+        }
+
+        usort($this->pluginsToLoad, static function($a, $b) {
+            return $a['name'] <=> $b['name'];
+        });
+
+        foreach ($this->pluginsToLoad as $plugin) {
+            $fullPath = $plugin['path'] . '/' . $plugin['name'];
+            require_once $fullPath;
         }
     }
 
@@ -138,15 +158,27 @@ class RCMS {
      * @return void
      */
     private function loadPlugins(string $path): void {
-        $dir = new DirectoryIterator($path);
-        foreach ($dir as $fileinfo) {
-            if ($fileinfo->isDir() && !$fileinfo->isDot()) {
-                $this->loadPlugins($fileinfo->getPath() . '/' . $fileinfo->getFilename() . '/');
-            } else if (!$fileinfo->isDot() && $fileinfo->getExtension() === 'php') {
-                $classname = $fileinfo->getBasename('.php');
-                if (class_exists($classname)) {
-                    $this->newGlobal($classname, new $classname($this));
-                }
+        //$dir = new DirectoryIterator($path);
+        //foreach ($dir as $fileinfo) {
+        //    if ($fileinfo->isDir() && !$fileinfo->isDot()) {
+        //        $this->loadPlugins($fileinfo->getPath() . '/' . $fileinfo->getFilename() . '/');
+        //    } else if (!$fileinfo->isDot() && $fileinfo->getExtension() === 'php') {
+        //        $classname = $fileinfo->getBasename('.php');
+        //        if (class_exists($classname)) {
+        //            $reflectionClass = new ReflectionClass($classname);
+        //            if (!$reflectionClass->isAbstract()) {
+        //                $this->newGlobal($classname, new $classname($this));
+        //            }
+        //        }
+        //    }
+        //}
+
+        foreach ($this->pluginsToLoad as $plugin) {
+            $className = $plugin['basename'];
+
+            $reflectionClass = new ReflectionClass($className);
+            if (!$reflectionClass->isAbstract()) {
+                $this->newGlobal($className, new $className($this));
             }
         }
     }
@@ -319,7 +351,7 @@ class RCMS {
         $questionMarksReplaced = str_replace('QMARK', '?', $uri);
 
         if ($uri !== $questionMarksReplaced) {
-            Functions::redirect($questionMarksReplaced);
+            Helpers::redirect($questionMarksReplaced);
             exit(0);
         }
     }

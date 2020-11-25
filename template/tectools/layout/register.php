@@ -22,11 +22,11 @@ if ($this->RCMS->Login->isLoggedIn()) {
             <div style="text-align: center">
                 <?php
                 if (isset($_GET['emailtaken'])) {
-                    Functions::outputError('Bruger med den email eksisterer allerede', 'h6');
+                    Helpers::outputError('Bruger med den email eksisterer allerede', 'h6');
                 }
 
                 if (isset($_GET['confirm_password'])) {
-                    Functions::outputError('Adgangskoder er ikke ens', 'h6');
+                    Helpers::outputError('Adgangskoder er ikke ens', 'h6');
                 }
                 ?>
             </div>

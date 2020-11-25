@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 
 if (!isset($_GET['manufacturerid']) || !is_numeric($_GET['manufacturerid'])) {
-    Functions::outputError('Manufacturer ID mangler', 'h3', true);
+    Helpers::outputError('Manufacturer ID mangler', 'h3', true);
     return;
 }
 

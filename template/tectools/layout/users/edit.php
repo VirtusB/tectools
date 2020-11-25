@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 
 if (!isset($_GET['userid']) || !is_numeric($_GET['userid'])) {
-    Functions::outputError('User ID mangler', 'h3', true);
+    Helpers::outputError('User ID mangler', 'h3', true);
     return;
 }
 
@@ -19,7 +19,7 @@ $TecTools = $GLOBALS['TecTools'];
 $userID = (int) $_GET['userid'];
 
 if (!$TecTools->authorizeUser($userID)) {
-    Functions::outputError('Du har ikke adgang til denne side', 'h3', true);
+    Helpers::outputError('Du har ikke adgang til denne side', 'h3', true);
     return;
 }
 
@@ -35,7 +35,7 @@ $user = $TecTools->getUserByID($userID);
             <div style="text-align: center">
                 <?php
                 if (isset($_GET['emailtaken'])) {
-                    Functions::outputError('Bruger med den email eksisterer allerede', 'h6');
+                    Helpers::outputError('Bruger med den email eksisterer allerede', 'h6');
                 }
                 ?>
             </div>

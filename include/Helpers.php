@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-class Functions {
+class Helpers {
 	public RCMS $RCMS;
 	
 	public function __construct(RCMS $RCMS) {
@@ -23,6 +23,12 @@ class Functions {
 		return false;
 	}
 
+    /**
+     * Sætter en cookie i browseren, som javascript i klientet finder og viser notifikationen
+     * @param $title
+     * @param $message
+     * @param string $type
+     */
 	public static function setNotification($title, $message, $type = 'success'): void {
 	    $data = [
 	        'title' => $title,

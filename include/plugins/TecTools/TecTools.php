@@ -100,18 +100,18 @@ class TecTools {
         $checkIn = $this->getCheckIn($checkInID);
 
         if (!$checkIn) {
-            Functions::outputAJAXResult(400, ['message' => 'Udlejningen kunne ikke findes']);
+            Helpers::outputAJAXResult(400, ['message' => 'Udlejningen kunne ikke findes']);
         }
 
         if ($checkIn['FK_UserID'] !== $userID && !$this->RCMS->Login->isAdmin()) {
-            Functions::outputAJAXResult(400, ['message' => 'Du ejer ikke denne udlejning']);
+            Helpers::outputAJAXResult(400, ['message' => 'Du ejer ikke denne udlejning']);
         }
 
         $logType = empty($checkIn['Comment']) ? LogTypes::ADD_COMMENT_TYPE_ID : LogTypes::EDIT_COMMENT_TYPE_ID;
         $this->RCMS->addLog($logType, ['UserID' => $this->RCMS->Login->getUserID()]);
 
         $this->RCMS->execute('CALL saveCheckInComment(?, ?)', array('is', $checkInID, $comment));
-        Functions::outputAJAXResult(200, ['OK']);
+        Helpers::outputAJAXResult(200, ['OK']);
     }
 
     /**
@@ -124,14 +124,14 @@ class TecTools {
         $checkIn = $this->getCheckIn($checkInID);
 
         if (!$checkIn) {
-            Functions::outputAJAXResult(400, ['message' => 'Udlejningen kunne ikke findes']);
+            Helpers::outputAJAXResult(400, ['message' => 'Udlejningen kunne ikke findes']);
         }
 
         if ($checkIn['FK_UserID'] !== $userID && !$this->RCMS->Login->isAdmin()) {
-            Functions::outputAJAXResult(400, ['message' => 'Du ejer ikke denne udlejning']);
+            Helpers::outputAJAXResult(400, ['message' => 'Du ejer ikke denne udlejning']);
         }
 
-        Functions::outputAJAXResult(200, ['comment' => $checkIn['Comment']]);
+        Helpers::outputAJAXResult(200, ['comment' => $checkIn['Comment']]);
     }
 
     /**
@@ -150,7 +150,7 @@ class TecTools {
         $reservationID = (int) $_POST['reservation_id'];
 
         if (!$this->userOwnsReservation($reservationID)) {
-            Functions::setNotification('Fejl', 'Du ejer ikke denne reservation', 'error');
+            Helpers::setNotification('Fejl', 'Du ejer ikke denne reservation', 'error');
             return;
         }
 
@@ -160,7 +160,7 @@ class TecTools {
 
         $this->RCMS->addLog(LogTypes::DELETE_RESERVATION_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        Functions::setNotification('Success', 'Reservationen blev slettet');
+        Helpers::setNotification('Success', 'Reservationen blev slettet');
     }
 
     /**
@@ -191,23 +191,23 @@ class TecTools {
         $userID = $this->RCMS->Login->getUserID();
 
         if ($this->RCMS->Login->isLoggedIn() === false) {
-            Functions::setNotification('Fejl', 'Du er ikke logget ind', 'error');
+            Helpers::setNotification('Fejl', 'Du er ikke logget ind', 'error');
             return;
         }
 
         if ($this->isToolCheckedIn($toolID) || $this->isToolReserved($toolID, $userID)) {
-            Functions::setNotification('Fejl', 'Værktøjet er allerede udlånt eller reserveret', 'error');
+            Helpers::setNotification('Fejl', 'Værktøjet er allerede udlånt eller reserveret', 'error');
             return;
         }
 
         $userProduct = $this->getUserProduct($userID);
         if ($userProduct === false) {
-            Functions::setNotification('Fejl', 'Du har ikke noget abonnement', 'error');
+            Helpers::setNotification('Fejl', 'Du har ikke noget abonnement', 'error');
             return;
         }
 
         if ($this->hasUserReachedMaxReservations($userID)) {
-            Functions::setNotification('Fejl', 'Du har allerede reserveret det antal værktøj som dit abonnement tillader', 'error');
+            Helpers::setNotification('Fejl', 'Du har allerede reserveret det antal værktøj som dit abonnement tillader', 'error');
             return;
         }
 
@@ -220,7 +220,7 @@ class TecTools {
 
         $this->RCMS->addLog(LogTypes::ADD_RESERVATION_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        Functions::setNotification('Success', 'Værktøjet er nu reserveret til dig');
+        Helpers::setNotification('Success', 'Værktøjet er nu reserveret til dig');
     }
 
     /**
@@ -238,7 +238,7 @@ class TecTools {
 
         // Tjek om brugeren har nogen aktive check ins
         if ($this->getCheckInCountForUser($userIDPost) !== 0) {
-            Functions::setNotification('Fejl', 'Brugeren har stadig aktive udlejninger', 'error');
+            Helpers::setNotification('Fejl', 'Brugeren har stadig aktive udlejninger', 'error');
             return;
         }
 
@@ -248,13 +248,13 @@ class TecTools {
 
         $this->RCMS->addLog(LogTypes::DELETE_USER_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        Functions::setNotification('Success', 'Brugeren blev slettet');
+        Helpers::setNotification('Success', 'Brugeren blev slettet');
 
         // Log ud hvis det er brugeren selv der sletter kontoen
         if ($userIDPost === $this->RCMS->Login->getUserID()) {
             $this->RCMS->Login->log_out();
         } else {
-            Functions::redirect('/dashboard');
+            Helpers::redirect('/dashboard');
         }
     }
 
@@ -277,7 +277,7 @@ class TecTools {
     private function cancelSubscription(): void {
         // Tjek om brugeren har nogen aktive check ins
         if ($this->getCheckInCountForUser($this->RCMS->Login->getUserID()) !== 0) {
-            Functions::setNotification('Fejl', 'Brugeren har stadig aktive udlejninger', 'error');
+            Helpers::setNotification('Fejl', 'Brugeren har stadig aktive udlejninger', 'error');
             return;
         }
 
@@ -290,7 +290,7 @@ class TecTools {
 
         $this->RCMS->addLog(LogTypes::CANCEL_SUBSCRIPTION_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        Functions::setNotification('Success', 'Abonnementet er blevet opsagt');
+        Helpers::setNotification('Success', 'Abonnementet er blevet opsagt');
     }
 
     /**
@@ -321,7 +321,7 @@ class TecTools {
         $logType = $productName === 'Basis' ? LogTypes::DOWNGRADE_SUBSCRIPTION_TYPE_ID : LogTypes::UPGRADE_SUBSCRIPTION_TYPE_ID;
         $this->RCMS->addLog($logType, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        Functions::setNotification('Success', 'Dit abonnement er blevet ændret og gemt!');
+        Helpers::setNotification('Success', 'Dit abonnement er blevet ændret og gemt!');
     }
 
     /**
@@ -344,7 +344,7 @@ class TecTools {
                 'customer' => $customerID
             ]);
         } catch (Exception $e) {
-            Functions::outputAJAXResult(400, ['message' => $e->getMessage(), 'data' => [$customerID, $priceID, $paymentMethodID]]);
+            Helpers::outputAJAXResult(400, ['message' => $e->getMessage(), 'data' => [$customerID, $priceID, $paymentMethodID]]);
         }
 
         // Sæt standard betalingsmetode for kunden
@@ -365,13 +365,13 @@ class TecTools {
             'expand' => ['latest_invoice.payment_intent'],
         ]);
 
-        Functions::setNotification('Success', 'Du er nu abonneret!❤');
+        Helpers::setNotification('Success', 'Du er nu abonneret!❤');
 
         $this->setSubName($_POST['product_name']);
 
         $this->RCMS->addLog(LogTypes::NEW_SUBSCRIPTION_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        Functions::outputAJAXResult(200, ['subscription' => $subscription]);
+        Helpers::outputAJAXResult(200, ['subscription' => $subscription]);
     }
 
     /**
@@ -402,35 +402,35 @@ class TecTools {
 
         if ($this->RCMS->Login->isLoggedIn() === false) {
             $response['result'] = 'Du er ikke logget ind';
-            Functions::outputAJAXResult(200, $response);
+            Helpers::outputAJAXResult(200, $response);
         }
 
         if (is_string($barcode) === false || strlen($barcode) !== 13) {
             $response['result'] = 'Stregkode er ikke 13 karakterer';
-            Functions::outputAJAXResult(200, $response);
+            Helpers::outputAJAXResult(200, $response);
         }
 
         $tool = $this->getToolByBarcode($barcode);
         if (empty($tool)) {
             $response['result'] = 'Intet værktøj fundet med den stregkode';
-            Functions::outputAJAXResult(200, $response);
+            Helpers::outputAJAXResult(200, $response);
         }
 
         $toolID = $tool['ToolID'];
         if ($this->isToolCheckedIn($toolID) || $this->isToolReserved($toolID, $userID)) {
             $response['result'] = 'Værktøjet er allerede udlånt eller reserveret';
-            Functions::outputAJAXResult(200, $response);
+            Helpers::outputAJAXResult(200, $response);
         }
 
         $userProduct = $this->getUserProduct($userID);
         if ($userProduct === false) {
             $response['result'] = 'Du har ikke noget abonnement';
-            Functions::outputAJAXResult(200, $response);
+            Helpers::outputAJAXResult(200, $response);
         }
 
         if ($this->hasUserReachedMaxCheckouts($userID)) {
             $response['result'] = 'Du har allerede udlånt det antal værktøj som dit abonnement tillader';
-            Functions::outputAJAXResult(200, $response);
+            Helpers::outputAJAXResult(200, $response);
         }
 
         // Alt validering foretaget
@@ -443,7 +443,7 @@ class TecTools {
         $this->RCMS->addLog(LogTypes::CHECK_IN_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
         $response['result'] = 'success';
-        Functions::outputAJAXResult(200, $response);
+        Helpers::outputAJAXResult(200, $response);
     }
 
     /**
@@ -630,7 +630,7 @@ class TecTools {
             $exists = $this->RCMS->execute('CALL getUserByEmail(?)', array('s', $email));
             if ($exists->num_rows !== 0) {
                 // E-mail er allerede taget
-                Functions::redirect("?userid=$userID&emailtaken");
+                Helpers::redirect("?userid=$userID&emailtaken");
                 return;
             }
         }
@@ -653,9 +653,9 @@ class TecTools {
 
         $this->editCustomerInStripe($currentUser['StripeID'], $firstname, $lastname, $email, $phone, $address, $zipcode, $city);
 
-        Functions::setNotification('Gemt', 'Dine ændringer blev gemt');
+        Helpers::setNotification('Gemt', 'Dine ændringer blev gemt');
 
-        Functions::redirect('/dashboard');
+        Helpers::redirect('/dashboard');
     }
 
     /**
@@ -740,7 +740,7 @@ class TecTools {
         $manufacturerName = $_POST['manufacturer_name'];
 
         if ($this->manufacturerExists($manufacturerName)) {
-            Functions::setNotification('Fejl', 'Producenten eksisterer allerede', 'error');
+            Helpers::setNotification('Fejl', 'Producenten eksisterer allerede', 'error');
             return;
         }
 
@@ -748,9 +748,9 @@ class TecTools {
 
         $this->RCMS->addLog(LogTypes::CREATE_MANUFACTURER_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        Functions::setNotification('Oprettet', 'Producenten blev oprettet');
+        Helpers::setNotification('Oprettet', 'Producenten blev oprettet');
 
-        Functions::redirect('/dashboard');
+        Helpers::redirect('/dashboard');
     }
 
     /**
@@ -786,7 +786,7 @@ class TecTools {
         $manufacturerName = $_POST['manufacturer_name'];
 
         if ($this->manufacturerExists($manufacturerName)) {
-            Functions::setNotification('Fejl', 'Producenten eksisterer allerede', 'error');
+            Helpers::setNotification('Fejl', 'Producenten eksisterer allerede', 'error');
             return;
         }
 
@@ -794,9 +794,9 @@ class TecTools {
 
         $this->RCMS->addLog(LogTypes::EDIT_MANUFACTURER_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        Functions::setNotification('Gemt', 'Dine ændringer blev gemt');
+        Helpers::setNotification('Gemt', 'Dine ændringer blev gemt');
 
-        Functions::redirect('/dashboard');
+        Helpers::redirect('/dashboard');
     }
 
     /**
@@ -811,7 +811,7 @@ class TecTools {
         $categoryName = $_POST['category_name'];
 
         if ($this->categoryExists($categoryName)) {
-            Functions::setNotification('Fejl', 'Kategorien eksisterer allerede', 'error');
+            Helpers::setNotification('Fejl', 'Kategorien eksisterer allerede', 'error');
             return;
         }
 
@@ -819,9 +819,9 @@ class TecTools {
 
         $this->RCMS->addLog(LogTypes::CREATE_CATEGORY_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        Functions::setNotification('Oprettet', 'Kategorien blev oprettet');
+        Helpers::setNotification('Oprettet', 'Kategorien blev oprettet');
 
-        Functions::redirect('/dashboard');
+        Helpers::redirect('/dashboard');
     }
 
     /**
@@ -857,7 +857,7 @@ class TecTools {
         $categoryName = $_POST['category_name'];
 
         if ($this->categoryExists($categoryName)) {
-            Functions::setNotification('Fejl', 'Kategorien eksisterer allerede', 'error');
+            Helpers::setNotification('Fejl', 'Kategorien eksisterer allerede', 'error');
             return;
         }
 
@@ -865,9 +865,9 @@ class TecTools {
 
         $this->RCMS->addLog(LogTypes::EDIT_CATEGORY_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        Functions::setNotification('Gemt', 'Dine ændringer blev gemt');
+        Helpers::setNotification('Gemt', 'Dine ændringer blev gemt');
 
-        Functions::redirect('/dashboard');
+        Helpers::redirect('/dashboard');
     }
 
     /**
@@ -922,9 +922,9 @@ class TecTools {
 
         $this->RCMS->addLog(LogTypes::EDIT_TOOL_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        Functions::setNotification('Gemt', 'Dine ændringer blev gemt');
+        Helpers::setNotification('Gemt', 'Dine ændringer blev gemt');
 
-        Functions::redirect('/dashboard');
+        Helpers::redirect('/dashboard');
     }
 
     /**
@@ -998,9 +998,9 @@ class TecTools {
 
         $this->RCMS->addLog(LogTypes::CREATE_TOOL_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        Functions::setNotification('Oprettet', 'Værktøjet blev oprettet');
+        Helpers::setNotification('Oprettet', 'Værktøjet blev oprettet');
 
-        Functions::redirect('/dashboard');
+        Helpers::redirect('/dashboard');
     }
 
     /**
@@ -1037,7 +1037,7 @@ class TecTools {
      */
     private function getToolByBarcodeAjax(): void {
         if (!isset($_POST['tool_barcode']) || strlen($_POST['tool_barcode']) !== 13) {
-            Functions::outputAJAXResult(400, ['result' => 'Stregkode er forkert']);
+            Helpers::outputAJAXResult(400, ['result' => 'Stregkode er forkert']);
         }
 
         // TODO: Indsæt hash i session og databasen med bruger ID, tjek efterfølgende på det i checkIn() metoden
@@ -1053,7 +1053,7 @@ class TecTools {
 
         $this->RCMS->addLog(LogTypes::SCAN_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        Functions::outputAJAXResult(200, $result);
+        Helpers::outputAJAXResult(200, $result);
     }
 
     /**

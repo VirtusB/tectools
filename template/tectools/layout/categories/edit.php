@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 
 if (!isset($_GET['categoryid']) || !is_numeric($_GET['categoryid'])) {
-    Functions::outputError('Category ID mangler', 'h3', true);
+    Helpers::outputError('Category ID mangler', 'h3', true);
     return;
 }
 

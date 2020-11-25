@@ -70,14 +70,4 @@ class Template {
 	    http_response_code(404);
 		echo "404 - Siden blev ikke fundet!";
 	}
-
-    /**
-     * Denne metode køres kun 1 gang inden indhold i template bliver inkluderet, og sørger for at alt på siden, bortset fra MySQL data, er i UTF-8 format
-     * @return void
-     */
-	public function initEncoding(): void {
-        mb_internal_encoding('UTF-8');
-        mb_http_output('UTF-8');
-        header('Content-Type: text/html; charset=UTF-8');
-    }
 }

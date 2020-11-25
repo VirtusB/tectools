@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 
 if (!isset($_GET['toolid']) || !is_numeric($_GET['toolid'])) {
-    Functions::outputError('Tool ID mangler', 'h3', true);
+    Helpers::outputError('Tool ID mangler', 'h3', true);
     return;
 }
 
@@ -40,7 +40,7 @@ $categories = $TecTools->getAllCategories();
             <div class="col s12 m6 l6 xl6 offset-m3 offset-l3 offset-xl3">
                 <?php
                 if (isset($_SESSION['tool_image_upload_error'])) {
-                    Functions::outputError($_SESSION['tool_image_upload_error'], 'h5', true);
+                    Helpers::outputError($_SESSION['tool_image_upload_error'], 'h5', true);
                     unset($_SESSION['tool_image_upload_error']);
                 }
                 ?>

@@ -61,13 +61,13 @@ class Login {
 
                 $this->RCMS->addLog(LogTypes::LOG_IN_TYPE_ID, ['UserID' => $user['UserID']]);
 
-                Functions::setNotification('Success', 'Du er nu logget på');
-                Functions::redirect('/dashboard');
+                Helpers::setNotification('Success', 'Du er nu logget på');
+                Helpers::redirect('/dashboard');
             } else {
-                Functions::redirect('/login?wrong_email_or_password');
+                Helpers::redirect('/login?wrong_email_or_password');
             }
 		} else {
-			Functions::redirect('/login?wrong_email_or_password');
+			Helpers::redirect('/login?wrong_email_or_password');
 		}
 	}
 
@@ -86,7 +86,7 @@ class Login {
             // E-mail er allerede brugt
             unset($_POST['password'], $_POST['repeat_password']);
             $_SESSION['createUserPOST'] = $_POST;
-            Functions::redirect('?emailtaken');
+            Helpers::redirect('?emailtaken');
 
             return;
         }
@@ -94,7 +94,7 @@ class Login {
         if ($password !== $repeat_password) {
             unset($_POST['password'], $_POST['repeat_password']);
             $_SESSION['createUserPOST'] = $_POST;
-            Functions::redirect('?confirm_password');
+            Helpers::redirect('?confirm_password');
 
             return;
         }

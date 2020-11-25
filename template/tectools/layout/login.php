@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 
 if ($this->RCMS->Login->isLoggedIn()) {
-    Functions::redirect('/dashboard');
+    Helpers::redirect('/dashboard');
 }
 
 ?>
@@ -23,7 +23,7 @@ if ($this->RCMS->Login->isLoggedIn()) {
 
             <?php
             if (isset($_GET['wrong_email_or_password'])) {
-                Functions::outputError('Forkert email eller adgangskode', 'h6', true);
+                Helpers::outputError('Forkert email eller adgangskode', 'h6', true);
             }
 
             if (isset($_GET['userInfoChanged'])) {
