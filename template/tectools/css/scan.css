@@ -12,6 +12,12 @@
     font-size: 30px;
 }
 
+@media all and (max-width: 450px) {
+    #scan-btn, #check-in-btn {
+        width: 65%;
+    }
+}
+
 #scan-btn i, #check-in-btn i {
     font-size: 30px;
 }

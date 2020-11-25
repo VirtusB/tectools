@@ -97,7 +97,7 @@ $categories = $TecTools->getAllCategories();
 
                     <div class="row mb0" style="text-align: left">
                         <div class="input-field col s6 m0">
-                            <button class="btn tec-btn" type="button" onclick="history.back()">Tilbage</button>
+                            <button class="btn tec-btn" type="button" onclick="location.href = '/dashboard'">Tilbage</button>
                         </div>
                     </div>
 

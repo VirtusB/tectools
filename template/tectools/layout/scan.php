@@ -11,7 +11,6 @@ declare(strict_types=1);
  */
 $TecTools = $GLOBALS['TecTools'];
 
-// TODO: fjern inline CSS
 ?>
 
 <div id="store-locations-json" class="hiddendiv">
@@ -21,7 +20,7 @@ $TecTools = $GLOBALS['TecTools'];
 <div class="section no-pad-bot">
     <div class="container" id="scan-container">
         <br><br>
-        <button id="scan-btn" class="btn green-btn">Scan <i class="fal fa-scanner"></i></button>
+        <button id="scan-btn" class="btn green-btn">Scan   <i class="fal fa-scanner"></i></button>
 
         <div class="row center" style="margin-top: 4rem;">
             <div class="col s12 m8 l6 xl4 offset-m2 offset-l3 offset-xl4">
@@ -42,7 +41,7 @@ $TecTools = $GLOBALS['TecTools'];
     <div style="display: none;" class="container" id="tool-container">
         <br><br>
 
-        <button onclick="startGeofence(this.getAttribute('data-barcode'))" data-barcode="" id="check-in-btn" class="btn green-btn">Lån <i class="fal fa-shopping-basket"></i></button>
+        <button onclick="startGeofence(this.getAttribute('data-barcode'))" data-barcode="" id="check-in-btn" class="btn green-btn">Lån   <i class="fal fa-shopping-basket"></i></button>
 
         <div style="margin-top: 2rem;" class="row center">
             <div class="col s12">

@@ -22,4 +22,7 @@ td[data-exceeded-date="1"]::after {
     }
 }
 
+#check-out-modal {
+    overflow-y: visible;
+}
 

@@ -43,6 +43,7 @@ form.addEventListener('submit', function (ev) {
     createPaymentMethod(cardElement);
 });
 
+// Opret betalingsmetode for brugeren
 function createPaymentMethod(card) {
     let billingName = document.getElementById('billing-name').value;
     let productID = document.getElementById('product_id').value;
@@ -59,7 +60,6 @@ function createPaymentMethod(card) {
           }
       }).then((result) => {
           if (result.error) {
-              // displayError(result);
               alert('Fejl');
               console.log('Fejl');
               console.log(result);
@@ -74,6 +74,7 @@ function createPaymentMethod(card) {
       });
 }
 
+// Opret abonnement for brugeren
 function createSubscription(customerId, paymentMethodId, priceId, productName) {
     showLoader('#submitBtn');
 
@@ -88,6 +89,7 @@ function createSubscription(customerId, paymentMethodId, priceId, productName) {
         },
         error: function (err) {
             console.error(err);
+            NotificationControl.error('Fejl', err.responseJSON.result);
         }
     });
 }

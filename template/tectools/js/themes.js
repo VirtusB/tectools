@@ -97,6 +97,6 @@ function disableDarkThemeStyle() {
     const darkThemeStyleEl = document.getElementById('dark-theme-style');
     darkThemeStyleEl.setAttribute('media', 'max-width: 1px');
 
-    document.querySelector('meta[name=msapplication-TileColor]').setAttribute('content', '#8cc63e');
-    document.querySelector('meta[name=theme-color]').setAttribute('content', '#8cc63e');
+    document.querySelector('meta[name=msapplication-TileColor]').setAttribute('content', '#2C3F50');
+    document.querySelector('meta[name=theme-color]').setAttribute('content', '#2C3F50');
 }

@@ -11,6 +11,11 @@ declare(strict_types=1);
  */
 $RCMSTables = $GLOBALS['RCMSTables'];
 
+/**
+ * @var TecTools $TecTools
+ */
+$TecTools = $GLOBALS['TecTools'];
+
 ?>
 
 <link rel="stylesheet" href="<?= $this->RCMS->getTemplateFolder() ?>/css/dashboard.css">
@@ -224,6 +229,22 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                 </div>
             </div>
 
+            <!-- Tjek Ud modal for personale til aktive  udlejninger -->
+            <div id="check-out-modal" class="modal">
+                <div class="modal-content">
+                    <h4>Tjek Ud - Vælg status</h4>
+
+                    <label for="status-select">Status</label>
+                    <select id="check-out-status-select" class="mat-select">
+                        <?php foreach ($TecTools->getAllStatuses() as $status): ?>
+                            <option value="<?= $status['StatusID'] ?>"><?= $status['StatusName'] ?></option>
+                        <?php endforeach; ?>
+                    </select>
+
+                    <button onclick="checkOut(this.getAttribute('data-checkin-id'), this)" class="btn tec-btn right modal-close mt2 mb2">Tjek Ud</button>
+                </div>
+            </div>
+
             <div class="row dashboard-row responsive-table-container">
                 <h3>Aktive udlejninger</h3>
 
@@ -288,7 +309,11 @@ $RCMSTables = $GLOBALS['RCMSTables'];
 
                 $buttons = [
                     [
-                        'button' => '<button onclick="commentCheckIn(?, this)" class="btn tec-btn">Vis kommentar</button>',
+                        'button' => '<button onclick="showCommentCheckIn(?, this)" class="btn tec-btn">Vis kommentar</button>',
+                        'value' => 'CheckInID'
+                    ],
+                    [
+                        'button' => '<button onclick="showCheckOutModal(?, this)" class="btn tec-btn">Tjek Ud</button>',
                         'value' => 'CheckInID'
                     ]
                 ];
@@ -352,7 +377,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
 
                 $buttons = [
                     [
-                        'button' => '<button onclick="commentCheckIn(?, this)" class="btn tec-btn">Vis kommentar</button>',
+                        'button' => '<button onclick="showCommentCheckIn(?, this)" class="btn tec-btn">Vis kommentar</button>',
                         'value' => 'CheckInID'
                     ]
                 ];
@@ -367,7 +392,6 @@ $RCMSTables = $GLOBALS['RCMSTables'];
                     <div class="row">
                         <div class="col s12 m5">
                             <div class="card-panel teal">
-                                <!-- TODO: skriv hvilket abonnement brugeren har -->
                                 <span style="display: block; margin-bottom: 24px" class="white-text">
                                     Velkommen, <?= $this->RCMS->Login->getFirstName() ?>
                                     <br>
@@ -465,7 +489,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
 
                 $buttons = [
                     [
-                        'button' => '<button onclick="commentCheckIn(?, this)" class="btn tec-btn">Kommentar</button>',
+                        'button' => '<button onclick="showCommentCheckIn(?, this)" class="btn tec-btn">Kommentar</button>',
                         'value' => 'CheckInID'
                     ]
                 ];
@@ -537,7 +561,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
 
                 $buttons = [
                     [
-                        'button' => '<button onclick="deleteReservation(?)" class="btn tec-btn red">Slet</button>',
+                        'button' => '<button onclick="deleteReservation(?, this)" class="btn tec-btn red">Slet</button>',
                         'value' => 'ReservationID'
                     ]
                 ];
@@ -610,7 +634,7 @@ $RCMSTables = $GLOBALS['RCMSTables'];
 
                 $buttons = [
                     [
-                        'button' => '<button onclick="commentCheckIn(?, this)" class="btn tec-btn">Kommentar</button>',
+                        'button' => '<button onclick="showCommentCheckIn(?, this)" class="btn tec-btn">Kommentar</button>',
                         'value' => 'CheckInID'
                     ]
                 ];

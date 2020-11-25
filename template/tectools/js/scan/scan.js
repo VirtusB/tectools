@@ -3,8 +3,6 @@ let barcodeScanner = document.getElementById('barcode-scanner');
 let scanContainer = document.getElementById('scan-container');
 let toolContainer = document.getElementById('tool-container');
 
-//TODO: tilføj kommentarer
-
 // Tjek om browseren har mulighed for at åbne en video-stream
 if (navigator.getUserMedia) {
     navigator.mediaDevices.getUserMedia({video: true, audio: false}).then(addScanBtnClickListener, noVideoCameraError);
@@ -104,32 +102,18 @@ function showTool(barcode) {
         dataType: "json",
         cache: false,
         success: function(res) {
-            if (res.result === 'success') {
-                $(scanContainer).slideUp();
+            $(scanContainer).slideUp();
 
-                toolContainer.querySelector('#check-in-btn').setAttribute('data-barcode', res.tool.BarCode);
-                toolContainer.querySelector('#tool-name-manufacturer').innerText = res.tool.ManufacturerName + ' ' + res.tool.ToolName;
-                toolContainer.querySelector('img').setAttribute('src', res.tool.Image);
+            toolContainer.querySelector('#check-in-btn').setAttribute('data-barcode', res.tool.BarCode);
+            toolContainer.querySelector('#tool-name-manufacturer').innerText = res.tool.ManufacturerName + ' ' + res.tool.ToolName;
+            toolContainer.querySelector('img').setAttribute('src', res.tool.Image);
 
-                $(toolContainer).slideDown();
-            } else {
-                alert(res.result);
-                console.error(res);
-            }
+            $(toolContainer).slideDown();
         },
         error: function (err) {
-            alert(err);
-            console.error(err);
+            NotificationControl.error('Fejl', err.responseJSON.result);
         }
     });
-}
-
-function disableCheckInBtn() {
-    toolContainer.querySelector('#check-in-btn').setAttribute('disabled', 'disabled');
-}
-
-function enableCheckInBtn() {
-    toolContainer.querySelector('#check-in-btn').removeAttribute('disabled');
 }
 
 /**
@@ -137,7 +121,7 @@ function enableCheckInBtn() {
  * @param {string} barcode
  */
 function checkInTool(barcode) {
-    disableCheckInBtn();
+    toolContainer.querySelector('#check-in-btn').setAttribute('disabled', 'disabled');
     showLoader('#check-in-btn');
 
     $.post({
@@ -146,18 +130,14 @@ function checkInTool(barcode) {
         dataType: "json",
         cache: false,
         success: function(res) {
-            if (res.result === 'success') {
-                NotificationControl.success('Udlånt', 'Værktøjet er nu udlånt til dig');
-                showSuccessIcon('#check-in-btn');
-            } else {
-                NotificationControl.error('Fejl', res.result);
-                document.getElementById('error-msg').innerText = res.result;
-                document.getElementById('error-msg').style.display = 'initial';
-                showErrorIcon('#check-in-btn');
-            }
+            NotificationControl.success('Udlånt', 'Værktøjet er nu udlånt til dig');
+            showSuccessIcon('#check-in-btn', 'Udlånt');
         },
         error: function (err) {
-            alert(err);
+            NotificationControl.error('Fejl', err.responseJSON.result);
+            document.getElementById('error-msg').innerText = err.responseJSON.result;
+            document.getElementById('error-msg').style.display = 'initial';
+            showErrorIcon('#check-in-btn', 'Fejl');
         }
     });
 }

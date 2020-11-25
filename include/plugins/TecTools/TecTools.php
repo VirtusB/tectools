@@ -57,7 +57,7 @@ class TecTools {
         'addCategory', 'editCategory',
         'addManufacturer', 'editManufacturer',
         'editUser',
-        'checkIn', 'getCheckInComment', 'saveCheckInComment',
+        'checkIn', 'checkOut', 'getCheckInComment', 'saveCheckInComment', 'getCheckInAjax',
         'getToolByBarcodeAjax',
         'newSubscription', 'cancelSubscription', 'upgradeDowngradeSubscription',
         'deleteUser',
@@ -93,45 +93,45 @@ class TecTools {
      * Gemmer en kommentar for en udlejning
      */
     private function saveCheckInComment(): void {
-        $checkInID = $_POST['check_in_id'];
+        $checkInID = (int) $_POST['check_in_id'];
         $comment = $_POST['comment'];
         $userID = $this->RCMS->Login->getUserID();
 
         $checkIn = $this->getCheckIn($checkInID);
 
         if (!$checkIn) {
-            Helpers::outputAJAXResult(400, ['message' => 'Udlejningen kunne ikke findes']);
+            Helpers::outputAJAXResult(400, ['result' => 'Udlejningen kunne ikke findes']);
         }
 
         if ($checkIn['FK_UserID'] !== $userID && !$this->RCMS->Login->isAdmin()) {
-            Helpers::outputAJAXResult(400, ['message' => 'Du ejer ikke denne udlejning']);
+            Helpers::outputAJAXResult(400, ['result' => 'Du ejer ikke denne udlejning']);
         }
 
         $logType = empty($checkIn['Comment']) ? LogTypes::ADD_COMMENT_TYPE_ID : LogTypes::EDIT_COMMENT_TYPE_ID;
         $this->RCMS->addLog($logType, ['UserID' => $this->RCMS->Login->getUserID()]);
 
         $this->RCMS->execute('CALL saveCheckInComment(?, ?)', array('is', $checkInID, $comment));
-        Helpers::outputAJAXResult(200, ['OK']);
+        Helpers::outputAJAXResult(200, ['result' => 'OK']);
     }
 
     /**
      * Henter kommentaren for en specifik udlejning og udskriver den via POST request
      */
     private function getCheckInComment(): void {
-        $checkInID = $_POST['check_in_id'];
+        $checkInID = (int) $_POST['check_in_id'];
         $userID = $this->RCMS->Login->getUserID();
 
         $checkIn = $this->getCheckIn($checkInID);
 
         if (!$checkIn) {
-            Helpers::outputAJAXResult(400, ['message' => 'Udlejningen kunne ikke findes']);
+            Helpers::outputAJAXResult(400, ['result' => 'Udlejningen kunne ikke findes']);
         }
 
         if ($checkIn['FK_UserID'] !== $userID && !$this->RCMS->Login->isAdmin()) {
-            Helpers::outputAJAXResult(400, ['message' => 'Du ejer ikke denne udlejning']);
+            Helpers::outputAJAXResult(400, ['result' => 'Du ejer ikke denne udlejning']);
         }
 
-        Helpers::outputAJAXResult(200, ['comment' => $checkIn['Comment']]);
+        Helpers::outputAJAXResult(200, ['result' => $checkIn['Comment']]);
     }
 
     /**
@@ -139,8 +139,25 @@ class TecTools {
      * @param $checkInID
      * @return array|false
      */
-    private function getCheckIn($checkInID) {
+    private function getCheckIn(int $checkInID) {
         return $this->RCMS->execute('CALL getCheckIn(?)', array('i', $checkInID))->fetch_array(MYSQLI_ASSOC) ?? false;
+    }
+
+    /**
+     * Returnerer et CheckIn fra databasen via POST request
+     */
+    private function getCheckInAjax(): void {
+        if (!$this->RCMS->Login->isAdmin()) {
+            Helpers::outputAJAXResult(400, ['result' => 'Du er ikke en administrator']);
+        }
+
+        $checkInID = (int) $_POST['check_in_id'];
+        $checkIn = $this->getCheckIn($checkInID);
+
+        $tool = $this->getToolByID($checkIn['FK_ToolID']);
+        $checkIn['FK_StatusID'] = $tool['FK_StatusID'];
+
+        Helpers::outputAJAXResult(200, ['result' => $checkIn]);
     }
 
     /**
@@ -262,7 +279,7 @@ class TecTools {
      * Gemmer navnet på abonnementet som brugeren har
      * @param $subName
      */
-    private function setSubName($subName): void {
+    private function setSubName(string $subName): void {
         $userID = $this->RCMS->Login->getUserID();
 
         $this->RCMS->execute('UPDATE Users SET SubName = ? WHERE UserID = ?', array('si', $subName, $userID));
@@ -344,7 +361,7 @@ class TecTools {
                 'customer' => $customerID
             ]);
         } catch (Exception $e) {
-            Helpers::outputAJAXResult(400, ['message' => $e->getMessage(), 'data' => [$customerID, $priceID, $paymentMethodID]]);
+            Helpers::outputAJAXResult(400, ['result' => $e->getMessage(), 'data' => [$customerID, $priceID, $paymentMethodID]]);
         }
 
         // Sæt standard betalingsmetode for kunden
@@ -375,21 +392,6 @@ class TecTools {
     }
 
     /**
-     * Returnerer true hvis begge arrays, $a og $b, er ens, ellers false.
-     * @param array $a
-     * @param array $b
-     * @return bool
-     */
-    public function array_equal(array $a, array $b): bool {
-        return (
-            is_array($a)
-            && is_array($b)
-            && count($a) === count($b)
-            && array_diff($a, $b) === array_diff($b, $a)
-        );
-    }
-
-    /**
      * Tilføj et Check-In af et værktøj på en bruger, via POST request
      * @return void
      * @throws \Stripe\Exception\ApiErrorException
@@ -402,35 +404,35 @@ class TecTools {
 
         if ($this->RCMS->Login->isLoggedIn() === false) {
             $response['result'] = 'Du er ikke logget ind';
-            Helpers::outputAJAXResult(200, $response);
+            Helpers::outputAJAXResult(400, $response);
         }
 
         if (is_string($barcode) === false || strlen($barcode) !== 13) {
             $response['result'] = 'Stregkode er ikke 13 karakterer';
-            Helpers::outputAJAXResult(200, $response);
+            Helpers::outputAJAXResult(400, $response);
         }
 
         $tool = $this->getToolByBarcode($barcode);
         if (empty($tool)) {
             $response['result'] = 'Intet værktøj fundet med den stregkode';
-            Helpers::outputAJAXResult(200, $response);
+            Helpers::outputAJAXResult(400, $response);
         }
 
         $toolID = $tool['ToolID'];
         if ($this->isToolCheckedIn($toolID) || $this->isToolReserved($toolID, $userID)) {
             $response['result'] = 'Værktøjet er allerede udlånt eller reserveret';
-            Helpers::outputAJAXResult(200, $response);
+            Helpers::outputAJAXResult(400, $response);
         }
 
         $userProduct = $this->getUserProduct($userID);
         if ($userProduct === false) {
             $response['result'] = 'Du har ikke noget abonnement';
-            Helpers::outputAJAXResult(200, $response);
+            Helpers::outputAJAXResult(400, $response);
         }
 
         if ($this->hasUserReachedMaxCheckouts($userID)) {
             $response['result'] = 'Du har allerede udlånt det antal værktøj som dit abonnement tillader';
-            Helpers::outputAJAXResult(200, $response);
+            Helpers::outputAJAXResult(400, $response);
         }
 
         // Alt validering foretaget
@@ -444,6 +446,24 @@ class TecTools {
 
         $response['result'] = 'success';
         Helpers::outputAJAXResult(200, $response);
+    }
+
+    private function checkOut(): void {
+        $checkInID = (int) $_POST['check_in_id'];
+        $statusID = $_POST['status_id'];
+
+        if (!$this->RCMS->Login->isAdmin()) {
+            Helpers::setNotification('Fejl', 'Du er ikke en administrator', 'error');
+            return;
+        }
+
+        $checkIn = $this->getCheckIn($checkInID);
+        $tool = $this->getToolByID($checkIn['FK_ToolID']);
+        $toolID = $tool['ToolID'];
+
+        $this->RCMS->execute('CALL checkout(?, ?)', array('ii', $toolID, $statusID));
+
+        Helpers::setNotification('Success', 'Værktøjet blev tjekket ud');
     }
 
     /**
@@ -893,7 +913,7 @@ class TecTools {
         if (!empty($categories)) {
             $currentToolCategoryIDs = array_map(static fn($category) => strval($category['CategoryID']), $currentTool['Categories']);
 
-            if ($this->array_equal($categories, $currentToolCategoryIDs) === false) {
+            if (Helpers::array_equal($categories, $currentToolCategoryIDs) === false) {
                 // Opdater kategorier
                 $this->removeAllCategoriesFromTool($toolID);
                 foreach ($categories as $categoryID) {
@@ -1039,8 +1059,6 @@ class TecTools {
         if (!isset($_POST['tool_barcode']) || strlen($_POST['tool_barcode']) !== 13) {
             Helpers::outputAJAXResult(400, ['result' => 'Stregkode er forkert']);
         }
-
-        // TODO: Indsæt hash i session og databasen med bruger ID, tjek efterfølgende på det i checkIn() metoden
 
         $tool = $this->getToolByBarcode($_POST['tool_barcode']);
 

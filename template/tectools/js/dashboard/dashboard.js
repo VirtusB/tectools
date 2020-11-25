@@ -36,7 +36,7 @@ function handleExceededRentals() {
  * Sletter en reservation
  * @param id
  */
-function deleteReservation(id) {
+function deleteReservation(id, context) {
     if (!confirm('Er du helt sikker?')) {
         return;
     }
@@ -48,8 +48,8 @@ function deleteReservation(id) {
     </form>
     `;
 
-    $(document.body).append(form);
-    $(`input[value=${id}]`).parent().submit();
+    $(context).append(form);
+    $(context).find(`input[value=${id}]`).parent().submit();
 }
 
 /**
@@ -82,7 +82,7 @@ function hideExceededReservations() {
  * @param checkInID
  * @param context
  */
-function commentCheckIn(checkInID, context) {
+function showCommentCheckIn(checkInID, context) {
     let commentModal = M.Modal.getInstance(document.getElementById('comment-modal'));
     let commentTextArea = document.getElementById('comment-textarea');
     document.querySelector('#comment-modal button').setAttribute('data-checkin-id', checkInID);
@@ -93,11 +93,11 @@ function commentCheckIn(checkInID, context) {
         dataType: "json",
         cache: false,
         success: function(res) {
-            commentTextArea.value = res.comment;
+            commentTextArea.value = res.result;
             commentModal.open();
         },
         error: function (err) {
-            NotificationControl.error('Fejl', err.message);
+            NotificationControl.error('Fejl', err.responseJSON.result);
         }
     });
 }
@@ -108,8 +108,6 @@ function commentCheckIn(checkInID, context) {
  * @param context
  */
 function saveCheckInComment(checkInID, context) {
-    console.log(checkInID, context)
-
     let comment = document.getElementById('comment-textarea').value;
 
     $.post({
@@ -121,7 +119,47 @@ function saveCheckInComment(checkInID, context) {
             NotificationControl.success('Gemt', 'Kommentaren blev gemt');
         },
         error: function (err) {
-            NotificationControl.error('Fejl', err.message);
+            NotificationControl.error('Fejl', err.responseJSON.result);
         }
     });
+}
+
+function showCheckOutModal(checkInID, context) {
+    let checkOutModal = M.Modal.getInstance(document.getElementById('check-out-modal'));
+    let checkOutStatusSelect = document.getElementById('check-out-status-select');
+    document.querySelector('#check-out-modal button').setAttribute('data-checkin-id', checkInID);
+
+    $.post({
+        url: location.origin + location.pathname,
+        data: {'check_in_id': checkInID, 'post_endpoint': 'getCheckInAjax'},
+        dataType: "json",
+        cache: false,
+        success: function(res) {
+            checkOutStatusSelect.querySelector(`option[value='${res.result.FK_StatusID}']`).setAttribute('selected', 'selected');
+            checkOutStatusSelect.dispatchEvent(new Event('change'));
+            checkOutModal.open();
+        },
+        error: function (err) {
+            NotificationControl.error('Fejl', err.responseJSON.result);
+        }
+    });
+}
+
+function checkOut(checkInID, context) {
+    if (!confirm('Er du helt sikker?')) {
+        return;
+    }
+
+    let statusID = context.parentElement.querySelector('#check-out-status-select').selectedOptions[0].value;
+
+    let form = `
+    <form style="display: none;" method="POST">
+        <input type="hidden" name="post_endpoint" value="checkOut">
+        <input type="hidden" name="check_in_id" value="${checkInID}">
+        <input type="hidden" name="status_id" value="${statusID}">
+    </form>
+    `;
+
+    $(context).append(form);
+    $(context).find(`input[value=${checkInID}]`).parent().submit();
 }

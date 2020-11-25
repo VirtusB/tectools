@@ -25,7 +25,7 @@ $pages = ceil(count($logs) / 10);
 
     <div class="row">
         <?php foreach ($logTypes as $logType): ?>
-        <div class="col s3">
+        <div class="col s6 m4 l3">
             <div onclick="updateSelectedTypes(this)" data-log-type-id="<?= $logType['LogTypeID'] ?>" class="log-type"><?= "{$logType['LogTypeName']} ({$logType['count']}x)" ?></div>
         </div>
         <?php endforeach; ?>

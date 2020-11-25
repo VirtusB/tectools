@@ -42,6 +42,21 @@ class Helpers {
     }
 
     /**
+     * Returnerer true hvis begge arrays, $a og $b, er ens, ellers false.
+     * @param array $a
+     * @param array $b
+     * @return bool
+     */
+    public static function array_equal(array $a, array $b): bool {
+        return (
+            is_array($a)
+            && is_array($b)
+            && count($a) === count($b)
+            && array_diff($a, $b) === array_diff($b, $a)
+        );
+    }
+
+    /**
      * Returnerer data til klienten i JSON format
      * @param int $status HTTP status kode, ex. 200 eller 404 osv.
      * @param array $result
