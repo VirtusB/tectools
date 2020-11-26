@@ -118,3 +118,94 @@ div.card-action a {
         font-size: 1.1rem;
     }
 }
+
+.marquee-container {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.marquee {
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    /*margin-bottom: 2rem;*/
+
+    /*display: inline-block;*/
+}
+
+.marquee-element-divider {
+    /*display: inline-block;*/
+    /*width: 100%;*/
+    /*height: 187px;*/
+    /*text-align: center;*/
+}
+
+.marquee-element-divider i {
+    line-height: 208px;
+}
+
+.marquee-inner {
+    /*animation: marquee 30s linear infinite;*/
+    text-align: center;
+
+    display: flex;
+    justify-content: center;
+}
+
+@keyframes marquee {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+.marquee-img {
+    object-fit: scale-down;
+    max-height: 80px;
+}
+
+.marquee-element {
+    padding: 10px;
+    background: linear-gradient(249.01deg,#ffb2009c 1.42%,rgba(226,160,125,0)),#2c3f508a;
+    color: #fff;
+    border-radius: 13px;
+    padding-bottom: 1px;
+    min-height: 208px;
+    min-width: 187px;
+    cursor: pointer;
+
+    max-width: 187px;
+}
+
+.marquee-img-container {
+    text-align: center;
+}
+
+.marquee-content {
+    text-align: center;
+    font-size: 14px;
+}
+
+.marquee-content p {
+    white-space: initial;
+}
+
+@media all and (max-width: 800px) {
+    #latest-checkins {
+        display: none;
+    }
+}
+
+.marquee-element-divider-container, .marquee-element-container {
+    display: inline-block;
+}
+
+.marquee-element-divider-container {
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 208px;
+    vertical-align: top;
+}

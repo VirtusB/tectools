@@ -203,15 +203,15 @@ a.btn:hover, button.btn:hover, .tec-submit-btn:hover {
         display: none;
     }
 
-    table tbody tr:not(.table-head):not(.search-tr):not(.pagination-tr) td {
+    table.RCMSTable tbody tr:not(.table-head):not(.search-tr):not(.pagination-tr) td {
         display: flex;
     }
 
-    tbody tr:not(.table-head):not(.search-tr):not(.pagination-tr) td[label]:last-child, tbody tr:not(.table-head):not(.search-tr):not(.pagination-tr) th[label]:last-child {
+    table.RCMSTable tbody tr:not(.table-head):not(.search-tr):not(.pagination-tr) td[label]:last-child, tbody tr:not(.table-head):not(.search-tr):not(.pagination-tr) th[label]:last-child {
         padding-bottom: 7px;
     }
 
-    table tbody tr:not(.table-head):not(.search-tr):not(.pagination-tr) td::before {
+    table.RCMSTable tbody tr:not(.table-head):not(.search-tr):not(.pagination-tr) td::before {
         content: attr(label);
         font-weight: bold;
         width: 120px;
@@ -221,7 +221,7 @@ a.btn:hover, button.btn:hover, .tec-submit-btn:hover {
         /*max-width: 120px;*/
     }
 
-    table tbody tr:not(.table-head):not(.search-tr):not(.pagination-tr) td, table tbody tr:not(.table-head):not(.search-tr):not(.pagination-tr) th {
+    table.RCMSTable tbody tr:not(.table-head):not(.search-tr):not(.pagination-tr) td, table tbody tr:not(.table-head):not(.search-tr):not(.pagination-tr) th {
         padding-bottom: 0;
         padding-top: 7px;
     }

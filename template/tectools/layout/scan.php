@@ -18,6 +18,11 @@ $TecTools = $GLOBALS['TecTools'];
 </div>
 
 <div class="section no-pad-bot">
+    <?php if ($TecTools->RCMS->Login->isAdmin()): ?>
+    <h4 class="center">Personale - Tjek Ud</h4>
+    <p class="center mb0">Her kan du som Personale tjekke værktøj ud, så det kommer på lager igen</p>
+    <?php endif; ?>
+
     <div class="container" id="scan-container">
         <br><br>
         <button id="scan-btn" class="btn green-btn">Scan   <i class="fal fa-scanner"></i></button>
@@ -51,7 +56,7 @@ $TecTools = $GLOBALS['TecTools'];
 
         <div class="row center" style="margin-top: 4rem;">
             <div class="col s12 m8 l6 xl4 offset-m2 offset-l3 offset-xl4">
-                <img style="max-width: 65%; object-fit: scale-down;" id="tool-name" src="" alt="">
+                <img style="max-width: 65%; object-fit: scale-down;" src="" alt="">
             </div>
 
             <div class="col s12 m8 l6 xl4 offset-m2 offset-l3 offset-xl4">
@@ -59,6 +64,61 @@ $TecTools = $GLOBALS['TecTools'];
             </div>
 
 
+        </div>
+
+        <br><br>
+    </div>
+
+    <div style="display: none" id="tool-container-admin">
+
+
+        <br><br>
+
+        <div class="row center" style="">
+            <div class="col s12 m8 l6 xl4 offset-m2 offset-l3 offset-xl4">
+                <img style="max-width: 65%; object-fit: scale-down;" src="" alt="">
+            </div>
+
+            <div class="col s12 m8 l6 xl4 offset-m2 offset-l3 offset-xl4">
+                <h4 style="word-break: break-word;" id="tool-name-manufacturer-admin" class="header center orange-text mt0"></h4>
+            </div>
+
+
+        </div>
+
+        <div class="row center">
+            <div class="col s12">
+                <table class="responsive-table">
+                    <thead>
+                    <tr>
+                        <th>Bruger ID</th>
+                        <th>Udlejning start</th>
+                        <th>Udlejning slut</th>
+                        <th>Kommentar</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td id="user-id"></td>
+                        <td id="start-date"></td>
+                        <td id="end-date"></td>
+                        <td id="comment"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col s10 offset-s1 mt2">
+                <label>Status</label>
+                <select id="tool-status" required class="mat-select">
+                    <option selected value="1">På lager</option>
+                    <option value="4">Ikke på lager</option>
+                    <option value="5">Beskadiget</option>
+                </select>
+            </div>
+
+            <button onclick="checkOutTool(this.getAttribute('data-checkin-id'))" data-checkin-id="" id="check-out-btn" class="btn green-btn mt2">Tjek Ud   <i class="fad fa-dolly"></i></button>
         </div>
 
         <br><br>

@@ -30,21 +30,32 @@ window.addEventListener('load', function () {
  * Denne funktion søger for at at alle de forskellige værktøjer på forsiden har samme højde
  */
 function fixCardHeights() {
-    let cards = document.querySelectorAll('#tools-row .card');
     let cardImages = document.querySelectorAll('#tools-row .card .card-image');
-    let cardActions = document.querySelectorAll('#tools-row .card-action');
-
-    let highestCard = 0;
     let highestImage = 0;
-    let highestAction = 0;
 
     // Find højder
-    cards.forEach(c => c.offsetHeight > highestCard ? highestCard = c.offsetHeight : highestCard = highestCard);
     cardImages.forEach(i => i.offsetHeight > highestImage ? highestImage = i.offsetHeight : highestImage = highestImage);
-    cardActions.forEach(i => i.offsetHeight > highestAction ? highestAction = i.offsetHeight : highestAction = highestAction);
 
     // Sæt højder
-    // cards.forEach(c => c.style.height = highestCard + 'px');
     cardImages.forEach(i => i.style.height = highestImage + 'px');
-    // cardActions.forEach(i => i.style.height = highestAction + 'px');
 }
+
+/**
+ * Viser/skjuler elementet "Seneste lån foretaget" på forsiden
+ */
+setInterval(function () {
+    var marquees = Array.from(document.querySelectorAll('.marquee'));
+
+    var visibleMarquee = marquees.filter(el => el.style.display !== 'none')[0];
+    var visibleMarqueeIndex = marquees.findIndex(m => m === visibleMarquee);
+
+    animateCSS(visibleMarquee, 'backOutLeft', true).then(function () {
+        var nextVisibleMarquee = marquees[visibleMarqueeIndex + 1];
+        if (nextVisibleMarquee === undefined) {
+            nextVisibleMarquee = marquees[0];
+        }
+
+        nextVisibleMarquee.style.display = 'block';
+        animateCSS(nextVisibleMarquee, 'backInRight');
+    });
+}, 6500);

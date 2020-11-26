@@ -223,7 +223,7 @@ $TecTools = $GLOBALS['TecTools'];
                     <h4>Kommentar til udlejning</h4>
 
                     <label for="comment-textarea">Kommentar</label>
-                    <textarea readonly class="materialize-textarea" id="comment-textarea" cols="30" rows="10"></textarea>
+                    <textarea readonly="readonly" class="materialize-textarea" id="comment-textarea" cols="30" rows="10"></textarea>
 
                     <button class="btn tec-btn right modal-close">Luk</button>
                 </div>
@@ -236,9 +236,9 @@ $TecTools = $GLOBALS['TecTools'];
 
                     <label for="status-select">Status</label>
                     <select id="check-out-status-select" class="mat-select">
-                        <?php foreach ($TecTools->getAllStatuses() as $status): ?>
-                            <option value="<?= $status['StatusID'] ?>"><?= $status['StatusName'] ?></option>
-                        <?php endforeach; ?>
+                        <option selected value="1">På lager</option>
+                        <option value="4">Ikke på lager</option>
+                        <option value="5">Beskadiget</option>
                     </select>
 
                     <button onclick="checkOut(this.getAttribute('data-checkin-id'), this)" class="btn tec-btn right modal-close mt2 mb2">Tjek Ud</button>
@@ -327,6 +327,10 @@ $TecTools = $GLOBALS['TecTools'];
 
                 <?php
                 $columns = array(
+                    array(
+                        'column' => 'ToolName',
+                        'label' => 'Navn'
+                    ),
                     array(
                         'column' => 'Image',
                         'label' => 'Billede',
@@ -634,7 +638,7 @@ $TecTools = $GLOBALS['TecTools'];
 
                 $buttons = [
                     [
-                        'button' => '<button onclick="showCommentCheckIn(?, this)" class="btn tec-btn">Kommentar</button>',
+                        'button' => '<button onclick="showCommentCheckIn(?, this)" class="btn tec-btn">Vis Kommentar</button>',
                         'value' => 'CheckInID'
                     ]
                 ];

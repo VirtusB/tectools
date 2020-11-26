@@ -3,6 +3,10 @@ let barcodeScanner = document.getElementById('barcode-scanner');
 let scanContainer = document.getElementById('scan-container');
 let toolContainer = document.getElementById('tool-container');
 
+let toolContainerAdmin = document.getElementById('tool-container-admin');
+let checkOutBtn = document.getElementById('check-out-btn');
+
+
 // Tjek om browseren har mulighed for at åbne en video-stream
 if (navigator.getUserMedia) {
     navigator.mediaDevices.getUserMedia({video: true, audio: false}).then(addScanBtnClickListener, noVideoCameraError);
@@ -98,17 +102,31 @@ Quagga.onDetected(function (data) {
 function showTool(barcode) {
     $.post({
         url: location.origin + location.pathname,
-        data: {'tool_barcode': barcode, 'post_endpoint': 'getToolByBarcodeAjax'},
+        data: {'tool_barcode': barcode, 'post_endpoint': isAdmin() ? 'getCheckInAjax' : 'getToolByBarcodeAjax'},
         dataType: "json",
         cache: false,
         success: function(res) {
             $(scanContainer).slideUp();
 
-            toolContainer.querySelector('#check-in-btn').setAttribute('data-barcode', res.tool.BarCode);
-            toolContainer.querySelector('#tool-name-manufacturer').innerText = res.tool.ManufacturerName + ' ' + res.tool.ToolName;
-            toolContainer.querySelector('img').setAttribute('src', res.tool.Image);
+            if (isAdmin()) {
+                toolContainerAdmin.querySelector('#check-out-btn').setAttribute('data-checkin-id', res.result.CheckInID);
+                toolContainerAdmin.querySelector('#tool-name-manufacturer-admin').innerText = res.result.tool.ManufacturerName + ' ' + res.result.tool.ToolName;
+                toolContainerAdmin.querySelector('img').setAttribute('src', res.result.tool.Image);
+                toolContainerAdmin.querySelector('img').style.maxWidth = '50%';
 
-            $(toolContainer).slideDown();
+                toolContainerAdmin.querySelector('#user-id').innerHTML = `<a href="/users/edit?userid=${res.result.FK_UserID}" target="_blank">${res.result.FK_UserID}</a>`
+                toolContainerAdmin.querySelector('#start-date').innerText = res.result.formattedStartDate;
+                toolContainerAdmin.querySelector('#end-date').innerText = res.result.formattedEndDate;
+                toolContainerAdmin.querySelector('#comment').innerText = res.result.Comment;
+
+                $(toolContainerAdmin).slideDown();
+            } else {
+                toolContainer.querySelector('#check-in-btn').setAttribute('data-barcode', res.tool.BarCode);
+                toolContainer.querySelector('#tool-name-manufacturer').innerText = res.tool.ManufacturerName + ' ' + res.tool.ToolName;
+                toolContainer.querySelector('img').setAttribute('src', res.tool.Image);
+
+                $(toolContainer).slideDown();
+            }
         },
         error: function (err) {
             NotificationControl.error('Fejl', err.responseJSON.result);
@@ -142,4 +160,17 @@ function checkInTool(barcode) {
     });
 }
 
+function checkOutTool(checkInID) {
+    let statusID = document.getElementById('tool-status').selectedOptions[0].value;
 
+    let form = `
+    <form id="check-out-tool-form" style="display: none;" method="POST">
+        <input type="hidden" name="post_endpoint" value="checkOut">
+        <input type="hidden" name="check_in_id" value="${checkInID}">
+        <input type="hidden" name="status_id" value="${statusID}">
+    </form>
+    `;
+
+    $(document.body).append(form);
+    $('#check-out-tool-form').submit();
+}

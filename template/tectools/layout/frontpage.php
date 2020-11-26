@@ -13,8 +13,9 @@ $TecTools = $GLOBALS['TecTools'];
 $GlobalHandlers = $GLOBALS['GlobalHandlers'];
 
 $categories = $TecTools->getAllCategories();
-
 $tools = $TecTools->getAllToolsWithFilters();
+$checkInsMarquee = $TecTools->getCheckInsForMarquee();
+$chunks = array_chunk($checkInsMarquee, 3);
 
 ?>
 
@@ -115,9 +116,44 @@ $tools = $TecTools->getAllToolsWithFilters();
             <?php endif; ?>
 
     </form>
+
+    <div id="latest-checkins" class="row">
+        <div class="col s12 mt2 marquee-container">
+
+            <h5 class="center mb2">Seneste lån foretaget af vores medlemmer!</h5>
+
+            <?php foreach ($chunks as $k => $checkIns): ?>
+            <div class="marquee" style="<?= $k !== 0 ? 'display: none;' : '' ?>">
+                <div class="marquee-inner">
+
+                    <?php foreach ($checkIns as $key => $checkIn): ?>
+                        <div class="marquee-element-container">
+                            <div onclick="location.href = '/tools/view?toolid=<?= $checkIn['FK_ToolID'] ?>'" class="marquee-element">
+                                <div class="marquee-img-container">
+                                    <img class="marquee-img" src="<?= $checkIn['Image'] ?>" alt="">
+                                </div>
+
+                                <div class="marquee-content">
+                                    <p><?= $checkIn['FirstName'] ?> lejede:<br><?= $checkIn['ManufacturerName'] ?> <?= $checkIn['ToolName'] ?><br><span class="render-datetime" datetime="<?= $checkIn['StartDate'] ?>"></span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <?php if (count($checkIns) !== ($key + 1)): ?>
+                            <div class="marquee-element-divider-container">
+                                <div class="marquee-element-divider">
+                                    <i class="fa fa-horizontal-rule"></i>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endforeach;?>
+
+        </div>
+    </div>
 </div>
-
-
 
 <link rel="stylesheet" href="<?= $this->RCMS->getTemplateFolder() ?>/css/frontpage.css">
 

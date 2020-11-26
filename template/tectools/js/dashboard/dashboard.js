@@ -1,9 +1,6 @@
 window.addEventListener('load', e => {
     // JsBarcode laver vores stregkoder fra databasen om til SVG elementer som kan scannes
     JsBarcode(".barcode").init();
-
-    // Biblioteket "timeago.js" formaterer datoer som f.eks. "2020-01-01" til "1. januar 2020"
-    window.timeagoInstance.render(document.querySelectorAll('.render-datetime'), 'da_DK');
 })
 
 window.addEventListener('load', function () {
@@ -78,7 +75,7 @@ function hideExceededReservations() {
 }
 
 /**
- * Funktion som køres når der klikkes "Kommentar" i tabellen over udlejninger
+ * Åbner et vindue hvor brugeren kan indtaste en kommentar til deres udlejning
  * @param checkInID
  * @param context
  */
@@ -93,7 +90,16 @@ function showCommentCheckIn(checkInID, context) {
         dataType: "json",
         cache: false,
         success: function(res) {
-            commentTextArea.value = res.result;
+            commentTextArea.value = res.result.Comment;
+
+            if (res.result.CheckedOut === 1) {
+                commentTextArea.setAttribute('readonly', 'readonly');
+            } else {
+                if (!isAdmin()) {
+                    commentTextArea.removeAttribute('readonly');
+                }
+            }
+
             commentModal.open();
         },
         error: function (err) {
@@ -124,6 +130,11 @@ function saveCheckInComment(checkInID, context) {
     });
 }
 
+/**
+ * Åbner et vindue hvor personale kan vælge status for værktøjet og tjekke det ud
+ * @param checkInID
+ * @param context
+ */
 function showCheckOutModal(checkInID, context) {
     let checkOutModal = M.Modal.getInstance(document.getElementById('check-out-modal'));
     let checkOutStatusSelect = document.getElementById('check-out-status-select');
@@ -135,8 +146,6 @@ function showCheckOutModal(checkInID, context) {
         dataType: "json",
         cache: false,
         success: function(res) {
-            checkOutStatusSelect.querySelector(`option[value='${res.result.FK_StatusID}']`).setAttribute('selected', 'selected');
-            checkOutStatusSelect.dispatchEvent(new Event('change'));
             checkOutModal.open();
         },
         error: function (err) {
@@ -145,6 +154,11 @@ function showCheckOutModal(checkInID, context) {
     });
 }
 
+/**
+ * Tjekker et værktøj ud
+ * @param checkInID
+ * @param context
+ */
 function checkOut(checkInID, context) {
     if (!confirm('Er du helt sikker?')) {
         return;

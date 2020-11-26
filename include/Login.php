@@ -27,7 +27,17 @@ class Login {
         if (isset($_POST['create_new_user']) && $_POST['create_new_user'] === '1') {
             $this->createUser();
         }
+
+        $this->setLoginCookies();
 	}
+
+    /**
+     * Sætter nogle cookies relateret til RCMS som skal bruges på frontend
+     */
+    private function setLoginCookies(): void {
+        $isAdmin = $this->isAdmin();
+        setcookie('RCMS_isAdmin', (string) $isAdmin, time()+3600, '/');
+    }
 
     /**
      * Returnerer true hvis brugeren er logget ind, ellers false

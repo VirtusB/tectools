@@ -42,9 +42,9 @@ class RCMS {
     private mysqli $mysqli;
 
     /**
-     * @var Helpers $Functions
+     * @var Helpers $Helpers
      */
-    public Helpers $Functions;
+    public Helpers $Helpers;
 
     /**
      * @var Template $Template
@@ -97,7 +97,7 @@ class RCMS {
 
         $this->connect();
 
-        $this->Functions = new Helpers($this);
+        $this->Helpers = new Helpers($this);
 
         $this->StripeWrapper = new StripeWrapper($this, $secretStripeKey);
         $this->Login = new Login($this);

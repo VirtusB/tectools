@@ -131,16 +131,25 @@ class TecTools {
             Helpers::outputAJAXResult(400, ['result' => 'Du ejer ikke denne udlejning']);
         }
 
-        Helpers::outputAJAXResult(200, ['result' => $checkIn['Comment']]);
+        Helpers::outputAJAXResult(200, ['result' => ['Comment' => $checkIn['Comment'], 'CheckedOut' => $checkIn['CheckedOut']]]);
     }
 
     /**
-     * Returnerer et CheckIn fra databasen
+     * Returnerer et CheckIn fra databasen via ID
      * @param $checkInID
      * @return array|false
      */
     private function getCheckIn(int $checkInID) {
         return $this->RCMS->execute('CALL getCheckIn(?)', array('i', $checkInID))->fetch_array(MYSQLI_ASSOC) ?? false;
+    }
+
+    /**
+     * Returnerer et CheckIn fra databasen via stregkode
+     * @param int $barcode
+     * @return array|false
+     */
+    private function getCheckInByBarcode(int $barcode) {
+        return $this->RCMS->execute('CALL getCheckInByBarcode(?)', array('i', $barcode))->fetch_array(MYSQLI_ASSOC) ?? false;
     }
 
     /**
@@ -151,11 +160,30 @@ class TecTools {
             Helpers::outputAJAXResult(400, ['result' => 'Du er ikke en administrator']);
         }
 
-        $checkInID = (int) $_POST['check_in_id'];
-        $checkIn = $this->getCheckIn($checkInID);
+        if (isset($_POST['check_in_id'])) {
+            $checkInID = (int) $_POST['check_in_id'];
+            $checkIn = $this->getCheckIn($checkInID);
 
-        $tool = $this->getToolByID($checkIn['FK_ToolID']);
-        $checkIn['FK_StatusID'] = $tool['FK_StatusID'];
+            if (!$checkIn) {
+                Helpers::outputAJAXResult(400, ['result' => 'Der er ikke nogen udlejning for dette værktøj']);
+            }
+
+            $tool = $this->getToolByID($checkIn['FK_ToolID']);
+        } else {
+            $toolBarcode = (int) $_POST['tool_barcode'];
+            $checkIn = $this->getCheckInByBarcode($toolBarcode);
+
+            if (!$checkIn) {
+                Helpers::outputAJAXResult(400, ['result' => 'Der er ikke nogen udlejning for dette værktøj']);
+            }
+
+            $tool = $this->getToolByID($checkIn['FK_ToolID']);
+            $tool['Image'] = $this->cleanImagePath($tool['Image']);
+        }
+
+        $checkIn['tool'] = $tool;
+        $checkIn['formattedStartDate'] = strftime ('d. %e %B kl. %H:%M:%S', strtotime($checkIn['StartDate']));
+        $checkIn['formattedEndDate'] = strftime ('d. %e %B kl. %H:%M:%S', strtotime($checkIn['EndDate']));
 
         Helpers::outputAJAXResult(200, ['result' => $checkIn]);
     }
@@ -318,7 +346,9 @@ class TecTools {
         $priceID = $_POST['price_id'];
         $productName = $_POST['product_name'];
 
-        $subscription = $this->RCMS->StripeWrapper->getSubscription('cus_HUiDUdDo6sHbRV');
+        $customerID = $this->RCMS->Login->getStripeID();
+
+        $subscription = $this->RCMS->StripeWrapper->getSubscription($customerID);
         $subscriptionID = $subscription->id;
         $client = $this->RCMS->StripeWrapper->getStripeClient();
 
@@ -448,6 +478,10 @@ class TecTools {
         Helpers::outputAJAXResult(200, $response);
     }
 
+    /**
+     * Funktion til at tjekke værktøj ud via POST request
+     * Kan kun bruges af administratorer
+     */
     private function checkOut(): void {
         $checkInID = (int) $_POST['check_in_id'];
         $statusID = $_POST['status_id'];
@@ -1052,6 +1086,15 @@ class TecTools {
     }
 
     /**
+     * Sørger for at stien til billedet er korrekt, således at det kan udskrives på siden
+     * @param $path
+     * @return string
+     */
+    private function cleanImagePath($path) {
+        return $this->RELATIVE_TOOL_IMAGE_FOLDER . '/' . $path;
+    }
+
+    /**
      * Henter et værktøj ud af databasen via stregkoden, og udskriver resultatet i JSON.
      * Til brug ved AJAX requests.
      */
@@ -1062,7 +1105,7 @@ class TecTools {
 
         $tool = $this->getToolByBarcode($_POST['tool_barcode']);
 
-        $tool['Image'] = $this->RELATIVE_TOOL_IMAGE_FOLDER . '/' . $tool['Image'];
+        $tool['Image'] = $this->cleanImagePath($tool['Image']);
 
         $result = [
             'result' => 'success',
@@ -1144,6 +1187,20 @@ class TecTools {
             }
         }
         echo '</span>';
+    }
+
+    /**
+     * Returnerer udlejninger som skal vises nederst på forsiden i det glidende element, marquee
+     * @return array|mixed
+     */
+    public function getCheckInsForMarquee() {
+        $checkIns = $this->RCMS->execute('CALL getCheckInsForMarquee()')->fetch_all(MYSQLI_ASSOC) ?? [];
+
+        foreach ($checkIns as &$checkIn) {
+            $checkIn['Image'] = $this->cleanImagePath($checkIn['Image']);
+        }
+
+        return $checkIns;
     }
 
     /**
