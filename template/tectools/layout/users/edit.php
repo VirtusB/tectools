@@ -121,6 +121,17 @@ $user = $TecTools->getUserByID($userID);
                     <button class="btn tec-btn red" type="submit">Slet bruger</button>
                 </form>
             </div>
+
+            <div class="col s12 m6 offset-m3">
+                <div class="card-panel teal white-text">
+                    <h6>Når du sletter din bruger, slettes følgende data:</h6>
+                    <p>Personoplysninger: Fornavn, Efternavn, Adresse, Telefonnummer</p>
+                    <p>Abonnement, hvis det eksisterer</p>
+                    <p>Reservationer</p>
+                    <p>Tidligere lån</p>
+                    <p>Personoplysninger gemt i Stripe</p>
+                </div>
+            </div>
         </div>
 
 

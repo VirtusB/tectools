@@ -77,6 +77,12 @@ if ($this->RCMS->Login->isLoggedIn()) {
                     <label for="repeat_password">Gentag adgangskode</label>
                 </div>
 
+                <div class="col s12 center">
+                    <label class="" for="consent">
+                        <input onchange="document.getElementById('submitBtn').toggleAttribute('disabled');" required="required" class="" name="consent" placeholder="" id="consent" type="checkbox">
+                        <span>Jeg har læst og accepteret <a target="_blank" href="/tos">betingelserne</a></span>
+                    </label>
+                </div>
 
             </div>
 
@@ -84,7 +90,7 @@ if ($this->RCMS->Login->isLoggedIn()) {
 
             <div class="row">
                 <div class="input-field col s12">
-                    <input class="tec-submit-btn" type="submit" value="Opret konto">
+                    <input id="submitBtn" disabled class="btn tec-submit-btn" type="submit" value="Opret konto">
                 </div>
             </div>
         </form>

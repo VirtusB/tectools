@@ -289,6 +289,8 @@ class TecTools {
 
         $this->cancelSubscription();
 
+        $this->RCMS->StripeWrapper->removeCustomer($this->RCMS->Login->getStripeID());
+
         $this->RCMS->execute('CALL removeUser(?)', array('i', $userIDPost));
 
         $this->RCMS->addLog(LogTypes::DELETE_USER_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);

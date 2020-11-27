@@ -169,7 +169,9 @@ div.card-action a {
 
 .marquee-element {
     padding: 10px;
-    background: linear-gradient(249.01deg,#ffb2009c 1.42%,rgba(226,160,125,0)),#2c3f508a;
+    /*background: linear-gradient(249.01deg,#ffb2009c 1.42%,rgba(226,160,125,0)),#2c3f508a;*/
+    /*background: linear-gradient(249.01deg,#3f51b5a1 1.42%,rgba(226,160,125,0)),#2c3f508a;*/
+    background: linear-gradient(249.01deg,#3f51b5a1 1.42%,rgba(226,160,125,0)),#009688;
     color: #fff;
     border-radius: 13px;
     padding-bottom: 1px;

@@ -124,6 +124,10 @@ a.btn, button.btn {
     transition: 0.3s;
 }
 
+.bold {
+    font-weight: bold;
+}
+
 .card:hover {
     box-shadow: 0 8px 16px 0 rgba(113, 106, 106, 0.2);
     /*box-shadow: 0 4px 16px 0 rgba(113, 106, 106, 0.15);*/
