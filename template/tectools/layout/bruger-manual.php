@@ -8,6 +8,7 @@ declare(strict_types=1);
     <div class="row">
         <div class="col s12 center mb2">
             <h4 class="bold mb2">Manual til brugere</h4>
+            <p class="mb2">Tryk på knapperne for videoinstruktion</a></p>
 
             <button class="btn tec-btn play mb2">
                 <i style="margin-right: 5px;" class="fad fa-play-circle"></i> Opret abonnement

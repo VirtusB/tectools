@@ -137,7 +137,8 @@ class RCMS {
                 $this->pluginsToLoad[] = [
                     'path' => $fileInfo->getPath(),
                     'name' => $fileInfo->getFilename(),
-                    'basename' => $fileInfo->getBasename('.php')
+                    'basename' => $fileInfo->getBasename('.php'),
+                    'shouldAutoLoad' => $this->shouldAutoLoad($fileInfo->getPath() . '/' . $fileInfo->getFilename())
                 ];
             }
         }
@@ -148,8 +149,15 @@ class RCMS {
 
         foreach ($this->pluginsToLoad as $plugin) {
             $fullPath = $plugin['path'] . '/' . $plugin['name'];
+
             require_once $fullPath;
         }
+    }
+
+    private function shouldAutoLoad($file): bool {
+        $contents =  file_get_contents($file);
+
+        return !preg_match('/\bdisableAutoLoading\b/', $contents);
     }
 
     /**
@@ -158,21 +166,6 @@ class RCMS {
      * @return void
      */
     private function loadPlugins(string $path): void {
-        //$dir = new DirectoryIterator($path);
-        //foreach ($dir as $fileinfo) {
-        //    if ($fileinfo->isDir() && !$fileinfo->isDot()) {
-        //        $this->loadPlugins($fileinfo->getPath() . '/' . $fileinfo->getFilename() . '/');
-        //    } else if (!$fileinfo->isDot() && $fileinfo->getExtension() === 'php') {
-        //        $classname = $fileinfo->getBasename('.php');
-        //        if (class_exists($classname)) {
-        //            $reflectionClass = new ReflectionClass($classname);
-        //            if (!$reflectionClass->isAbstract()) {
-        //                $this->newGlobal($classname, new $classname($this));
-        //            }
-        //        }
-        //    }
-        //}
-
         foreach ($this->pluginsToLoad as $plugin) {
             $className = $plugin['basename'];
 

@@ -8,6 +8,8 @@ class TecTools {
      */
     public RCMS $RCMS;
 
+    public static bool $disableAutoLoading;
+
     /**
      * Absolutte sti til mappen hvor billeder af værktøj ligger
      * @var string $TOOL_IMAGE_FOLDER
