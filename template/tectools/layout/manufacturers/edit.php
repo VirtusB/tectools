@@ -16,7 +16,7 @@ if (!isset($_GET['manufacturerid']) || !is_numeric($_GET['manufacturerid'])) {
  */
 $TecTools = $GLOBALS['TecTools'];
 
-$manufacturer = $TecTools->getManufacturer((int) $_GET['manufacturerid']);
+$manufacturer = $TecTools->Manufacturers->getManufacturer((int) $_GET['manufacturerid']);
 
 ?>
 

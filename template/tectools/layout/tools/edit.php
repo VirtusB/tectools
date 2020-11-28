@@ -20,7 +20,7 @@ $tool = $TecTools->getToolByID((int) $_GET['toolid']);
 
 $toolCategoryIDs = array_map(static fn($category) => $category['CategoryID'], $tool['Categories']);
 
-$categories = $TecTools->getAllCategories();
+$categories = $TecTools->Categories->getAllCategories();
 
 ?>
 
@@ -71,7 +71,7 @@ $categories = $TecTools->getAllCategories();
                     <label>Producent</label>
                     <select id="manufacturer_id" required class="mat-select" name="manufacturer_id">
                         <option value="" disabled selected>Vælg producent</option>
-                        <?php foreach ($TecTools->getAllManufacturers() as $manufacturer): ?>
+                        <?php foreach ($TecTools->Manufacturers->getAllManufacturers() as $manufacturer): ?>
                             <option <?= $manufacturer['ManufacturerID'] === intval($tool['FK_ManufacturerID']) ? 'selected' : '' ?> value="<?= $manufacturer['ManufacturerID'] ?>"><?= $manufacturer['ManufacturerName'] ?></option>
                         <?php endforeach; ?>
                     </select>

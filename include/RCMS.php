@@ -147,7 +147,12 @@ class RCMS {
             return $a['name'] <=> $b['name'];
         });
 
-        foreach ($this->pluginsToLoad as $plugin) {
+        foreach ($this->pluginsToLoad as $key => $plugin) {
+            if (!$plugin['shouldAutoLoad']) {
+                unset($this->pluginsToLoad[$key]);
+                continue;
+            }
+
             $fullPath = $plugin['path'] . '/' . $plugin['name'];
 
             require_once $fullPath;

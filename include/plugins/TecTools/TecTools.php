@@ -1,6 +1,8 @@
 <?php
 
 declare(strict_types=1);
+require_once 'Categories.php';
+require_once 'Manufacturers.php';
 
 class TecTools {
     /**
@@ -8,7 +10,15 @@ class TecTools {
      */
     public RCMS $RCMS;
 
-    public static bool $disableAutoLoading;
+    /**
+     * @var Categories $Categories
+     */
+    public Categories $Categories;
+
+    /**
+     * @var Manufacturers $Manufacturers
+     */
+    public Manufacturers $Manufacturers;
 
     /**
      * Absolutte sti til mappen hvor billeder af værktøj ligger
@@ -44,10 +54,16 @@ class TecTools {
     public const TOOL_LOANED_OUT_STATUS = 3;
 
     /**
-     * Status værdi for værktøj som ikke er på lager (ex. demo vare, sendt til reparation, udgået)
+     * Status værdi for værktøj som ikke er på lager (ex. demo vare, udgået, udsolgt)
      * @var int TOOL_AVAILABLE_STATUS
      */
     public const TOOL_NOT_IN_STOCK_STATUS = 4;
+
+    /**
+     * Status værdi for værktøj som er beskadiget
+     * @var int TOOL_AVAILABLE_STATUS
+     */
+    public const TOOL_DAMAGED_STATUS = 5;
 
     /**
      * Liste over POST endpoints, som har en metode i denne klase, som kan eksekveres automatisk
@@ -56,8 +72,6 @@ class TecTools {
      */
     private static array $allowedEndpoints = [
         'addTool', 'editTool',
-        'addCategory', 'editCategory',
-        'addManufacturer', 'editManufacturer',
         'editUser',
         'checkIn', 'checkOut', 'getCheckInComment', 'saveCheckInComment', 'getCheckInAjax',
         'getToolByBarcodeAjax',
@@ -70,6 +84,9 @@ class TecTools {
         $this->RCMS = $RCMS;
         $this->TOOL_IMAGE_FOLDER = $this->RCMS->getUploadsFolder() . '/tools/images';
         $this->RELATIVE_TOOL_IMAGE_FOLDER = $this->RCMS->getRelativeUploadsFolder() . '/tools/images';
+
+        $this->Categories = new Categories($this);
+        $this->Manufacturers = new Manufacturers($this);
 
         $this->handlePOSTEndpoints();
     }
@@ -753,19 +770,6 @@ class TecTools {
     }
 
     /**
-     * Fjerner alle kategorier fra et værktøj
-     * @param int $toolID
-     * @return void
-     */
-    private function removeAllCategoriesFromTool(int $toolID): void {
-        if (!$this->RCMS->Login->isAdmin()) {
-            return;
-        }
-
-        $this->RCMS->execute('CALL removeAllCategoriesFromTool(?)', array('i', $toolID));
-    }
-
-    /**
      * Returnerer false, hvis $userID ikke er det samme som brugerens ID i databasen og brugeren ikke er personale.
      *
      * Personale kan ændre på alle brugere, så $userID må i de tilfælde godt være et andet ID end det som står i databasen.
@@ -784,148 +788,6 @@ class TecTools {
         }
 
         return true;
-    }
-
-    /**
-     * Tilføjer en producent via en POST request
-     * @return void
-     */
-    private function addManufacturer(): void {
-        if (!$this->RCMS->Login->isAdmin()) {
-            return;
-        }
-
-        $manufacturerName = $_POST['manufacturer_name'];
-
-        if ($this->manufacturerExists($manufacturerName)) {
-            Helpers::setNotification('Fejl', 'Producenten eksisterer allerede', 'error');
-            return;
-        }
-
-        $this->RCMS->execute('CALL addManufacturer(?)', array('s', $manufacturerName));
-
-        $this->RCMS->addLog(LogTypes::CREATE_MANUFACTURER_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
-
-        Helpers::setNotification('Oprettet', 'Producenten blev oprettet');
-
-        Helpers::redirect('/dashboard');
-    }
-
-    /**
-     * Tjekker om en producent med samme navn allerede eksisterer i databasen
-     * @param $name
-     * @return bool
-     */
-    private function manufacturerExists($name): bool {
-        $exists = $this->RCMS->execute('SELECT COUNT(*) AS count FROM Manufacturers WHERE ManufacturerName = ?', array('s', $name))->fetch_object()->count;
-        return $exists !== 0;
-    }
-
-    /**
-     * Returnerer en producent
-     * @param int $manufacturerID
-     * @return array|null
-     */
-    public function getManufacturer(int $manufacturerID): ?array {
-        $res = $this->RCMS->execute('CALL getManufacturer(?)', array('i', $manufacturerID));
-        return $res->fetch_assoc();
-    }
-
-    /**
-     * Redigerer en producent via en POST request
-     * @return void
-     */
-    private function editManufacturer(): void {
-        if (!is_numeric($_POST['manufacturer_id']) || !$this->RCMS->Login->isAdmin()) {
-            return;
-        }
-
-        $manufacturerID = (int) $_POST['manufacturer_id'];
-        $manufacturerName = $_POST['manufacturer_name'];
-
-        if ($this->manufacturerExists($manufacturerName)) {
-            Helpers::setNotification('Fejl', 'Producenten eksisterer allerede', 'error');
-            return;
-        }
-
-        $this->RCMS->execute('CALL editManufacturer(?, ?)', array('is', $manufacturerID, $manufacturerName));
-
-        $this->RCMS->addLog(LogTypes::EDIT_MANUFACTURER_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
-
-        Helpers::setNotification('Gemt', 'Dine ændringer blev gemt');
-
-        Helpers::redirect('/dashboard');
-    }
-
-    /**
-     * Tilføjer en kategori via en POST request
-     * @return void
-     */
-    private function addCategory(): void {
-        if (!$this->RCMS->Login->isAdmin()) {
-            return;
-        }
-
-        $categoryName = $_POST['category_name'];
-
-        if ($this->categoryExists($categoryName)) {
-            Helpers::setNotification('Fejl', 'Kategorien eksisterer allerede', 'error');
-            return;
-        }
-
-        $this->RCMS->execute('CALL addCategory(?)', array('s', $categoryName));
-
-        $this->RCMS->addLog(LogTypes::CREATE_CATEGORY_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
-
-        Helpers::setNotification('Oprettet', 'Kategorien blev oprettet');
-
-        Helpers::redirect('/dashboard');
-    }
-
-    /**
-     * Tjekker om en kategori med samme navn allerede eksisterer i databasen
-     * @param $name
-     * @return bool
-     */
-    private function categoryExists($name): bool {
-        $exists = $this->RCMS->execute('SELECT COUNT(*) AS count FROM Categories WHERE CategoryName = ?', array('s', $name))->fetch_object()->count;
-        return $exists !== 0;
-    }
-
-    /**
-     * Henter en kategori ud fra databasen
-     * @param int $categoryID
-     * @return array|null
-     */
-    public function getCategory(int $categoryID): ?array {
-        $res = $this->RCMS->execute('CALL getCategory(?)', array('i', $categoryID));
-        return $res->fetch_assoc();
-    }
-
-    /**
-     * Redigerer en kategori via en POST request
-     * @return void
-     */
-    private function editCategory(): void {
-        if (!is_numeric($_POST['category_id']) || !$this->RCMS->Login->isAdmin() ) {
-            return;
-        }
-
-        $categoryID = (int) $_POST['category_id'];
-        $categoryName = $_POST['category_name'];
-
-        if ($this->categoryExists($categoryName)) {
-            Helpers::setNotification('Fejl', 'Kategorien eksisterer allerede', 'error');
-            return;
-        }
-
-        $this->RCMS->execute('CALL editCategory(?, ?)', array('is', $categoryID, $categoryName));
-
-        $this->RCMS->addLog(LogTypes::EDIT_CATEGORY_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
-
-        Helpers::setNotification('Gemt', 'Dine ændringer blev gemt');
-
-        Helpers::redirect('/dashboard');
     }
 
     /**
@@ -953,12 +815,12 @@ class TecTools {
 
             if (Helpers::array_equal($categories, $currentToolCategoryIDs) === false) {
                 // Opdater kategorier
-                $this->removeAllCategoriesFromTool($toolID);
+                $this->Categories->removeAllCategoriesFromTool($toolID);
                 foreach ($categories as $categoryID) {
                     if (!is_numeric($categoryID)) {
                         continue;
                     }
-                    $this->addToolToCategory($toolID, (int) $categoryID);
+                    $this->Categories->addToolToCategory($toolID, (int) $categoryID);
                 }
             }
         }
@@ -1051,7 +913,7 @@ class TecTools {
             if (!is_numeric($categoryID)) {
                 continue;
             }
-            $this->addToolToCategory($toolID, (int) $categoryID);
+            $this->Categories->addToolToCategory($toolID, (int) $categoryID);
         }
 
         $this->RCMS->addLog(LogTypes::CREATE_TOOL_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
@@ -1059,16 +921,6 @@ class TecTools {
         Helpers::setNotification('Oprettet', 'Værktøjet blev oprettet');
 
         Helpers::redirect('/dashboard');
-    }
-
-    /**
-     * Tilføjer et værktøj til en kategori
-     * @param int $toolID
-     * @param int $categoryID
-     * @return void
-     */
-    private function addToolToCategory(int $toolID, int $categoryID): void {
-        $this->RCMS->execute('CALL addToolToCategory(?, ?)', array('ii', $toolID, $categoryID));
     }
 
     /**
@@ -1080,7 +932,7 @@ class TecTools {
         $res = $this->RCMS->execute('CALL getToolByID(?)', array('i', $toolID));
         $tool = $res->fetch_assoc();
 
-        $tool['Categories'] = $this->getCategoriesForTool($tool['ToolID']);
+        $tool['Categories'] = $this->Categories->getCategoriesForTool($tool['ToolID']);
 
         if ($tool === null) {
             return false;
@@ -1155,7 +1007,7 @@ class TecTools {
         $tools = $res->fetch_all(MYSQLI_ASSOC);
 
         foreach ($tools as $key => $tool) {
-            $tools[$key]['Categories'] = $this->getCategoriesForTool($tool['ToolID']);
+            $tools[$key]['Categories'] = $this->Categories->getCategoriesForTool($tool['ToolID']);
         }
 
         return $tools ?? [];
@@ -1276,7 +1128,7 @@ class TecTools {
         $tools = $res->fetch_all(MYSQLI_ASSOC);
 
         foreach ($tools as $key => $tool) {
-            $tools[$key]['Categories'] = $this->getCategoriesForTool($tool['ToolID']);
+            $tools[$key]['Categories'] = $this->Categories->getCategoriesForTool($tool['ToolID']);
         }
 
         return $tools ?? [];
@@ -1289,36 +1141,6 @@ class TecTools {
     public function getAllStatuses(): array {
         $res = $this->RCMS->execute('CALL getAllStatuses();');
 
-        return $res->fetch_all(MYSQLI_ASSOC) ?? [];
-    }
-
-    /**
-     * Henter alle kategorier ud fra databasen
-     * @return array
-     */
-    public function getAllCategories(): array {
-        $res = $this->RCMS->execute('CALL getAllCategories()');
-
-        return $res->fetch_all(MYSQLI_ASSOC) ?? [];
-    }
-
-    /**
-     * Henter alle kategorier ud for et værktøj fra databasen
-     * @param int $toolID
-     * @return array
-     */
-    public function getCategoriesForTool(int $toolID): array {
-        $res = $this->RCMS->execute('CALL getCategoriesForTool(?)', array('i', $toolID));
-
-        return $res->fetch_all(MYSQLI_ASSOC) ?? [];
-    }
-
-    /**
-     * Henter alle producenter ud fra databasen
-     * @return array
-     */
-    public function getAllManufacturers(): array {
-        $res = $this->RCMS->execute('CALL getAllManufacturers()');
         return $res->fetch_all(MYSQLI_ASSOC) ?? [];
     }
 

@@ -16,7 +16,7 @@ if (!isset($_GET['categoryid']) || !is_numeric($_GET['categoryid'])) {
  */
 $TecTools = $GLOBALS['TecTools'];
 
-$category = $TecTools->getCategory((int) $_GET['categoryid']);
+$category = $TecTools->Categories->getCategory((int) $_GET['categoryid']);
 
 ?>
 

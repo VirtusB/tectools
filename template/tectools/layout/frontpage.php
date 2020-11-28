@@ -12,7 +12,7 @@ $TecTools = $GLOBALS['TecTools'];
  */
 $GlobalHandlers = $GLOBALS['GlobalHandlers'];
 
-$categories = $TecTools->getAllCategories();
+$categories = $TecTools->Categories->getAllCategories();
 $tools = $TecTools->getAllToolsWithFilters();
 $checkInsMarquee = $TecTools->getCheckInsForMarquee();
 $chunks = array_chunk($checkInsMarquee, 3);
