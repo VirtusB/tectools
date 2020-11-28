@@ -1,3 +1,9 @@
+/*
+Denne fil indeholder klient kode som køres på siden, hvor kunder indtaster kort oplysninger og køber et abonnement
+Side: /buy-subscription
+Layout: buy-subscription.php
+ */
+
 var stripe = Stripe('pk_test_YqYxaJ8NiGPQHhVuuNpkIGca');
 var elements = stripe.elements();
 var form = document.getElementById('payment-form');
@@ -34,8 +40,6 @@ cardElement.on('change', function (event) {
     }
 });
 
-
-
 // Tilføj en event listener, som skal oprette abonnementet når brugeren klikker køb
 form.addEventListener('submit', function (ev) {
     ev.preventDefault();
@@ -43,7 +47,10 @@ form.addEventListener('submit', function (ev) {
     createPaymentMethod(cardElement);
 });
 
-// Opret betalingsmetode for brugeren
+/**
+ * Opretter en betalingsmetode for kunden, som er nødvendig før abonnementet kan oprettes
+ * @param card
+ */
 function createPaymentMethod(card) {
     let billingName = document.getElementById('billing-name').value;
     let productID = document.getElementById('product_id').value;
@@ -74,7 +81,13 @@ function createPaymentMethod(card) {
       });
 }
 
-// Opret abonnement for brugeren
+/**
+ * Opret abonnement for brugeren via POST request
+ * @param customerId
+ * @param paymentMethodId
+ * @param priceId
+ * @param productName
+ */
 function createSubscription(customerId, paymentMethodId, priceId, productName) {
     showLoader('#submitBtn');
 

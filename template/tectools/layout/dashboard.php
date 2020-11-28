@@ -399,7 +399,7 @@ $TecTools = $GLOBALS['TecTools'];
                                 <span style="display: block; margin-bottom: 24px" class="white-text">
                                     Velkommen, <?= $this->RCMS->Login->getFirstName() ?>
                                     <br>
-                                    <?= empty($this->RCMS->Login->getSubName()) ? 'Du har ikke noget abonnement' : "Du er {$this->RCMS->Login->getSubName()} bruger" ?>
+                                    <?= empty($TecTools->Users->getSubName()) ? 'Du har ikke noget abonnement' : "Du er {$TecTools->Users->getSubName()} bruger" ?>
                                 </span>
 
                                 <a class="btn tec-btn xl-up-mb0" href="/my-subscription">Mit abonnement</a>

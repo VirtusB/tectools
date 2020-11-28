@@ -10,6 +10,12 @@ use Stripe\StripeClient;
 use Stripe\Subscription;
 use Stripe\SubscriptionItem;
 
+/**
+ * Class StripeWrapper
+ * Denne klasse fungerer som en wrapper til Stripe API'et.
+ * Den indeholder som gør det nemmere at arbejde med API'et og reducere mængden af kode der skal skrives.
+ * Den indeholder bl.a. metoder til at oprette, redigere og slette kunder og hente produkter
+ */
 class StripeWrapper {
     /**
      * @var RCMS $RCMS
@@ -106,14 +112,15 @@ class StripeWrapper {
     }
 
     /**
-     * Tjekker om prisen for et produkt er over 200 kroner
+     * Tjekker om prisen for et produkt er over x kroner
      *
-     * Vi anser et produkt værende premium hvis det koster mere end 200 kroner
+     * Vi anser et produkt værende premium hvis det koster mere end x kroner
      * @param array $product
+     * @param float $premiumPrice
      * @return bool
      */
-    public function isPremiumPlan(array $product): bool {
-        return $product['price'] > 200;
+    public function isPremiumPlan(array $product, float $premiumPrice): bool {
+        return $product['price'] > $premiumPrice;
     }
 
     /**

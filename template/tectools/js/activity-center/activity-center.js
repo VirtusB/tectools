@@ -1,3 +1,9 @@
+/*
+Denne fil indeholder klient kode som køres på aktivitetssiden
+Side: /activity-center
+Layout: activity-center.php
+ */
+
 let selectedLogTypeIDs = [];
 
 let logTable = document.getElementById('logs');

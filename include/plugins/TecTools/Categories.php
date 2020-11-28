@@ -1,17 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * Class Categories
+ * Denne klasse indeholder metoder som vedrører kategorier på TecTools siden
+ * Den indeholder metoder til bl.a. oprette, redigere og hente kategorier
+ */
 class Categories extends Base {
     /**
      * @var RCMS $RCMS
      */
     public RCMS $RCMS;
 
+    /**
+     * @var bool $disableAutoLoading
+     * Forhindrer RCMS at loade denne klasse automatisk
+     */
     public static bool $disableAutoLoading;
 
     public static array $allowedEndpoints = [
         'addCategory', 'editCategory'
     ];
 
+    /**
+     * @var TecTools $TecTools
+     */
     public TecTools $TecTools;
 
     public function __construct(TecTools $TecTools) {
@@ -39,7 +53,7 @@ class Categories extends Base {
 
         $this->RCMS->execute('CALL addCategory(?)', array('s', $categoryName));
 
-        $this->RCMS->addLog(LogTypes::CREATE_CATEGORY_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
+        $this->RCMS->Logs->addLog(Logs::CREATE_CATEGORY_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
         Helpers::setNotification('Oprettet', 'Kategorien blev oprettet');
 
@@ -85,7 +99,7 @@ class Categories extends Base {
 
         $this->RCMS->execute('CALL editCategory(?, ?)', array('is', $categoryID, $categoryName));
 
-        $this->RCMS->addLog(LogTypes::EDIT_CATEGORY_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
+        $this->RCMS->Logs->addLog(Logs::EDIT_CATEGORY_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
         Helpers::setNotification('Gemt', 'Dine ændringer blev gemt');
 

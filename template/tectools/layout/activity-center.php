@@ -11,8 +11,8 @@ declare(strict_types=1);
  */
 $TecTools = $GLOBALS['TecTools'];
 
-$logTypes = $TecTools->getLogTypes();
-$logs = $TecTools->getLogs();
+$logTypes = $this->RCMS->Logs->getLogTypes();
+$logs = $this->RCMS->Logs->getLogs();
 
 $pages = ceil(count($logs) / 10);
 

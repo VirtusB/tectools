@@ -14,7 +14,7 @@ $GlobalHandlers = $GLOBALS['GlobalHandlers'];
 
 $categories = $TecTools->Categories->getAllCategories();
 $tools = $TecTools->getAllToolsWithFilters();
-$checkInsMarquee = $TecTools->getCheckInsForMarquee();
+$checkInsMarquee = $TecTools->CheckIns->getCheckInsForMarquee();
 $chunks = array_chunk($checkInsMarquee, 3);
 
 ?>
@@ -110,7 +110,7 @@ $chunks = array_chunk($checkInsMarquee, 3);
             <?php else: ?>
 
             <div class="col s12">
-                <h5>Der er ingen værktøj, der matcher dit filter</h5>
+                <h5>Der er ingen værktøj, der matcher dine kriterier</h5>
             </div>
 
             <?php endif; ?>

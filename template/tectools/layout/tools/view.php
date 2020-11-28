@@ -53,7 +53,7 @@ $listColumnCount = count($tool['Categories']) > 1 ? 2 : 1;
 
                 <?php if ($this->RCMS->Login->getSubName()): ?>
                 <div>
-                    <?php if ($tool['StatusID'] === $TecTools::TOOL_AVAILABLE_STATUS && !$TecTools->hasUserReachedMaxReservations()): ?>
+                    <?php if ($tool['StatusID'] === $TecTools::TOOL_AVAILABLE_STATUS && !$TecTools->Reservations->hasUserReachedMaxReservations()): ?>
                         <form method="post">
                             <input type="hidden" name="post_endpoint" value="addReservation">
                             <input type="hidden" name="tool_id" value="<?= $tool['ToolID'] ?>">

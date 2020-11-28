@@ -2,6 +2,16 @@
 
 declare(strict_types=1);
 
+/**
+ * Class GlobalHandlers
+ * Denne klasse indeholder funktioner som bruges i pluginet RCMSTables.
+ * Tabeller oprettet med RCMSTables kan konfigureres således, at der køres en funktion på hver kolonne inden tabellen bliver udskrevet på siden.
+ * Disse funktioner defineres i denne klasse.
+ *
+ * Vi har f.eks. en funktion der hedder "formatUserLevel", som kigger på brugerens niveau fra databasen
+ * Det giver ikke mening for brugere på siden at se et 1-tal eller et 9-tal, for de ved ikke hvad forskellen er
+ * Med formatUserLevel formaterer vi 1-tallet til "Standard" og 9-tallet til "Personale"
+ */
 class GlobalHandlers {
 	public RCMS $RCMS;
 	

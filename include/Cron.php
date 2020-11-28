@@ -2,6 +2,21 @@
 
 require_once(__DIR__ . '/../index.php');
 
+/**
+ * Class Cron
+ * Denne klasse står for at håndtere og køre cronjobs.
+ *
+ * For at klassen fungere, skal der manuelt tilføjes et job til crontab'en på Linux serveren, som skal køre denne fil.
+ * Denne fil skal køres ligeså ofte, som det job man tilføjer med denne klasse der køres oftest.
+ *
+ * Forklaring: Hvis man gerne vil tilføje et job med denne klasse, som skal køres hvert 5. minut,
+ * så skal jobbet man manuelt har tilføjet til crontab'en køre denne fil minimum ligeså ofte.
+ * Man må gerne køre denne fil endnu oftere, som f.eks. hvert minut, det må bare ikke være mindre hyppigt.
+ *
+ * Til TecTools projektet køre vi denne fil hvert minut,
+ * hvilket betyder at denne klasse tjekker 5 gange i minuttet om vores job til at slette reservationer skal køres.
+ * Vores job til at slette reservationer bliver stadig kun kørt 1 gang hvert 5. minut.
+ */
 class Cron {
     /**
      * @var RCMS $RCMS
@@ -30,8 +45,9 @@ class Cron {
     }
 
     /**
-     * Test if a timestamp matches a cron format or not
-     * fx. $cron = '5 0 * * *';
+     * Tjekker om et tidsstempel matcher et cron format
+     * F.eks. $cron = '5 0 * * *';
+     * Denne funktion er taget fra: https://www.binarytides.com/php-check-if-a-timestamp-matches-a-given-cron-schedule/
      * @param $time
      * @param $cron
      * @return bool
@@ -53,13 +69,11 @@ class Cron {
             $values = array();
 
             /*
-                For patters like 0-23/2
+                For mønstre som 0-23/2
             */
             if (strpos($val, '/') !== false) {
-                //Get the range and step
                 list($range, $steps) = explode('/', $val);
 
-                //Now get the start and stop
                 if ($range == '*') {
                     $range = $ranges[$part];
                 }
@@ -69,7 +83,7 @@ class Cron {
                     $values[] = $i;
                 }
             } /*
-            For patters like :
+            For mønsre som:
             2
             2,5,8
             2-23

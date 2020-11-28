@@ -1,3 +1,11 @@
+/*
+Denne fil indeholder klient kode som køres på "Rediger værktøj" og "Opret værktøj" siderne
+Side: /tools/edit
+Side /tools/create
+Layout: /tools/edit.php
+Layout: /tools/create.php
+ */
+
 /**
  * Quill er en rich-text editor
  * WYSIWYG

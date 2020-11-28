@@ -1,3 +1,6 @@
+/**
+ * Denne klasse indeholder metoder som kan bruges til at lave et Geofence
+ */
 class Geofence {
     /**
      * Brugerens latitude

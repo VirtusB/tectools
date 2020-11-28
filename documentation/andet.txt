@@ -101,7 +101,7 @@ class TecToolsCategories extends Base {
 
         $this->RCMS->execute('CALL addCategory(?)', array('s', $categoryName));
 
-        $this->RCMS->addLog(LogTypes::CREATE_CATEGORY_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
+        $this->RCMS->Logs->addLog(Logs::CREATE_CATEGORY_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
         Helpers::setNotification('Oprettet', 'Kategorien blev oprettet');
 
@@ -147,7 +147,7 @@ class TecToolsCategories extends Base {
 
         $this->RCMS->execute('CALL editCategory(?, ?)', array('is', $categoryID, $categoryName));
 
-        $this->RCMS->addLog(LogTypes::EDIT_CATEGORY_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
+        $this->RCMS->Logs->addLog(Logs::EDIT_CATEGORY_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
         Helpers::setNotification('Gemt', 'Dine ændringer blev gemt');
 

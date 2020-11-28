@@ -18,12 +18,12 @@ $TecTools = $GLOBALS['TecTools'];
 
 $userID = (int) $_GET['userid'];
 
-if (!$TecTools->authorizeUser($userID)) {
+if (!$TecTools->Users->authorizeUser($userID)) {
     Helpers::outputError('Du har ikke adgang til denne side', 'h3', true);
     return;
 }
 
-$user = $TecTools->getUserByID($userID);
+$user = $TecTools->Users->getUserByID($userID);
 
 ?>
 
@@ -83,7 +83,7 @@ $user = $TecTools->getUserByID($userID);
 
                 <?php if ($this->RCMS->Login->isAdmin()): ?>
                     <div class="input-field col s6">
-                        <select id="user-level" required  name="level">
+                        <select class="mat-select" id="user-level" required  name="level">
                             <option value="" disabled selected>Vælg brugertype</option>
                             <option <?= $user['Level'] === 1 ? 'selected' : '' ?> value="1">Standard</option>
                             <option <?= $user['Level'] === 9 ? 'selected' : '' ?> value="9">Personale</option>
@@ -138,9 +138,4 @@ $user = $TecTools->getUserByID($userID);
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        $('select').formSelect();
-    });
-</script>
 

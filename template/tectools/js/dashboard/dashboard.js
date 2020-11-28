@@ -1,3 +1,10 @@
+/*
+Denne fil indeholder klient kode som køres på Dashboard siden
+Den indeholder kode som vedrører normale bruger og personale brugere
+Side: /dashboard
+Layout: dashboard.php
+ */
+
 window.addEventListener('load', e => {
     // JsBarcode laver vores stregkoder fra databasen om til SVG elementer som kan scannes
     JsBarcode(".barcode").init();
@@ -156,6 +163,7 @@ function showCheckOutModal(checkInID, context) {
 
 /**
  * Tjekker et værktøj ud
+ * Når personalet klikker "Tjek Ud", køre denne funktion
  * @param checkInID
  * @param context
  */

@@ -1,5 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * Class Cronjobs
+ * I denne klasse opretter vi én metode til hvert cronjob, vi gerne vil have der skal køre på TecTools siden
+ */
 class Cronjobs {
     public RCMS $RCMS;
 

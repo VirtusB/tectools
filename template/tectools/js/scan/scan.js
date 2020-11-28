@@ -1,11 +1,15 @@
+/*
+Denne fil indeholder klient kode som køres på Scan siden
+Den indeholder kode som vedrører normale bruger og personale brugere
+Side: /scan
+Layout: scan.php
+ */
+
 let scanBtn = document.getElementById('scan-btn');
 let barcodeScanner = document.getElementById('barcode-scanner');
 let scanContainer = document.getElementById('scan-container');
 let toolContainer = document.getElementById('tool-container');
-
 let toolContainerAdmin = document.getElementById('tool-container-admin');
-let checkOutBtn = document.getElementById('check-out-btn');
-
 
 // Tjek om browseren har mulighed for at åbne en video-stream
 if (navigator.getUserMedia) {
@@ -15,18 +19,26 @@ if (navigator.getUserMedia) {
 }
 
 /**
- * Hvis browseren ikke understøtter video-streaming får brugeren en fejl
+ * Denne funktion køre, hvis browseren IKKE understøtter video-streaming
  */
 function noVideoCameraError() {
     alert('Din enhed eller browser understøtter ikke scanning');
     scanBtn.setAttribute('disabled', 'disabled');
 }
 
+/**
+ * Denne funktion køre, hvis browseren understøtter video-streaming
+ * @param stream
+ */
 function addScanBtnClickListener(stream) {
     stream.getTracks().forEach(t => t.stop()); // For at lukke det track, som vi brugte, til at tjekke om brugeren har et kamera
     scanBtn.addEventListener('click', scanBtnClickHandler, {once: true});
 }
 
+/**
+ * Denne funktion køres når brugeren klikker på "Scan" knappen
+ * @param event
+ */
 function scanBtnClickHandler(event) {
     startScan();
     barcodeScanner.style.border = 'none';
@@ -70,7 +82,7 @@ function startScan() {
     }, function(err) {
         if (err) {
             console.log(err);
-            alert('Fejl: ' + err);
+            NotificationControl.error('Fejl', err);
             return;
         }
 
@@ -88,7 +100,7 @@ Quagga.onDetected(function (data) {
     let tool_barcode = data.codeResult.code;
 
     if (tool_barcode.length !== 13) {
-        alert('FEJL: Længden af stregkoden er ikke 13 karakterer');
+        NotificationControl.error('Fejl', 'Længden af stregkoden er ikke 13 karakterer')
         location.reload();
     }
 
@@ -160,6 +172,11 @@ function checkInTool(barcode) {
     });
 }
 
+/**
+ * Personale på Scan siden får vist en "Tjek Ud" knap, i stedet for en "Lån" knap
+ * Når personalet klikker "Tjek Ud", køre denne funktion
+ * @param checkInID
+ */
 function checkOutTool(checkInID) {
     let statusID = document.getElementById('tool-status').selectedOptions[0].value;
 

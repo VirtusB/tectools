@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 use Stripe\Exception\ApiErrorException;
 
+/**
+ * Class Login
+ * Denne klasse indeholder metoder der vedrører brugere i RCMS generelt
+ * Indeholder bl.a. metoder til at oprette bruger, logge ind og logge ud
+ */
 class Login {
     /**
      * @var RCMS $RCMS
@@ -69,7 +74,7 @@ class Login {
                 $_SESSION['logged_in'] = 1;
                 $_SESSION['user'] = $user;
 
-                $this->RCMS->addLog(LogTypes::LOG_IN_TYPE_ID, ['UserID' => $user['UserID']]);
+                $this->RCMS->Logs->addLog(Logs::LOG_IN_TYPE_ID, ['UserID' => $user['UserID']]);
 
                 Helpers::setNotification('Success', 'Du er nu logget på');
                 Helpers::redirect('/dashboard');
@@ -176,14 +181,6 @@ class Login {
     }
 
     /**
-     * Returnerer brugerens Stripe Customer ID
-     * @return bool|string
-     */
-    public function getStripeID() {
-	    return $_SESSION['user']['StripeID'] ?? false;
-    }
-
-    /**
      * Returnerer brugerens fornavn
      * @return bool|string
      */
@@ -197,14 +194,6 @@ class Login {
      */
     public function getLastName() {
         return $_SESSION['user']['LastName'] ?? false;
-    }
-
-    /**
-     * Returnerer brugerens abonnement navn
-     * @return bool|string
-     */
-    public function getSubName() {
-        return $_SESSION['user']['SubName'] ?? false;
     }
 
     /**
@@ -229,7 +218,7 @@ class Login {
      * @return void
      */
 	public function log_out(string $customLocation = ''): void {
-        $this->RCMS->addLog(LogTypes::LOG_OUT_TYPE_ID, ['UserID' => $this->getUserID()]);
+        $this->RCMS->Logs->addLog(Logs::LOG_OUT_TYPE_ID, ['UserID' => $this->getUserID()]);
 
         unset($_SESSION['logged_in'], $_SESSION['user']);
         if ($customLocation !== '') {

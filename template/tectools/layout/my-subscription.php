@@ -14,7 +14,7 @@ $TecTools = $GLOBALS['TecTools'];
 
 $products = $this->RCMS->StripeWrapper->getStripeProducts();
 
-$userProduct = $TecTools->getUserProduct($this->RCMS->Login->getUserID());
+$userProduct = $TecTools->Users->getUserProduct($this->RCMS->Login->getUserID());
 
 ?>
 
@@ -39,7 +39,7 @@ $userProduct = $TecTools->getUserProduct($this->RCMS->Login->getUserID());
                         <ul class='collection center'>
                             <?php foreach ($product['metadata'] as $prop): ?>
                                 <li class='collection-item'>
-                                    <?= $this->RCMS->StripeWrapper->isPremiumPlan($product) ? "<strong>{$prop['value']} {$prop['description']}</strong>" : "{$prop['value']} {$prop['description']}" ?>
+                                    <?= $this->RCMS->StripeWrapper->isPremiumPlan($product, 200) ? "<strong>{$prop['value']} {$prop['description']}</strong>" : "{$prop['value']} {$prop['description']}" ?>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
@@ -92,7 +92,7 @@ $userProduct = $TecTools->getUserProduct($this->RCMS->Login->getUserID());
 
                                             <input type="hidden" name="price_id" value="<?= $this->RCMS->StripeWrapper->getPlan($product['id'])->id ?>">
 
-                                            <input type="hidden" name="customer_id" value="<?= $this->RCMS->Login->getStripeID() ?>">
+                                            <input type="hidden" name="customer_id" value="<?= $TecTools->Users->getStripeID() ?>">
 
                                             <button type="submit" class='btn green new-subscription'>Vælg</button>
                                         </form>

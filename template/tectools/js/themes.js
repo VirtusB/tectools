@@ -1,3 +1,7 @@
+/**
+ * Denne fil indeholder klient kode som gøre at brugere kan vælge imellem Light Theme og Dark Theme på siden
+ */
+
 document.addEventListener('DOMContentLoaded', e => {
     const themeSwitch = document.getElementById('dark-theme-input');
 

@@ -1,3 +1,7 @@
+/**
+ * Denne klasse indeholder metoder som kan bruges til at vise notifikationer på siden
+ * Indeholder success, fejl og advarsel
+ */
 class NotificationControl {
     static successNotification = window.createNotification({
         closeOnClick: true,

@@ -2,6 +2,12 @@
 
 declare(strict_types=1);
 
+/**
+ * Class Template
+ * Denne klasse står primært for at vise indhold til brugeren
+ * Den tjekker også på om brugeren må se det indhold de anmoder om
+ * Andre metoder der omhandler indhold kan tilføjes i denne klasse
+ */
 class Template {
     /**
      * @var RCMS $RCMS

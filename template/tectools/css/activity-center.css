@@ -11,7 +11,7 @@
 }
 
 .log-type:hover {
-    background: #ff9100;
+    background: #ff9100 !important;
     color: #eee;
     transition: all .2s ease-in-out;
 }

@@ -1,17 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * Class Manufacturers
+ * Denne klasse indeholder metoder som vedrører producenter på TecTools siden
+ * Den indeholder metoder til bl.a. oprette, redigere og hente producenter
+ */
 class Manufacturers extends Base {
     /**
      * @var RCMS $RCMS
      */
     public RCMS $RCMS;
 
+    /**
+     * @var bool $disableAutoLoading
+     * Forhindrer RCMS at loade denne klasse automatisk
+     */
     public static bool $disableAutoLoading;
 
     public static array $allowedEndpoints = [
         'addManufacturer', 'editManufacturer'
     ];
 
+    /**
+     * @var TecTools $TecTools
+     */
     public TecTools $TecTools;
 
     public function __construct(TecTools $TecTools) {
@@ -39,7 +53,7 @@ class Manufacturers extends Base {
 
         $this->RCMS->execute('CALL addManufacturer(?)', array('s', $manufacturerName));
 
-        $this->RCMS->addLog(LogTypes::CREATE_MANUFACTURER_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
+        $this->RCMS->Logs->addLog(Logs::CREATE_MANUFACTURER_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
         Helpers::setNotification('Oprettet', 'Producenten blev oprettet');
 
@@ -85,7 +99,7 @@ class Manufacturers extends Base {
 
         $this->RCMS->execute('CALL editManufacturer(?, ?)', array('is', $manufacturerID, $manufacturerName));
 
-        $this->RCMS->addLog(LogTypes::EDIT_MANUFACTURER_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
+        $this->RCMS->Logs->addLog(Logs::EDIT_MANUFACTURER_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
         Helpers::setNotification('Gemt', 'Dine ændringer blev gemt');
 

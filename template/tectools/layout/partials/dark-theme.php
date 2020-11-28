@@ -26,6 +26,10 @@ declare(strict_types=1);
         color: #fff;
     }
 
+    .log-type {
+        background: #1d1d1d !important;
+    }
+
     select {
         color: #fff;
         background-color: #1d1d1d;

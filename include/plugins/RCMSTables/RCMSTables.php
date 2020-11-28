@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/**
+ * Class RCMSTables
+ * Denne klasse bruges til at oprette HTML tabeller på siden.
+ * Tabeller oprettet med denne klasse indeholder bl.a. paginering/sideskift, sortering og dropdown indhold.
+ *
+ * En anden god ting ved at benytte denne klasse,
+ * til at oprette tabeller, er at man slipper næsten helt for at skrive noget SQL,
+ * da klassen genererer og eksekverer det meste for en
+ */
 class RCMSTables {
     /**
      * @var RCMS $RCMS

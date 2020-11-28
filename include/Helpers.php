@@ -2,6 +2,11 @@
 
 declare(strict_types=1);
 
+/**
+ * Class Helpers
+ * Denne klasse indeholder hjælpe funktioner.
+ * Bl.a. til at omdirigere brugeren, sætte notifikationer osv.
+ */
 class Helpers {
 	public RCMS $RCMS;
 	

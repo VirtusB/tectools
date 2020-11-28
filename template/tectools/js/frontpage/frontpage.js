@@ -1,3 +1,9 @@
+/*
+Denne fil indeholder klient kode som køres på forsiden
+Side: /
+Layout: frontpage.php
+ */
+
 document.addEventListener('DOMContentLoaded', function() {
     let categorySelect = document.getElementById('category-select');
 

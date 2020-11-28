@@ -8,8 +8,14 @@ require_once(__DIR__ . "/Template.php");
 require_once(__DIR__ . "/Helpers.php");
 require_once(__DIR__ . "/StripeWrapper.php");
 require_once(__DIR__ . "/Login.php");
-require_once(__DIR__ . "/LogTypes.php");
+require_once(__DIR__ . "/Logs.php");
 
+/**
+ * Class RCMS
+ * Denne klasse er entry-pointet for enhver webside der bruger RCMS-systemet.
+ * Klassen står for at forbinde til MySQL og for at loade andre nødvendige klasser.
+ * Den indeholder "execute" metoden, som står for at eksekvere SQL på en sikker måde, ved at benytte parametre og Prepared Statements
+ */
 class RCMS {
     /**
      * Domæne eller IP til databasen
@@ -57,6 +63,11 @@ class RCMS {
     public Login $Login;
 
     /**
+     * @var Logs $Logs
+     */
+    public Logs $Logs;
+
+    /**
      * Cron klassen, hvis den eksisterer
      * @var Cron $cron
      */
@@ -97,6 +108,7 @@ class RCMS {
 
         $this->connect();
 
+        $this->Logs = new Logs($this);
         $this->Helpers = new Helpers($this);
 
         $this->StripeWrapper = new StripeWrapper($this, $secretStripeKey);
@@ -352,11 +364,5 @@ class RCMS {
             Helpers::redirect($questionMarksReplaced);
             exit(0);
         }
-    }
-
-    public function addLog(int $LogTypeID, array $data) {
-        $json = json_encode($data);
-
-        $this->execute('CALL addLog(?, ?)', array('is', $LogTypeID, $json));
     }
 }
