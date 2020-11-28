@@ -133,9 +133,9 @@ function showTool(barcode) {
 
                 $(toolContainerAdmin).slideDown();
             } else {
-                toolContainer.querySelector('#check-in-btn').setAttribute('data-barcode', res.tool.BarCode);
-                toolContainer.querySelector('#tool-name-manufacturer').innerText = res.tool.ManufacturerName + ' ' + res.tool.ToolName;
-                toolContainer.querySelector('img').setAttribute('src', res.tool.Image);
+                toolContainer.querySelector('#check-in-btn').setAttribute('data-barcode', res.result.BarCode);
+                toolContainer.querySelector('#tool-name-manufacturer').innerText = res.result.ManufacturerName + ' ' + res.result.ToolName;
+                toolContainer.querySelector('img').setAttribute('src', res.result.Image);
 
                 $(toolContainer).slideDown();
             }

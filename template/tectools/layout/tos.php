@@ -7,8 +7,6 @@ declare(strict_types=1);
 <div class="container mt4">
     <div class="row">
         <div class="col s12 mb2">
-<!--            <h3 class="center mt0">Betingelser & Vilkår</h3>-->
-
             <h4 class="bold">Persondata ved køb</h4>
 
             <p>Persondata ved køb</p>

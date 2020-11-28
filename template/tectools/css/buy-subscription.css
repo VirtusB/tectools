@@ -15,7 +15,7 @@ span.title {
     color: #eee;
 }
 
-.card-panel li:nth-child(2) {
+.card-panel li:nth-child(even) {
     padding-top: 10px;
     padding-bottom: 10px;
 }

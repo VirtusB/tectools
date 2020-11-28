@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 require_once 'Categories.php';
 require_once 'Manufacturers.php';
 require_once 'Reservations.php';
@@ -303,8 +304,7 @@ class TecTools extends Base {
         $tool['Image'] = $this->cleanImagePath($tool['Image']);
 
         $result = [
-            'result' => 'success',
-            'tool' => $tool
+            'result' => $tool
         ];
 
         $this->RCMS->Logs->addLog(Logs::SCAN_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);

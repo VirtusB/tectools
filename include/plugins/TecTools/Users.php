@@ -153,8 +153,6 @@ class Users extends Base {
             return;
         }
 
-        //TODO: Tilføj et ekstra felt, "confirm password" og tjek at de er ens
-
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
         $email = $_POST['email'];

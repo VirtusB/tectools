@@ -185,3 +185,15 @@ function checkOut(checkInID, context) {
     $(context).append(form);
     $(context).find(`input[value=${checkInID}]`).parent().submit();
 }
+
+function deleteManufacturer(manufacturerID, context) {
+
+}
+
+function deleteCategory(categoryID, context) {
+
+}
+
+function deleteTool(toolID, context) {
+
+}

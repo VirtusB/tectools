@@ -42,6 +42,7 @@ $TecTools = $GLOBALS['TecTools'];
                 </div>
             </div>
 
+            <!-- region Værktøj tabel -->
             <div class="row dashboard-row responsive-table-container">
                 <h3 class="mt0">Værktøj</h3>
 
@@ -75,9 +76,6 @@ $TecTools = $GLOBALS['TecTools'];
                     )
                 );
 
-
-
-
                 $order = "ORDER BY ToolID DESC";
                 $settings = array('searchbar' => true, 'pageLimit' => 5);
 
@@ -85,13 +83,19 @@ $TecTools = $GLOBALS['TecTools'];
                     array(
                         "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/tools/editQMARKtoolid=?`" value="Rediger værktøj" />',
                         "value" => "ToolID"
+                    ),
+                    array(
+                        "button" => '<input type="button" class="btn tec-btn red" onclick="deleteTool(?, this)" value="Slet producent" />',
+                        "value" => "ToolID"
                     )
                 );
 
                 $RCMSTables->createRCMSTable("tools_table", "Tools p1 LEFT JOIN Manufacturers p2 ON p1.FK_ManufacturerID = p2.ManufacturerID LEFT JOIN Statuses p3 ON p3.StatusID = p1.FK_StatusID", $columns, $settings, null, $order, $buttons, null);
                 ?>
             </div>
+            <!-- endregion -->
 
+            <!-- region Bruger tabel -->
             <div class="row dashboard-row responsive-table-container">
                 <h3>Brugere</h3>
 
@@ -142,7 +146,9 @@ $TecTools = $GLOBALS['TecTools'];
                 ?>
 
             </div>
+            <!-- endregion -->
 
+            <!-- region Kategori og producent tabel -->
             <div class="row dashboard-row responsive-table-container">
                 <div class="col s12 xl6">
                     <h3>Kategorier</h3>
@@ -172,6 +178,10 @@ $TecTools = $GLOBALS['TecTools'];
                     $buttons = array(
                         array(
                             "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/categories/editQMARKcategoryid=?`" value="Rediger kategori" />',
+                            "value" => "CategoryID"
+                        ),
+                        array(
+                            "button" => '<input type="button" class="btn tec-btn red" onclick="deleteCategory(?, this)" value="Slet kategori" />',
                             "value" => "CategoryID"
                         )
                     );
@@ -209,6 +219,10 @@ $TecTools = $GLOBALS['TecTools'];
                         array(
                             "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/manufacturers/editQMARKmanufacturerid=?`" value="Rediger producent" />',
                             "value" => "ManufacturerID"
+                        ),
+                        array(
+                            "button" => '<input type="button" class="btn tec-btn red" onclick="deleteManufacturer(?, this)" value="Slet producent" />',
+                            "value" => "ManufacturerID"
                         )
                     );
 
@@ -216,8 +230,9 @@ $TecTools = $GLOBALS['TecTools'];
                     ?>
                 </div>
             </div>
+            <!-- endregion -->
 
-            <!-- Kommentar modal for personale til aktive og afsluttede udlejninger -->
+            <!-- region Kommentar modal for personale til aktive og afsluttede udlejninger -->
             <div id="comment-modal" class="modal">
                 <div class="modal-content">
                     <h4>Kommentar til udlejning</h4>
@@ -228,13 +243,14 @@ $TecTools = $GLOBALS['TecTools'];
                     <button class="btn tec-btn right modal-close">Luk</button>
                 </div>
             </div>
+            <!-- endregion -->
 
-            <!-- Tjek Ud modal for personale til aktive  udlejninger -->
+            <!-- region Tjek Ud modal for personale til aktive  udlejninger -->
             <div id="check-out-modal" class="modal">
                 <div class="modal-content">
                     <h4>Tjek Ud - Vælg status</h4>
 
-                    <label for="status-select">Status</label>
+                    <label for="check-out-status-select">Status</label>
                     <select id="check-out-status-select" class="mat-select">
                         <option selected value="1">På lager</option>
                         <option value="4">Ikke på lager</option>
@@ -244,7 +260,9 @@ $TecTools = $GLOBALS['TecTools'];
                     <button onclick="checkOut(this.getAttribute('data-checkin-id'), this)" class="btn tec-btn right modal-close mt2 mb2">Tjek Ud</button>
                 </div>
             </div>
+         <!-- endregion -->
 
+            <!-- region Aktive udlejninger, personale tabel -->
             <div class="row dashboard-row responsive-table-container">
                 <h3>Aktive udlejninger</h3>
 
@@ -321,8 +339,10 @@ $TecTools = $GLOBALS['TecTools'];
                 $RCMSTables->createRCMSTable("active_checkins_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, $buttons, null);
                 ?>
             </div>
+            <!-- endregion -->
 
-            <div class="row dashboard-row responsive-table-container">
+            <!-- region Afsluttede udlejninger, personale tabel -->
+            <div class="row dashboard-row responsive-table-container mb4">
                 <h3>Afsluttede udlejninger</h3>
 
                 <?php
@@ -389,6 +409,7 @@ $TecTools = $GLOBALS['TecTools'];
                 $RCMSTables->createRCMSTable("ended_checkins_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, $buttons, null);
                 ?>
             </div>
+            <!-- endregion -->
 
         <?php elseif ($this->RCMS->Login->isAdmin() === false && $this->RCMS->Login->isLoggedIn() === true): ?>
             <div class="row">
@@ -412,7 +433,7 @@ $TecTools = $GLOBALS['TecTools'];
                 </div>
             </div>
 
-            <!-- Kommentar modal for brugere til aktive og afsluttede udlejninger -->
+            <!-- region Kommentar modal for brugere til aktive og afsluttede udlejninger -->
             <div id="comment-modal" class="modal">
                 <div class="modal-content">
                     <h4>Kommentar til udlejning</h4>
@@ -423,7 +444,9 @@ $TecTools = $GLOBALS['TecTools'];
                     <button onclick="saveCheckInComment(this.getAttribute('data-checkin-id'), this)" class="btn tec-btn right modal-close">Gem</button>
                 </div>
             </div>
+            <!-- endregion -->
 
+            <!-- region Aktive udlejninger, bruger tabel -->
             <div class="row responsive-table-container">
                 <h3>Aktive udlejninger</h3>
 
@@ -501,7 +524,9 @@ $TecTools = $GLOBALS['TecTools'];
                 $RCMSTables->createRCMSTable("active_checkins_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, $buttons, null);
                 ?>
             </div>
+            <!-- endregion -->
 
+            <!-- region Reservationer tabel -->
             <div class="row responsive-table-container">
                 <h3>Dine reservationer</h3>
 
@@ -573,7 +598,9 @@ $TecTools = $GLOBALS['TecTools'];
                 $RCMSTables->createRCMSTable("reservations_table", "Reservations r LEFT JOIN Tools t ON t.ToolID = r.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID LEFT JOIN Statuses s ON s.StatusID = t.FK_StatusID", $columns, $settings, $where, $order, $buttons, null);
                 ?>
             </div>
+            <!-- endregion -->
 
+            <!-- region Afsluttede udlejninger, bruger tabel -->
             <div class="row responsive-table-container">
                 <h3>Afsluttede udlejninger</h3>
 
@@ -646,6 +673,8 @@ $TecTools = $GLOBALS['TecTools'];
                 $RCMSTables->createRCMSTable("ended_checkins_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, $buttons, null);
                 ?>
             </div>
+            <!-- endregion -->
+
         <?php endif; ?>
     </div>
 </div>

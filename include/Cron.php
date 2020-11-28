@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once(__DIR__ . '/../index.php');
 
 /**
@@ -25,14 +27,18 @@ class Cron {
 
     private array $cronjobs;
 
-    public function __construct($RCMS) {
+    public function __construct(RCMS $RCMS) {
         $this->RCMS = $RCMS;
         $this->cronjobs = array();
     }
 
+    /**
+     * Tjekker for hvert cronjob om det skal køres nu, og køre jobbet hvis det skal
+     */
     public function runCronJobs(): void {
         foreach ($this->cronjobs as $job) {
             $time = $job[0];
+
             if ($this->is_time_cron(time(), $time)) {
                 $job[1]();
             }
@@ -40,7 +46,11 @@ class Cron {
         die();
     }
 
-    public function addCronJob($cronjob): void {
+    /**
+     * Tilføjer et cronjob
+     * @param array $cronjob
+     */
+    public function addCronJob(array $cronjob): void {
         $this->cronjobs[] = $cronjob;
     }
 
@@ -52,7 +62,7 @@ class Cron {
      * @param $cron
      * @return bool
      */
-    private function is_time_cron($time, $cron): bool {
+    private function is_time_cron(int $time, string $cron): bool {
         $cron_parts = explode(' ', $cron);
         if (count($cron_parts) != 5) {
             return false;

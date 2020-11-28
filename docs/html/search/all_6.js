@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['dark_2dtheme_2ephp_114',['dark-theme.php',['../dark-theme_8php.html',1,'']]],
+  ['dashboard_2ejs_115',['dashboard.js',['../dashboard_8js.html',1,'']]],
+  ['dashboard_2ephp_116',['dashboard.php',['../dashboard_8php.html',1,'']]],
+  ['dat_117',['dat',['../_r_e_a_d_m_e__da___d_k_8txt.html#a226889586ab366a2aa29f62f1d7059f3',1,'README_da_DK.txt']]],
+  ['delete_5freservation_5ftype_5fid_118',['DELETE_RESERVATION_TYPE_ID',['../class_logs.html#a441e1f912806038652a4be984dfa9533',1,'Logs']]],
+  ['delete_5fuser_5ftype_5fid_119',['DELETE_USER_TYPE_ID',['../class_logs.html#ab23fda73b62444a9bc5e08075d9c89da',1,'Logs']]],
+  ['deleteoldreservations_120',['deleteOldReservations',['../class_cronjobs.html#a7b7346157495ef6b6a2e78507aecaea2',1,'Cronjobs']]],
+  ['deletereservation_121',['deleteReservation',['../class_reservations.html#aae30a5f72267c1c947a40040d65c67cf',1,'Reservations']]],
+  ['deleteuser_122',['deleteUser',['../class_users.html#a7bc7bfa5384d57b7bfd159a47f730466',1,'Users']]],
+  ['desc_5fda_5fdk_2etxt_123',['desc_da_DK.txt',['../desc__da___d_k_8txt.html',1,'']]],
+  ['desc_5fen_5fus_2etxt_124',['desc_en_US.txt',['../desc__en___u_s_8txt.html',1,'']]],
+  ['dic_125',['dic',['../_r_e_a_d_m_e__da___d_k_8txt.html#a40aa686e98559f499b149f661858acb0',1,'README_da_DK.txt']]],
+  ['display_5f404_126',['display_404',['../class_template.html#a0054d2f9cecc8423fa41c5bc2f11dc14',1,'Template']]],
+  ['display_5fcontent_127',['display_content',['../class_template.html#ac19fd7462ea3a765e725c65b84c976e7',1,'Template']]],
+  ['displayfrontpagepagination_128',['displayFrontPagePagination',['../class_tec_tools.html#a3bc8d5e288b911d05b15719cb77ef210',1,'TecTools']]],
+  ['displaytoolcountmessage_129',['displayToolCountMessage',['../class_tec_tools.html#a3d5f41a577c4232685cb6a0de6ff0a80',1,'TecTools']]],
+  ['downgrade_5fsubscription_5ftype_5fid_130',['DOWNGRADE_SUBSCRIPTION_TYPE_ID',['../class_logs.html#a47a462ff76e619228fe3803c38e7cc18',1,'Logs']]]
+];

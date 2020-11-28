@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['rcms_265',['RCMS',['../class_r_c_m_s.html',1,'']]],
+  ['rcms_2ephp_266',['RCMS.php',['../_r_c_m_s_8php.html',1,'']]],
+  ['rcmstables_267',['RCMSTables',['../class_r_c_m_s_tables.html',1,'']]],
+  ['rcmstables_2ephp_268',['RCMSTables.php',['../_r_c_m_s_tables_8php.html',1,'']]],
+  ['readme_2emd_269',['README.md',['../_r_e_a_d_m_e_8md.html',1,'']]],
+  ['readme_5fda_5fdk_2etxt_270',['README_da_DK.txt',['../_r_e_a_d_m_e__da___d_k_8txt.html',1,'']]],
+  ['readme_5fth_5fda_5fdk_2etxt_271',['README_th_da_DK.txt',['../_r_e_a_d_m_e__th__da___d_k_8txt.html',1,'']]],
+  ['readme_5fth_5fen_2dus_2etxt_272',['README_th_en-US.txt',['../_r_e_a_d_m_e__th__en-_u_s_8txt.html',1,'']]],
+  ['recursive_5frequire_5fplugins_273',['recursive_require_plugins',['../class_r_c_m_s.html#a314e5c2543d957166d64e02fcdff29db',1,'RCMS']]],
+  ['redirect_274',['redirect',['../class_helpers.html#a5e14208a0df1b1fb4c4776cb8f078ea2',1,'Helpers']]],
+  ['register_2ephp_275',['register.php',['../register_8php.html',1,'']]],
+  ['removeallcategoriesfromtool_276',['removeAllCategoriesFromTool',['../class_categories.html#a19771796395cdb0171fb95ed4c363667',1,'Categories']]],
+  ['removecustomer_277',['removeCustomer',['../class_stripe_wrapper.html#a1ad97b443d6c738fb12d831e6e3eed92',1,'StripeWrapper']]],
+  ['reservations_278',['Reservations',['../class_reservations.html',1,'']]],
+  ['reservations_2ephp_279',['Reservations.php',['../_reservations_8php.html',1,'']]],
+  ['retrievedata_280',['retrieveData',['../class_r_c_m_s_tables.html#a380e6bad47e1896327bb8cec537772ab',1,'RCMSTables']]],
+  ['runcronjobs_281',['runCronJobs',['../class_cron.html#a7e52c03cf83f32fea300acbdbba224de',1,'Cron']]]
+];

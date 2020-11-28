@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Class Logs
  * Denne klasse indeholder metoder der vedrører logging og hændelser

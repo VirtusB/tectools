@@ -1,0 +1,9 @@
+<map id="Template" name="Template">
+<area shape="rect" id="node1" title=" " alt="" coords="220,5,295,32"/>
+<area shape="rect" id="node2" href="$class_r_c_m_s.html" title=" " alt="" coords="227,95,287,121"/>
+<area shape="rect" id="node3" href="$class_helpers.html" title=" " alt="" coords="120,184,187,211"/>
+<area shape="rect" id="node4" href="$class_login.html" title=" " alt="" coords="8,184,61,211"/>
+<area shape="rect" id="node5" href="$class_stripe_wrapper.html" title=" " alt="" coords="370,184,475,211"/>
+<area shape="rect" id="node7" href="$class_logs.html" title=" " alt="" coords="524,184,575,211"/>
+<area shape="rect" id="node6" title=" " alt="" coords="609,95,698,121"/>
+</map>
