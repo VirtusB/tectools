@@ -2,11 +2,31 @@
 
 declare(strict_types=1);
 
+$randNum1 = random_int(5, 20);
+$randNum2 = random_int(5, 20);
+$result = $randNum1 + $randNum2;
+$_SESSION['contact_page_captcha'] = $result;
+
 ?>
 
 <div class="container">
     <div class="row">
         <div class="col s12">
+            <?php if (isset($_GET['sent'])): ?>
+            <div class="row">
+                <h2 class="center mt2">Besked sendt</h2>
+
+                <div class="row" style="display: flex">
+                    <div class="col s12 m5" style="margin: 0 auto;">
+                        <div class="card-panel teal">
+                <span class="white-text">
+                    Din besked blev sendt!<br>Vi svarer tilbage hurtigst muligt
+                </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php else: ?>
             <h2 class="center mt2">Hvad kan vi hjælpe med?</h2>
 
             <div class="row">
@@ -14,39 +34,39 @@ declare(strict_types=1);
                 <form method="post" id="contact-form" class="col s12 m8 offset-m2">
                     <div class="row">
                         <div class="input-field col m6 s12">
-                            <input id="first_name" name="contact-firstname" type="text" class="validate">
+                            <input required id="first_name" value="<?= $_POST['firstname'] ?? '' ?>" name="firstname" type="text" class="validate">
                             <label for="first_name" class="">Fornavn</label>
                         </div>
                         <div class="input-field col m6 s12">
-                            <input id="last_name" name="contact-lastname" type="text" class="validate">
+                            <input required id="last_name" value="<?= $_POST['lastname'] ?? '' ?>" name="lastname" type="text" class="validate">
                             <label for="last_name">Efternavn</label>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="input-field col m6 s12">
-                            <input id="email" name="contact-email" type="text" class="validate">
+                            <input required id="email" value="<?= $_POST['email'] ?? '' ?>" name="email" type="text" class="validate">
                             <label for="email" class="">Email</label>
                         </div>
                         <div class="input-field col m6 s12">
-                            <input id="phone_number" name="contact-phone" type="tel" class="validate">
+                            <input required id="phone_number" value="<?= $_POST['phone'] ?? '' ?>" name="phone" type="tel" class="validate">
                             <label for="phone_number" class="">Telefon nr.</label>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="input-field col s12">
-                            <textarea id="message" name="contact-message" class="materialize-textarea"></textarea>
+                            <textarea required id="message" name="message" class="materialize-textarea"><?= $_POST['message'] ?? '' ?></textarea>
                             <label for="message" class="">Besked</label>
                         </div>
                     </div>
 
-
+                    <input type="hidden" name="post_endpoint" value="contactCustomerService">
 
                     <div class="row">
                         <div class="input-field col m6 s12">
-                            <input id="verification" type="text" class="validate">
-                            <label for="verification" class="">Hvad er 2 +2?</label>
+                            <input required id="verification" name="verification" type="text" class="validate">
+                            <label for="verification" class="">Hvad er <?= $randNum1 ?> plus <?= $randNum2 ?>?</label>
                         </div>
                         <div class="col m6">
                             <p class="right-align">
@@ -66,6 +86,9 @@ declare(strict_types=1);
                 </div>
 
             </div>
+            <?php endif; ?>
+
+
         </div>
     </div>
 </div>

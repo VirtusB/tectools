@@ -77,7 +77,7 @@ declare(strict_types=1);
         background: #1d1d1d !important;
     }
 
-    div.modal textarea.materialize-textarea {
+    div.modal textarea.materialize-textarea, #message {
         color: #eee;
     }
 

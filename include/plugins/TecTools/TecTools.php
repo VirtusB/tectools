@@ -102,7 +102,7 @@ class TecTools {
      * @var array|string[]
      */
     public static array $allowedEndpoints = [
-        'addTool', 'editTool', 'getToolByBarcodeAjax', 'deleteTool'
+        'addTool', 'editTool', 'getToolByBarcodeAjax', 'deleteTool', 'contactCustomerService'
     ];
 
     /**
@@ -534,5 +534,50 @@ class TecTools {
         } else {
             $POSTClass->$endpoint(...$args);
         }
+    }
+
+    /**
+     * Sender en mail til TecTools personalet
+     * En kunde kan kontakte TecTools personalet via kontakt siden
+     */
+    private function contactCustomerService(): void {
+        $generatedCaptcha = $_SESSION['contact_page_captcha'];
+        $userSuppliedCaptcha = $_POST['verification'];
+
+        if ((int) $generatedCaptcha !== (int) $userSuppliedCaptcha) {
+            Helpers::setNotification('Fejl', 'Regnestykket er forkert', 'error');
+            return;
+        }
+
+        $message = $_POST['message'];
+        $customerName = $_POST['firstname'] . ' '. $_POST['lastname'];
+        $phone = $_POST['phone'];
+        $email = $_POST['email'];
+
+        $body = <<<HTML
+        <p>En kunde har sendt en besked via kontakt siden</p>
+        <br>
+        <p>Kunde navn: $customerName</p>
+        <p>Kunde telefonnummer: $phone</p>
+        <p>Kunde e-mail adresse: $email</p>
+        <p>Kundens besked:</p>
+        <i>$message</i>
+        <br>
+        <br>
+        <p>Med venlig hilsen TecTools</p>
+        <img style="max-height: 53px" src="cid:TTLogo" alt="Logo" />
+HTML;
+
+        $logoPath = __DIR__ . '/../../../' . $this->RCMS->getTemplateFolder() . '/images/logo.png';
+
+        Mailer::sendEmail(
+            SMTP_USERNAME,
+            'TecTools',
+            SMTP_USERNAME,
+            'TecTools',
+            'TecTools - kundebesked',
+            $body, [], [], 'TTLogo', $logoPath);
+
+        Helpers::redirect('?sent');
     }
 }

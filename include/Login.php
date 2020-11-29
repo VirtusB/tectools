@@ -77,15 +77,17 @@ class Login {
      * @param string $emailAddress
      */
     private function sendResetPasswordMail(string $fullName, string $url, string $emailAddress): void {
+        $siteName = SITE_NAME;
+
         $body = <<<HTML
         <p>Kære $fullName</p>
-        <p>Vi er meget kede af, at du har mistet adgang til TecTools 💔</p>
+        <p>Vi er meget kede af, at du har mistet adgang til $siteName 💔</p>
         <br>
         <h3>
             <a href="$url">Klik her for at vælge en ny adgangskode</a>
         </h3>
         <br>
-        <p>Med venlig hilsen TecTools</p>
+        <p>Med venlig hilsen $siteName</p>
         <img style="max-height: 53px" src="cid:TTLogo" alt="Logo" />
 HTML;
 
@@ -93,10 +95,10 @@ HTML;
 
         Mailer::sendEmail(
             SMTP_USERNAME,
-            'TecTools',
+            SITE_NAME,
             $emailAddress,
             $fullName,
-            'TecTools - gendan adgangskode',
+            "$siteName - gendan adgangskode",
             $body, [], [], 'TTLogo', $logoPath);
     }
 
