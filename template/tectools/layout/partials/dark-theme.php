@@ -65,7 +65,8 @@ declare(strict_types=1);
     }
 
     .info-paragraph {
-        background-color: #eeeeee24;
+        /*background-color: #eeeeee24;*/
+        background-color: #03363d;
     }
 
     .ql-editor.ql-blank::before {

@@ -89,3 +89,6 @@ For at køre tests:
     - Entry-point for TecTools / RCMS
   - README.me
     - Indeholder information omkring projektet
+
+Style Guide
+![Style_Guide_New@3x.png](docs/images/Style_Guide_New%403x.png)
