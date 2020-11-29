@@ -15,7 +15,7 @@ require_once 'Users.php';
  * Den indeholder metoder til bl.a. oprette, redigere og hente værktøj
  * Klassen står også for at loade vores andre klasser som er nødvendige for at siden fungere
  */
-class TecTools extends Base {
+class TecTools {
     /**
      * @var RCMS $RCMS
      */
@@ -97,18 +97,26 @@ class TecTools extends Base {
     public const TOOL_DAMAGED_STATUS = 5;
 
     /**
-     * Liste over POST endpoints, som har en metode i denne klasse, som kan eksekveres automatisk
-     * Vi er nød til at have en liste over tilladte endpoints, så brugere ikke kan eksekvere andre metoder i denne klasse
+     * Liste over POST endpoints (metoder), som kan eksekveres automatisk
+     * Vi er nød til at have en liste over tilladte endpoints, så brugere ikke kan eksekvere alle metoder i denne klasse
      * @var array|string[]
      */
     public static array $allowedEndpoints = [
-        'addTool', 'editTool', 'getToolByBarcodeAjax'
+        'addTool', 'editTool', 'getToolByBarcodeAjax', 'deleteTool'
     ];
+
+    /**
+     * Array over klasser som indeholder metoder som skal kunne kaldes via POST requests
+     * @var array $POSTClasses
+     */
+    public array $POSTClasses = [];
 
     public function __construct(RCMS $RCMS) {
         $this->RCMS = $RCMS;
         $this->TOOL_IMAGE_FOLDER = $this->RCMS->getUploadsFolder() . '/tools/images';
         $this->RELATIVE_TOOL_IMAGE_FOLDER = $this->RCMS->getRelativeUploadsFolder() . '/tools/images';
+
+        $this->POSTClasses[] = $this;
 
         $this->Categories = new Categories($this);
         $this->Manufacturers = new Manufacturers($this);
@@ -117,7 +125,7 @@ class TecTools extends Base {
         $this->Subscriptions = new Subscriptions($this);
         $this->Users = new Users($this);
 
-        parent::__construct();
+        $this->handlePOSTEndpoints();
     }
 
     /**
@@ -135,7 +143,7 @@ class TecTools extends Base {
      * @return void
      * @throws Exception
      */
-    protected function editTool(): void {
+    public function editTool(): void {
         if (!is_numeric($_POST['tool_id']) || !$this->RCMS->Login->isAdmin() ) {
             return;
         }
@@ -223,7 +231,7 @@ class TecTools extends Base {
      * @throws Exception
      * @return void
      */
-    protected function addTool(): void {
+    public function addTool(): void {
         if (!$this->RCMS->Login->isAdmin()) {
             return;
         }
@@ -264,6 +272,25 @@ class TecTools extends Base {
     }
 
     /**
+     * Sletter et værktøj via POST request
+     */
+    public function deleteTool(): void {
+        $toolID = (int) $_POST['tool_id'];
+        // Skal man kunne slette et værktøj der er i brug på aktive eller afsluttede udlejninger/reservationer?
+        // Skal metoden slette udlejninger og reservationer, eller skal metoden forhindre brugeren i at slette værktøjet?
+    }
+
+    /**
+     * Tjekker om et værktøj bliver benyttet på nuværende tidspunkt
+     * @param int $categoryID
+     * @return bool
+     */
+    private function isToolInUse(int $categoryID): bool {
+        // Tjek om der er nogen aktive eller afsluttede udlejninger og reservationer
+        // Slet også CategoryTools
+    }
+
+    /**
      * Henter et værktøj ud fra databasen
      * @param int $toolID
      * @return array|false
@@ -286,15 +313,15 @@ class TecTools extends Base {
      * @param $path
      * @return string
      */
-    public function cleanImagePath($path): string {
+    public function cleanImagePath(string $path): string {
         return $this->RELATIVE_TOOL_IMAGE_FOLDER . '/' . $path;
     }
 
     /**
      * Henter et værktøj ud af databasen via stregkoden, og udskriver resultatet i JSON.
-     * Til brug ved AJAX requests.
+     * Via POST request
      */
-    protected function getToolByBarcodeAjax(): void {
+    public function getToolByBarcodeAjax(): void {
         if (!isset($_POST['tool_barcode']) || strlen($_POST['tool_barcode']) !== 13) {
             Helpers::outputAJAXResult(400, ['result' => 'Stregkode er forkert']);
         }
@@ -334,22 +361,6 @@ class TecTools extends Base {
         }
 
         return $locations;
-    }
-
-    /**
-     * Henter alle værktøj ud fra databasen
-     * @return array
-     */
-    public function getAllTools(): array {
-        $res = $this->RCMS->execute('CALL getAllTools();');
-
-        $tools = $res->fetch_all(MYSQLI_ASSOC);
-
-        foreach ($tools as $key => $tool) {
-            $tools[$key]['Categories'] = $this->Categories->getCategoriesForTool($tool['ToolID']);
-        }
-
-        return $tools ?? [];
     }
 
     /**
@@ -467,5 +478,63 @@ class TecTools extends Base {
         $res = $this->RCMS->execute('CALL getAllStatuses();');
 
         return $res->fetch_all(MYSQLI_ASSOC) ?? [];
+    }
+
+    /**
+     * Denne metode tjekker, om $_POST array'et indeholder navnet på en metode i denne klasse eller de andre TecTools underklasser,
+     * tjekker derefter om det er en af de tilladte endpoints,
+     * og eksekvere efterfølgende metoden hvis det er tilfældet
+     *
+     * Det er endda muligt for handlePOSTEndpoints at overdrage funktionsparametre til målfunktionen
+     */
+    public function handlePOSTEndpoints(): void {
+        if (!isset($_POST['post_endpoint'])) {
+            return;
+        }
+
+        $endpoint = $_POST['post_endpoint'];
+        $POSTClass = null;
+
+        foreach ($this->POSTClasses as $class) {
+            if (method_exists($class, $endpoint)) {
+                $POSTClass = $class;
+            }
+        }
+
+        if ($POSTClass === null) {
+            Helpers::setNotification('Fejl', 'Ukendt POST endpoint', 'error');
+            return;
+        }
+
+        $endpointAllowed = null;
+
+        if (!in_array($endpoint, $POSTClass::$allowedEndpoints, true)) {
+            Helpers::setNotification('Fejl', 'Denne funktion må ikke kaldes via POST', 'error');
+            return;
+        }
+
+        $args = [];
+
+        $reflectionMethod = new ReflectionMethod($POSTClass, $endpoint);
+        $params = $reflectionMethod->getParameters();
+
+        foreach ($params as $param) {
+            if (isset($_POST[$param->getName()])) {
+                if ($param->getType() !== null) {
+                    $typeName = $param->getType()->getName();
+                    $value = $_POST[$param->getName()];
+                    $castStatement = 'return (' . $typeName . ') ' . $value .';';
+                    $args[] = eval($castStatement);
+                } else {
+                    $args[] = $_POST[$param->getName()];
+                }
+            }
+        }
+
+        if (empty($args)) {
+            $POSTClass->$endpoint();
+        } else {
+            $POSTClass->$endpoint(...$args);
+        }
     }
 }

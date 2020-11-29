@@ -7,7 +7,7 @@ declare(strict_types=1);
  * Denne klasse indeholder metoder som vedrører producenter på TecTools siden
  * Den indeholder metoder til bl.a. oprette, redigere og hente producenter
  */
-class Manufacturers extends Base {
+class Manufacturers {
     /**
      * @var RCMS $RCMS
      */
@@ -19,8 +19,13 @@ class Manufacturers extends Base {
      */
     public static bool $disableAutoLoading;
 
+    /**
+     * Liste over POST endpoints (metoder), som kan eksekveres automatisk
+     * Vi er nød til at have en liste over tilladte endpoints, så brugere ikke kan eksekvere alle metoder i denne klasse
+     * @var array|string[]
+     */
     public static array $allowedEndpoints = [
-        'addManufacturer', 'editManufacturer'
+        'addManufacturer', 'editManufacturer', 'deleteManufacturer'
     ];
 
     /**
@@ -32,14 +37,14 @@ class Manufacturers extends Base {
         $this->TecTools = $TecTools;
         $this->RCMS = $TecTools->RCMS;
 
-        parent::__construct();
+        $TecTools->POSTClasses[] = $this;
     }
 
     /**
      * Tilføjer en producent via en POST request
      * @return void
      */
-    protected function addManufacturer(): void {
+    public function addManufacturer(): void {
         if (!$this->RCMS->Login->isAdmin()) {
             return;
         }
@@ -61,12 +66,37 @@ class Manufacturers extends Base {
     }
 
     /**
+     * Sletter en producent via POST request
+     */
+    public function deleteManufacturer(): void {
+        $manufacturerID = (int) $_POST['manufacturer_id'];
+
+        if ($this->isManufacturerInUse($manufacturerID)) {
+            Helpers::setNotification('Fejl', 'Producenten er i brug', 'error');
+            return;
+        }
+
+        $this->RCMS->execute('CALL removeManufacturer(?)', array('i', $manufacturerID));
+        Helpers::setNotification('Success', 'Producenten blev slettet');
+    }
+
+    /**
+     * Tjekker om en producent bliver benyttet på nuværende tidspunkt
+     * @param int $manufacturerID
+     * @return bool
+     */
+    private function isManufacturerInUse(int $manufacturerID): bool {
+        $inUse = $this->RCMS->execute('SELECT fn_IsManufacturerInUse(?) AS inUse', array('i', $manufacturerID))->fetch_object()->inUse;
+        return (bool) $inUse;
+    }
+
+    /**
      * Tjekker om en producent med samme navn allerede eksisterer i databasen
      * @param $name
      * @return bool
      */
-    private function manufacturerExists($name): bool {
-        $exists = $this->RCMS->execute('SELECT COUNT(*) AS count FROM Manufacturers WHERE ManufacturerName = ?', array('s', $name))->fetch_object()->count;
+    private function manufacturerExists(string $name): bool {
+        $exists = $this->RCMS->execute('SELECT fn_ManufacturerExists(?) AS count', array('s', $name))->fetch_object()->count;
         return $exists !== 0;
     }
 
@@ -84,7 +114,7 @@ class Manufacturers extends Base {
      * Redigerer en producent via en POST request
      * @return void
      */
-    protected function editManufacturer(): void {
+    public function editManufacturer(): void {
         if (!is_numeric($_POST['manufacturer_id']) || !$this->RCMS->Login->isAdmin()) {
             return;
         }

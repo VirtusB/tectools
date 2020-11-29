@@ -7,7 +7,7 @@ declare(strict_types=1);
  * Denne klasse indeholder metoder som vedrører kategorier på TecTools siden
  * Den indeholder metoder til bl.a. oprette, redigere og hente kategorier
  */
-class Categories extends Base {
+class Categories {
     /**
      * @var RCMS $RCMS
      */
@@ -19,8 +19,13 @@ class Categories extends Base {
      */
     public static bool $disableAutoLoading;
 
+    /**
+     * Liste over POST endpoints (metoder), som kan eksekveres automatisk
+     * Vi er nød til at have en liste over tilladte endpoints, så brugere ikke kan eksekvere alle metoder i denne klasse
+     * @var array|string[]
+     */
     public static array $allowedEndpoints = [
-        'addCategory', 'editCategory'
+        'addCategory', 'editCategory', 'deleteCategory'
     ];
 
     /**
@@ -32,14 +37,14 @@ class Categories extends Base {
         $this->TecTools = $TecTools;
         $this->RCMS = $TecTools->RCMS;
 
-        parent::__construct();
+        $TecTools->POSTClasses[] = $this;
     }
 
     /**
      * Tilføjer en kategori via en POST request
      * @return void
      */
-    protected function addCategory(): void {
+    public function addCategory(): void {
         if (!$this->RCMS->Login->isAdmin()) {
             return;
         }
@@ -61,12 +66,37 @@ class Categories extends Base {
     }
 
     /**
+     * Sletter en kategori via POST request
+     */
+    public function deleteCategory(): void {
+        $categoryID = (int) $_POST['category_id'];
+
+        if ($this->isCategoryInUse($categoryID)) {
+            Helpers::setNotification('Fejl', 'Kategorien er i brug', 'error');
+            return;
+        }
+
+        $this->RCMS->execute('CALL removeCategory(?)', array('i', $categoryID));
+        Helpers::setNotification('Success', 'Kategorien blev slettet');
+    }
+
+    /**
+     * Tjekker om en kategori bliver benyttet på nuværende tidspunkt
+     * @param int $categoryID
+     * @return bool
+     */
+    private function isCategoryInUse(int $categoryID): bool {
+        $inUse = $this->RCMS->execute('SELECT fn_IsCategoryInUse(?) AS inUse', array('i', $categoryID))->fetch_object()->inUse;
+        return (bool) $inUse;
+    }
+
+    /**
      * Tjekker om en kategori med samme navn allerede eksisterer i databasen
      * @param $name
      * @return bool
      */
-    private function categoryExists($name): bool {
-        $exists = $this->RCMS->execute('SELECT COUNT(*) AS count FROM Categories WHERE CategoryName = ?', array('s', $name))->fetch_object()->count;
+    private function categoryExists(string $name): bool {
+        $exists = $this->RCMS->execute('SELECT fn_CategoryExists(?) AS count', array('s', $name))->fetch_object()->count;
         return $exists !== 0;
     }
 
@@ -84,7 +114,7 @@ class Categories extends Base {
      * Redigerer en kategori via en POST request
      * @return void
      */
-    protected function editCategory(): void {
+    public function editCategory(): void {
         if (!is_numeric($_POST['category_id']) || !$this->RCMS->Login->isAdmin() ) {
             return;
         }

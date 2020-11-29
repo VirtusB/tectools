@@ -7,7 +7,7 @@ declare(strict_types=1);
  * Denne klasse indeholder metoder som vedrører brugere på TecTools siden
  * Den indeholder metoder til bl.a. redigere og slette brugere, og til at hente brugerens abonnement
  */
-class Users extends Base {
+class Users {
     /**
      * @var RCMS $RCMS
      */
@@ -19,6 +19,11 @@ class Users extends Base {
      */
     public static bool $disableAutoLoading;
 
+    /**
+     * Liste over POST endpoints (metoder), som kan eksekveres automatisk
+     * Vi er nød til at have en liste over tilladte endpoints, så brugere ikke kan eksekvere alle metoder i denne klasse
+     * @var array|string[]
+     */
     public static array $allowedEndpoints = [
         'editUser', 'deleteUser'
     ];
@@ -32,7 +37,7 @@ class Users extends Base {
         $this->TecTools = $TecTools;
         $this->RCMS = $TecTools->RCMS;
 
-        parent::__construct();
+        $TecTools->POSTClasses[] = $this;
     }
 
     /**
@@ -57,7 +62,7 @@ class Users extends Base {
      * Hvis brugeren har et abonnement, opsiges det
      * @throws \Stripe\Exception\ApiErrorException
      */
-    protected function deleteUser(): void {
+    public function deleteUser(): void {
         $userIDPost = (int) $_POST['userID'];
 
         if ($userIDPost !== $this->RCMS->Login->getUserID() && !$this->RCMS->Login->isAdmin()) {
@@ -142,7 +147,7 @@ class Users extends Base {
      * @return void
      * @throws \Stripe\Exception\ApiErrorException
      */
-    protected function editUser(): void {
+    public function editUser(): void {
         if (!is_numeric($_POST['user_id'])) {
             return;
         }

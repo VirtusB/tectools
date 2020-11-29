@@ -85,7 +85,7 @@ $TecTools = $GLOBALS['TecTools'];
                         "value" => "ToolID"
                     ),
                     array(
-                        "button" => '<input type="button" class="btn tec-btn red" onclick="deleteTool(?, this)" value="Slet producent" />',
+                        "button" => '<input type="button" class="btn tec-btn red" onclick="deleteTool(?, this)" value="Slet værktøj" />',
                         "value" => "ToolID"
                     )
                 );
@@ -148,87 +148,87 @@ $TecTools = $GLOBALS['TecTools'];
             </div>
             <!-- endregion -->
 
-            <!-- region Kategori og producent tabel -->
+            <!-- region Kategori tabel -->
             <div class="row dashboard-row responsive-table-container">
-                <div class="col s12 xl6">
-                    <h3>Kategorier</h3>
+                <h3>Kategorier</h3>
 
-                    <?php
-                    $columns = array(
-                        array(
-                            'column' => 'CategoryID',
-                            'label' => 'ID',
-                            'prefix' => 'p1.CategoryID AS'
-                        ),
-                        array(
-                            'column' => "CategoryName",
-                            'label' => "Navn",
-                            'prefix' => 'p1.CategoryName AS'
-                        ),
-                        array(
-                            'column' => "toolCount",
-                            'prefix' => 'COUNT(p2.FK_CategoryID) AS ',
-                            'label' => "Antal værktøj"
-                        )
-                    );
+                <?php
+                $columns = array(
+                    array(
+                        'column' => 'CategoryID',
+                        'label' => 'ID',
+                        'prefix' => 'p1.CategoryID AS'
+                    ),
+                    array(
+                        'column' => "CategoryName",
+                        'label' => "Navn",
+                        'prefix' => 'p1.CategoryName AS'
+                    ),
+                    array(
+                        'column' => "toolCount",
+                        'prefix' => 'COUNT(p2.FK_CategoryID) AS ',
+                        'label' => "Antal værktøj"
+                    )
+                );
 
-                    $order = "ORDER BY p1.CategoryID DESC";
-                    $settings = array('searchbar' => true, 'pageLimit' => 5);
+                $order = "ORDER BY p1.CategoryID DESC";
+                $settings = array('searchbar' => true, 'pageLimit' => 5);
 
-                    $buttons = array(
-                        array(
-                            "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/categories/editQMARKcategoryid=?`" value="Rediger kategori" />',
-                            "value" => "CategoryID"
-                        ),
-                        array(
-                            "button" => '<input type="button" class="btn tec-btn red" onclick="deleteCategory(?, this)" value="Slet kategori" />',
-                            "value" => "CategoryID"
-                        )
-                    );
+                $buttons = array(
+                    array(
+                        "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/categories/editQMARKcategoryid=?`" value="Rediger kategori" />',
+                        "value" => "CategoryID"
+                    ),
+                    array(
+                        "button" => '<input type="button" class="btn tec-btn red" onclick="deleteCategory(?, this)" value="Slet kategori" />',
+                        "value" => "CategoryID"
+                    )
+                );
 
-                    $RCMSTables->createRCMSTable("categories_table", "Categories p1 LEFT JOIN CategoryTools p2 ON p2.FK_CategoryID = p1.CategoryID GROUP BY p1.CategoryID, p1.CategoryName", $columns, $settings, null, $order, $buttons, null);
-                    ?>
-                </div>
+                $RCMSTables->createRCMSTable("categories_table", "Categories p1 LEFT JOIN CategoryTools p2 ON p2.FK_CategoryID = p1.CategoryID GROUP BY p1.CategoryID, p1.CategoryName", $columns, $settings, null, $order, $buttons, null);
+                ?>
+            </div>
+            <!-- endregion -->
 
-                <div class="col s12 xl6">
-                    <h3>Producenter</h3>
+            <!-- region Producent tabel -->
+            <div class="row dashboard-row responsive-table-container">
+                <h3>Producenter</h3>
 
-                    <?php
-                    $columns = array(
-                        array(
-                            'column' => 'ManufacturerID',
-                            'label' => 'ID',
-                            'prefix' => 'p1.ManufacturerID AS'
-                        ),
-                        array(
-                            'column' => "ManufacturerName",
-                            'label' => "Navn",
-                            'prefix' => 'p1.ManufacturerName AS'
-                        ),
-                        array(
-                            'column' => "toolCount",
-                            'prefix' => 'COUNT(p2.FK_ManufacturerID) AS ',
-                            'label' => "Antal værktøj"
-                        )
-                    );
+                <?php
+                $columns = array(
+                    array(
+                        'column' => 'ManufacturerID',
+                        'label' => 'ID',
+                        'prefix' => 'p1.ManufacturerID AS'
+                    ),
+                    array(
+                        'column' => "ManufacturerName",
+                        'label' => "Navn",
+                        'prefix' => 'p1.ManufacturerName AS'
+                    ),
+                    array(
+                        'column' => "toolCount",
+                        'prefix' => 'COUNT(p2.FK_ManufacturerID) AS ',
+                        'label' => "Antal værktøj"
+                    )
+                );
 
-                    $order = "ORDER BY p1.ManufacturerID DESC";
-                    $settings = array('searchbar' => true, 'pageLimit' => 5);
+                $order = "ORDER BY p1.ManufacturerID DESC";
+                $settings = array('searchbar' => true, 'pageLimit' => 5);
 
-                    $buttons = array(
-                        array(
-                            "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/manufacturers/editQMARKmanufacturerid=?`" value="Rediger producent" />',
-                            "value" => "ManufacturerID"
-                        ),
-                        array(
-                            "button" => '<input type="button" class="btn tec-btn red" onclick="deleteManufacturer(?, this)" value="Slet producent" />',
-                            "value" => "ManufacturerID"
-                        )
-                    );
+                $buttons = array(
+                    array(
+                        "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/manufacturers/editQMARKmanufacturerid=?`" value="Rediger producent" />',
+                        "value" => "ManufacturerID"
+                    ),
+                    array(
+                        "button" => '<input type="button" class="btn tec-btn red" onclick="deleteManufacturer(?, this)" value="Slet producent" />',
+                        "value" => "ManufacturerID"
+                    )
+                );
 
-                    $RCMSTables->createRCMSTable("manufacturers_table", "Manufacturers p1 LEFT JOIN Tools p2 ON p2.FK_ManufacturerID = p1.ManufacturerID GROUP BY p1.ManufacturerID, p1.ManufacturerName", $columns, $settings, null, $order, $buttons, null);
-                    ?>
-                </div>
+                $RCMSTables->createRCMSTable("manufacturers_table", "Manufacturers p1 LEFT JOIN Tools p2 ON p2.FK_ManufacturerID = p1.ManufacturerID GROUP BY p1.ManufacturerID, p1.ManufacturerName", $columns, $settings, null, $order, $buttons, null);
+                ?>
             </div>
             <!-- endregion -->
 

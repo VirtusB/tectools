@@ -78,11 +78,35 @@ class RCMS {
      */
     public StripeWrapper $StripeWrapper;
 
+    /**
+     * Root mappen, som regel "/"
+     * @var string $homefolder
+     */
     private string $homefolder;
+
+    /**
+     * Template mappen
+     * For TecTools er den "/template/tectools"
+     * @var string $templatefolder
+     */
     private string $templatefolder;
+
+    /**
+     * Absolutte sti til uploads mappen
+     * @var string $uploadsfolder
+     */
     private string $uploadsfolder;
+
+    /**
+     * Relative sti til uploads mappen
+     * @var string $relativeUploadsFolder
+     */
     private string $relativeUploadsFolder;
 
+    /**
+     * Array af plugin klasser som skal loades
+     * @var array
+     */
     private array $pluginsToLoad = [];
 
     public function __construct(string $host, string $user, string $pass, string $database, string $homefolder, string $templatefolder, string $uploadsfolder, string $secretStripeKey, string $environment = '') {

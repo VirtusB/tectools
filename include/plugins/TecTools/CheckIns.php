@@ -7,7 +7,7 @@ declare(strict_types=1);
  * Denne klasse indeholder metoder som vedrører Tjek Ind og Tjek Ud funktionalitet på TecTools siden
  * Den indeholder metoder til bl.a. låne værktøj og returnere værktøj på lager igen
  */
-class CheckIns extends Base {
+class CheckIns {
     /**
      * @var RCMS $RCMS
      */
@@ -19,6 +19,11 @@ class CheckIns extends Base {
      */
     public static bool $disableAutoLoading;
 
+    /**
+     * Liste over POST endpoints (metoder), som kan eksekveres automatisk
+     * Vi er nød til at have en liste over tilladte endpoints, så brugere ikke kan eksekvere alle metoder i denne klasse
+     * @var array|string[]
+     */
     public static array $allowedEndpoints = [
         'checkIn', 'checkOut', 'getCheckInComment', 'saveCheckInComment', 'getCheckInAjax'
     ];
@@ -32,13 +37,13 @@ class CheckIns extends Base {
         $this->TecTools = $TecTools;
         $this->RCMS = $TecTools->RCMS;
 
-        parent::__construct();
+        $TecTools->POSTClasses[] = $this;
     }
 
     /**
-     * Gemmer en kommentar for en udlejning
+     * Gemmer en kommentar for en udlejning via POST request
      */
-    protected function saveCheckInComment(): void {
+    public function saveCheckInComment(): void {
         $checkInID = (int) $_POST['check_in_id'];
         $comment = $_POST['comment'];
         $userID = $this->RCMS->Login->getUserID();
@@ -63,7 +68,7 @@ class CheckIns extends Base {
     /**
      * Henter kommentaren for en specifik udlejning og udskriver den via POST request
      */
-    protected function getCheckInComment(): void {
+    public function getCheckInComment(): void {
         $checkInID = (int) $_POST['check_in_id'];
         $userID = $this->RCMS->Login->getUserID();
 
@@ -101,7 +106,7 @@ class CheckIns extends Base {
     /**
      * Returnerer et CheckIn fra databasen via POST request
      */
-    protected function getCheckInAjax(): void {
+    public function getCheckInAjax(): void {
         if (!$this->RCMS->Login->isAdmin()) {
             Helpers::outputAJAXResult(400, ['result' => 'Du er ikke en administrator']);
         }
@@ -139,7 +144,7 @@ class CheckIns extends Base {
      * @return void
      * @throws \Stripe\Exception\ApiErrorException
      */
-    protected function checkIn(): void {
+    public function checkIn(): void {
         $userID = $this->RCMS->Login->getUserID();
 
         $response = ['result' => ''];
@@ -223,7 +228,7 @@ class CheckIns extends Base {
      * Funktion til at tjekke værktøj ud via POST request
      * Kan kun bruges af administratorer
      */
-    protected function checkOut(): void {
+    public function checkOut(): void {
         $checkInID = (int) $_POST['check_in_id'];
         $statusID = $_POST['status_id'];
 

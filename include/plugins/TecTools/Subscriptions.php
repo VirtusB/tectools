@@ -7,7 +7,7 @@ declare(strict_types=1);
  * Denne klasse indeholder metoder som vedrører abonnementer på TecTools siden
  * Den indeholder metoder til bl.a. oprette, opgradere, nedgradere og annullere abonnementer
  */
-class Subscriptions extends Base {
+class Subscriptions {
     /**
      * @var RCMS $RCMS
      */
@@ -19,6 +19,11 @@ class Subscriptions extends Base {
      */
     public static bool $disableAutoLoading;
 
+    /**
+     * Liste over POST endpoints (metoder), som kan eksekveres automatisk
+     * Vi er nød til at have en liste over tilladte endpoints, så brugere ikke kan eksekvere alle metoder i denne klasse
+     * @var array|string[]
+     */
     public static array $allowedEndpoints = [
         'newSubscription', 'cancelSubscription', 'upgradeDowngradeSubscription'
     ];
@@ -32,7 +37,7 @@ class Subscriptions extends Base {
         $this->TecTools = $TecTools;
         $this->RCMS = $TecTools->RCMS;
 
-        parent::__construct();
+        $TecTools->POSTClasses[] = $this;
     }
 
     /**
@@ -71,10 +76,10 @@ class Subscriptions extends Base {
     }
 
     /**
-     * Sender en API request til Stripe, og opgraderer eller nedgraderer et abonnement
+     * Sender en API request til Stripe, og opgraderer eller nedgraderer et abonnement via POST request
      * @throws \Stripe\Exception\ApiErrorException
      */
-    protected function upgradeDowngradeSubscription(): void {
+    public function upgradeDowngradeSubscription(): void {
         $priceID = $_POST['price_id'];
         $productName = $_POST['product_name'];
 
@@ -104,10 +109,10 @@ class Subscriptions extends Base {
     }
 
     /**
-     * Sender en API request til Stripe, og opretter et abonnement for en eksisterende kunde
+     * Sender en API request til Stripe, og opretter et abonnement for en eksisterende kunde via POST request
      * @throws \Stripe\Exception\ApiErrorException
      */
-    protected function newSubscription(): void {
+    public function newSubscription(): void {
         $customerID = $this->TecTools->Users->getStripeID();
         $priceID = $_POST['priceID'];
         $paymentMethodID = $_POST['paymentMethodID'];

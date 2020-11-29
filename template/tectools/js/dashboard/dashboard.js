@@ -186,14 +186,65 @@ function checkOut(checkInID, context) {
     $(context).find(`input[value=${checkInID}]`).parent().submit();
 }
 
+/**
+ * Slet producent
+ * @param manufacturerID
+ * @param context
+ */
 function deleteManufacturer(manufacturerID, context) {
+    if (!confirm('Er du helt sikker?')) {
+        return;
+    }
 
+    let form = `
+    <form style="display: none;" method="POST">
+        <input type="hidden" name="post_endpoint" value="deleteManufacturer">
+        <input type="hidden" name="manufacturer_id" value="${manufacturerID}">
+    </form>
+    `;
+
+    $(context).append(form);
+    $(context).find(`input[value=${manufacturerID}]`).parent().submit();
 }
 
+/**
+ * Slet kategori
+ * @param categoryID
+ * @param context
+ */
 function deleteCategory(categoryID, context) {
+    if (!confirm('Er du helt sikker?')) {
+        return;
+    }
 
+    let form = `
+    <form style="display: none;" method="POST">
+        <input type="hidden" name="post_endpoint" value="deleteCategory">
+        <input type="hidden" name="category_id" value="${categoryID}">
+    </form>
+    `;
+
+    $(context).append(form);
+    $(context).find(`input[value=${categoryID}]`).parent().submit();
 }
 
+/**
+ * Slet værktøj
+ * @param toolID
+ * @param context
+ */
 function deleteTool(toolID, context) {
+    if (!confirm('Er du helt sikker?')) {
+        return;
+    }
 
+    let form = `
+    <form style="display: none;" method="POST">
+        <input type="hidden" name="post_endpoint" value="deleteTool">
+        <input type="hidden" name="tool_id" value="${toolID}">
+    </form>
+    `;
+
+    $(context).append(form);
+    $(context).find(`input[value=${toolID}]`).parent().submit();
 }

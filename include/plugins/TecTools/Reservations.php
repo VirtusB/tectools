@@ -7,7 +7,7 @@ declare(strict_types=1);
  * Denne klasse indeholder metoder som vedrører reservationer på TecTools siden
  * Den indeholder metoder til bl.a. oprette og slette reservationer
  */
-class Reservations extends Base {
+class Reservations {
     /**
      * @var RCMS $RCMS
      */
@@ -19,6 +19,11 @@ class Reservations extends Base {
      */
     public static bool $disableAutoLoading;
 
+    /**
+     * Liste over POST endpoints (metoder), som kan eksekveres automatisk
+     * Vi er nød til at have en liste over tilladte endpoints, så brugere ikke kan eksekvere alle metoder i denne klasse
+     * @var array|string[]
+     */
     public static array $allowedEndpoints = [
         'addReservation', 'deleteReservation'
     ];
@@ -32,7 +37,7 @@ class Reservations extends Base {
         $this->TecTools = $TecTools;
         $this->RCMS = $TecTools->RCMS;
 
-        parent::__construct();
+        $TecTools->POSTClasses[] = $this;
     }
 
     /**
@@ -89,7 +94,7 @@ class Reservations extends Base {
     /**
      * Sletter en reservation via POST request
      */
-    protected function deleteReservation(): void {
+    public function deleteReservation(): void {
         $reservationID = (int) $_POST['reservation_id'];
 
         if (!$this->userOwnsReservation($reservationID)) {
@@ -129,7 +134,7 @@ class Reservations extends Base {
      * Tilføjer en reservation for en bruger via POST request
      * @throws \Stripe\Exception\ApiErrorException
      */
-    protected function addReservation(): void {
+    public function addReservation(): void {
         $toolID = (int) $_POST['tool_id'];
         $userID = $this->RCMS->Login->getUserID();
 

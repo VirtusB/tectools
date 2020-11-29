@@ -69,7 +69,7 @@ class GlobalHandlers {
         $imgSrc = $TecTools->RELATIVE_TOOL_IMAGE_FOLDER . '/' . $image;
 
         return <<<HTML
-            <img style="max-height: 53.75px;" src="$imgSrc" alt="">
+            <img class="materialboxed" style="max-height: 53.75px;" src="$imgSrc" alt="">
 HTML;
     }
 

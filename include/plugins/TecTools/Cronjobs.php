@@ -9,7 +9,7 @@ declare(strict_types=1);
 class Cronjobs {
     public RCMS $RCMS;
 
-    public function __construct($RCMS) {
+    public function __construct(RCMS $RCMS) {
         $this->RCMS = $RCMS;
 
         $this->deleteOldReservations();

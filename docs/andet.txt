@@ -167,3 +167,103 @@ class TecToolsCategories extends Base {
         $this->RCMS->execute('CALL removeAllCategoriesFromTool(?)', array('i', $toolID));
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Class Base
+ * Denne klasse er fundamentet for alle vores andre klasser, som indeholder metoder der skal køres ved POST requests.
+ * Klassen eksister kun for at reducere duplikeret kode, ved at give alle underklasser adgang til variablen $allowedEndpoints og metoden handlePOSTEndpoints.
+ * Den kan selvfølgelig udvides senere, hvis der er andre metoder man gerne vil have adgang til at alle underklasser.
+ */
+abstract class Base {
+    /**
+     * Liste over POST endpoints, som har en metode i denne klasse (og underklasse), som kan eksekveres automatisk
+     * Vi er nød til at have en liste over tilladte endpoints, så brugere ikke kan eksekvere andre metoder i denne klasse
+     * @var array|string[]
+     */
+    public static array $allowedEndpoints = [];
+
+    public function __construct() {
+        $this->handlePOSTEndpoints();
+    }
+
+    /**
+     * Denne metode tjekker, om $_POST array'et indeholder navnet på en metode i denne klasse (og underklasse),
+     * tjekker derefter om det er en af de tilladte endpoints,
+     * og eksekvere efterfølgende metoden hvis det er tilfældet
+     *
+     * Det er endda muligt for handlePOSTEndpoints at overdrage funktionsparametre til målfunktionen
+     */
+    public function handlePOSTEndpoints(): void {
+        if (!isset($_POST['post_endpoint'])) {
+            return;
+        }
+
+        $endpoint = $_POST['post_endpoint'];
+
+        var_dump($this::$allowedEndpoints);
+        die();
+
+        echo '<pre>';
+        print_r($this->classes);
+        echo '</pre>';
+        die();
+
+        var_dump(get_class_methods($this));
+        die();
+
+        if (!method_exists($this, $endpoint)) {
+            Helpers::setNotification('Fejl', 'Ukendt POST endpoint', 'error');
+            return;
+        }
+
+        if (!in_array($endpoint, $this::$allowedEndpoints, true)) {
+            Helpers::setNotification('Fejl', 'Denne funktion må ikke kaldes via POST', 'error');
+            return;
+        }
+
+        $args = [];
+
+        $reflectionMethod = new ReflectionMethod($this, $endpoint);
+        $params = $reflectionMethod->getParameters();
+
+        foreach ($params as $param) {
+            if (isset($_POST[$param->getName()])) {
+                if ($param->getType() !== null) {
+                    $typeName = $param->getType()->getName();
+                    $value = $_POST[$param->getName()];
+                    $castStatement = 'return (' . $typeName . ') ' . $value .';';
+                    $args[] = eval($castStatement);
+                } else {
+                    $args[] = $_POST[$param->getName()];
+                }
+            }
+        }
+
+        if (empty($args)) {
+            $this->$endpoint();
+        } else {
+            $this->$endpoint(...$args);
+        }
+    }
+}
