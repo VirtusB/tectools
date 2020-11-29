@@ -131,17 +131,6 @@ class Users {
     }
 
     /**
-     * Henter en bruger ud af databasen via deres e-mail
-     * @param string $email
-     * @return bool|array
-     */
-    public function getUserByEmail(string $email) {
-        $res = $this->RCMS->execute('CALL getUserByEmail(?)', array('s', $email));
-
-        return $res->fetch_array(MYSQLI_ASSOC) ?? false;
-    }
-
-    /**
      * Redigerer en bruger via en POST request
      * Bruges både når almindelige brugere ændre deres profil, og når personale ændre på andre brugeres profil
      * @return void
@@ -175,8 +164,8 @@ class Users {
 
         // Tjek om brugeren vil ændre sin e-mail, og om e-mailen er optaget
         if ($currentUser['Email'] !== $email) {
-            $exists = $this->RCMS->execute('CALL getUserByEmail(?)', array('s', $email));
-            if ($exists->num_rows !== 0) {
+            $user = $this->RCMS->Login->getUserByEmail($email);
+            if ($user) {
                 // E-mail er allerede taget
                 Helpers::redirect("?userid=$userID&emailtaken");
                 return;

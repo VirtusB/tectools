@@ -60,20 +60,20 @@ function setupTestDatabase(bool $seed = false, bool $returnRCMS = true) {
     // Indsæt funktioner og procedures ind i test databasen
     $RCMS = new RCMS(TEST_DB_HOST, TEST_DB_USER, TEST_DB_PASS, TEST_DB_NAME, ROOT_FOLDER, TEMPLATE_FOLDER_NAME, UPLOADS_FOLDER, TEST_STRIPE_SECRET_KEY, 'development');
 
-    mysqli_set_charset($RCMS->getMySQLI(), 'utf8mb4');
+    mysqli_set_charset($RCMS->getMySQLi(), 'utf8mb4');
 
     foreach ($proceduresAndFunctions as $prodOrFunc) {
-        mysqli_query($RCMS->getMySQLI(), "DROP {$prodOrFunc['Type']} IF EXISTS {$prodOrFunc['Name']};");
+        mysqli_query($RCMS->getMySQLi(), "DROP {$prodOrFunc['Type']} IF EXISTS {$prodOrFunc['Name']};");
 
         $code = $prodOrFunc['Code'];
         $code = str_replace(DB_NAME, TEST_DB_NAME, $code);
 
         $code = str_replace('DEFINER=`virtusbc_tectools_test`@`%`', '', $code);
 
-        $res = mysqli_multi_query($RCMS->getMySQLI(), $code);
+        $res = mysqli_multi_query($RCMS->getMySQLi(), $code);
 
         if ($res === false) {
-            echo '<br><br>' . mysqli_error($RCMS->getMySQLI()) . '<br><br>';
+            echo '<br><br>' . mysqli_error($RCMS->getMySQLi()) . '<br><br>';
         }
     }
 

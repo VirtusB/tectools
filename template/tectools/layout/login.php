@@ -40,6 +40,7 @@ if ($this->RCMS->Login->isLoggedIn()) {
                 <div class="input-field col s12">
                     <input autocomplete="off" required id="password" type="password" name="password" class="validate">
                     <label for="password">Adgangskode</label>
+                    <a href="/forgot-password">Glemt adgangskode</a>
                 </div>
             </div>
 

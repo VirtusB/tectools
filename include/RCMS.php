@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require __DIR__ . '/vendor/autoload.php';
 
+require_once(__DIR__ . "/Mailer.php");
 require_once(__DIR__ . "/Template.php");
 require_once(__DIR__ . "/Helpers.php");
 require_once(__DIR__ . "/StripeWrapper.php");
@@ -69,14 +70,19 @@ class RCMS {
 
     /**
      * Cron klassen, hvis den eksisterer
-     * @var Cron $cron
+     * @var Cron|null $cron
      */
-    private $cron;
+    private ?Cron $Cron = null;
 
     /**
      * @var StripeWrapper $StripeWrapper
      */
     public StripeWrapper $StripeWrapper;
+
+    /**
+     * @var Mailer $Mailer
+     */
+    public Mailer $Mailer;
 
     /**
      * Root mappen, som regel "/"
@@ -110,14 +116,14 @@ class RCMS {
     private array $pluginsToLoad = [];
 
     public function __construct(string $host, string $user, string $pass, string $database, string $homefolder, string $templatefolder, string $uploadsfolder, string $secretStripeKey, string $environment = '') {
-        if (!headers_sent() && session_status() == PHP_SESSION_NONE) {
+        if (!headers_sent() && session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
         $this->recursive_require_plugins(__DIR__ . '/plugins/');
 
         if (class_exists('Cron')) {
-            $this->cron = new Cron($this);
+            $this->Cron = new Cron($this);
         }
 
         $this->host = $host;
@@ -132,6 +138,7 @@ class RCMS {
 
         $this->connect();
 
+        $this->Mailer = new Mailer($this);
         $this->Logs = new Logs($this);
         $this->Helpers = new Helpers($this);
 
@@ -139,12 +146,12 @@ class RCMS {
         $this->Login = new Login($this);
         $this->Template = new Template($this);
 
-        $this->loadPlugins(__DIR__ . '/plugins/');
+        $this->loadPlugins();
 
         ob_start();
 
-        if ($this->cron !== null) {
-            $this->cron->runCronJobs();
+        if ($this->Cron !== null) {
+            $this->Cron->runCronJobs();
         }
 
         require_once 'template/' . $templatefolder . '/index.php';
@@ -166,9 +173,7 @@ class RCMS {
         $dir->setFlags(RecursiveDirectoryIterator::SKIP_DOTS);
 
         $directory = new RecursiveDirectoryIterator($path);
-        $iterator = new RecursiveIteratorIterator($directory);
-
-        foreach ($iterator as $fileInfo) {
+        foreach (new RecursiveIteratorIterator($directory) as $fileInfo) {
             if ($fileInfo->getExtension() === 'php') {
                 $this->pluginsToLoad[] = [
                     'path' => $fileInfo->getPath(),
@@ -203,10 +208,10 @@ class RCMS {
 
     /**
      * Tilføjer alle klasser der ligger i plugins mappen til $GLOBALS, så de kan bruges alle steder i koden
-     * @param string $path Stien til plugins mappen
      * @return void
+     * @throws ReflectionException
      */
-    private function loadPlugins(string $path): void {
+    private function loadPlugins(): void {
         foreach ($this->pluginsToLoad as $plugin) {
             $className = $plugin['basename'];
 
@@ -267,7 +272,7 @@ class RCMS {
      * Returnere den oprettede MySQL forbindelse
      * @return mysqli
      */
-    public function getMySQLI(): \mysqli {
+    public function getMySQLi(): mysqli {
         return $this->mysqli;
     }
 
@@ -292,9 +297,7 @@ class RCMS {
 
         $stmt = mysqli_prepare($this->mysqli, $query) or die("MySQLi Query Error: " . mysqli_error($this->mysqli));
 
-        if ($parameters !== null && $parameters !== "" && !empty($parameters)) {
-            //$rc = call_user_func_array(array($stmt, "bind_param"), $parameters);
-
+        if ($parameters !== null && !empty($parameters)) {
             $types = $parameters[0];
             unset($parameters[0]);
 
@@ -302,7 +305,7 @@ class RCMS {
             $stmt->execute();
 
             if (false === $rc) {
-                die('bind_param() failed: ' . htmlspecialchars($stmt->error));
+                die('bind_param() failed: ' . htmlspecialchars($stmt->error, ENT_QUOTES | ENT_HTML5));
             }
         } else {
             $stmt->execute();
@@ -339,8 +342,8 @@ class RCMS {
      * Returnerer instansen af Cron klassen
      * @return Cron
      */
-    public function getCron(): \Cron {
-        return $this->cron;
+    public function getCron(): Cron {
+        return $this->Cron;
     }
 
     /**

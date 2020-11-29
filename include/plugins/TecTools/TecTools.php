@@ -134,8 +134,7 @@ class TecTools {
      * @return array|null
      */
     public function getToolByBarcode(string $barcode): ?array {
-        $res = $this->RCMS->execute('CALL getToolByBarcode(?)', array('s', $barcode));
-        return $res->fetch_assoc();
+        return $this->RCMS->execute('CALL getToolByBarcode(?)', array('s', $barcode))->fetch_assoc() ?? null;
     }
 
     /**
@@ -296,14 +295,13 @@ class TecTools {
      * @return array|false
      */
     public function getToolByID(int $toolID) {
-        $res = $this->RCMS->execute('CALL getToolByID(?)', array('i', $toolID));
-        $tool = $res->fetch_assoc();
-
-        $tool['Categories'] = $this->Categories->getCategoriesForTool($tool['ToolID']);
+        $tool = $this->RCMS->execute('CALL getToolByID(?)', array('i', $toolID))->fetch_assoc() ?? null;
 
         if ($tool === null) {
             return false;
         }
+
+        $tool['Categories'] = $this->Categories->getCategoriesForTool($tool['ToolID']);
 
         return $tool;
     }

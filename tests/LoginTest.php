@@ -44,7 +44,7 @@ class LoginTest extends TestCase {
 
         $this->RCMS->Login->createUser();
 
-        $userFromDatabase = $this->TecTools->getUserByEmail($user['email']);
+        $userFromDatabase = $this->RCMS->Login->getUserByEmail($user['email']);
 
         // Fjern brugeren fra Stripe, der er ingen grund til at den ligger der
         if (!empty($userFromDatabase)) {

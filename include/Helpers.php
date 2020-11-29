@@ -19,31 +19,54 @@ class Helpers {
      * @return bool
      */
 	public function isFrontPage(): bool {
-		$request_url = htmlspecialchars(strip_tags(mysqli_real_escape_string($this->RCMS->getMySQLI(), $_SERVER["REQUEST_URI"])));
+		$request_url = htmlspecialchars(strip_tags(mysqli_real_escape_string($this->RCMS->getMySQLi(), $_SERVER["REQUEST_URI"])), ENT_QUOTES | ENT_HTML5);
 
-		if (isset($_GET['search-text']) || $request_url === $this->RCMS->getHomeFolder() . "index.php" || $request_url === $this->RCMS->getHomeFolder() || $request_url === $this->RCMS->getHomeFolder() . "index.php/") {
-			return true;
-		}
-
-		return false;
-	}
+        return isset($_GET['search-text']) || $request_url === $this->RCMS->getHomeFolder() . "index.php" || $request_url === $this->RCMS->getHomeFolder() || $request_url === $this->RCMS->getHomeFolder() . "index.php/";
+    }
 
     /**
-     * Sætter en cookie i browseren, som javascript i klientet finder og viser notifikationen
+     * Sætter en cookie i browseren, som javascript i klienten finder og viser notifikationen
      * @param $title
      * @param $message
      * @param string $type
+     * @throws JsonException
      */
 	public static function setNotification($title, $message, $type = 'success'): void {
-	    $data = [
-	        'title' => $title,
-	        'message' => $message,
-            'type' => $type
-        ];
 
-	    $data = json_encode($data);
+        $data = json_encode([
+            'title' => $title,
+            'message' => $message,
+            'type' => $type
+        ], JSON_THROW_ON_ERROR);
 
 	    setcookie('notificationFrontend', $data, time()+3600, '/');
+    }
+
+    /**
+     * Genererer et GUID
+     * Version 4 på 36 karakterer (med bindestreger)
+     * @param null $data
+     * @return string
+     * @throws Exception
+     */
+    public static function guidv4($data = null): string {
+        $data = $data ?? random_bytes(16);
+
+        assert(strlen($data) === 16);
+
+        $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // set version to 0100
+        $data[8] = chr(ord($data[8]) & 0x3f | 0x80); // set bits 6-7 to 10
+
+        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+    }
+
+    /**
+     * Returnerer HTTP host med protokol
+     * Ex. https://tectools.virtusb.com
+     * @return string
+     */
+    public static function getHTTPHost(): string {
+        return 'https://' . $_SERVER['HTTP_HOST'];
     }
 
     /**
@@ -54,9 +77,7 @@ class Helpers {
      */
     public static function array_equal(array $a, array $b): bool {
         return (
-            is_array($a)
-            && is_array($b)
-            && count($a) === count($b)
+            count($a) === count($b)
             && array_diff($a, $b) === array_diff($b, $a)
         );
     }
@@ -66,15 +87,16 @@ class Helpers {
      * @param int $status HTTP status kode, ex. 200 eller 404 osv.
      * @param array $result
      * @return void
+     * @throws JsonException
      */
     public static function outputAJAXResult(int $status, array $result): void {
-        ob_get_clean();
+        ob_end_clean();
         ob_start();
         header('Content-Type: application/json');
 
         http_response_code($status);
 
-        echo json_encode($result);
+        echo json_encode($result, JSON_THROW_ON_ERROR);
 
         die();
     }
@@ -107,7 +129,7 @@ class Helpers {
 		return $request['is_admin_page'] && $this->RCMS->Login->isLoggedIn();
 	}
 
-	public static function redirect($page) {
+	public static function redirect($page): void {
 	    @header("Location:  $page");
     }
 
