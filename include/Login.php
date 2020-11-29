@@ -65,8 +65,20 @@ class Login {
 
         $name = $user['FirstName'] . ' ' . $user['LastName'];
 
+        $this->sendResetPasswordMail($name, $url, $email);
+
+        Helpers::redirect('?sent');
+    }
+
+    /**
+     * Sender en mail som indeholder et link hvor brugeren kan vælge en ny adgangskode
+     * @param string $fullName
+     * @param string $url
+     * @param string $emailAddress
+     */
+    private function sendResetPasswordMail(string $fullName, string $url, string $emailAddress): void {
         $body = <<<HTML
-        <p>Kære $name</p>
+        <p>Kære $fullName</p>
         <p>Vi er meget kede af, at du har mistet adgang til TecTools 💔</p>
         <br>
         <h3>
@@ -82,12 +94,10 @@ HTML;
         Mailer::sendEmail(
             SMTP_USERNAME,
             'TecTools',
-            $email,
-            $name,
+            $emailAddress,
+            $fullName,
             'TecTools - gendan adgangskode',
             $body, [], [], 'TTLogo', $logoPath);
-
-        Helpers::redirect('?sent');
     }
 
     /**

@@ -49,6 +49,8 @@ For at køre tests:
       - Klasse som har metoder til at logge på og af siden
     - Logs.php
       - Klasse som har metoder til at logge hændelser på siden
+    - Mailer.php
+      - Klasse til at sende e-mails med SwiftMailer
     - RCMS.php
       - Hovedklassen for RCMS-systemet, som loader andre nødvendige klasser
     - StripeWrapper.php
