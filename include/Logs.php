@@ -41,18 +41,10 @@ class Logs {
     /**
      * Tilføjer en log om en hændelse i databasen
      * @param int $LogTypeID
-     * @param array|null $data
+     * @param array $data
      */
-    public function addLog(int $LogTypeID, array $data = null) {
-        if ($data === null) {
-            if ($this->Login->isLoggedIn()) {
-                $data = ['UserID' => $this->RCMS->Login->getUserID()];
-            } else {
-                $data = '';
-            }
-        }
-
-        $json = empty($data) ? '' : json_encode($data);
+    public function addLog(int $LogTypeID, array $data): void {
+        $json = json_encode($data);
 
         $this->RCMS->execute('CALL addLog(?, ?)', array('is', $LogTypeID, $json));
     }

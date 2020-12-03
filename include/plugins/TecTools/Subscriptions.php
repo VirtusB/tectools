@@ -41,6 +41,14 @@ class Subscriptions {
     }
 
     /**
+     * Returnerer navnet på brugerens abonnement
+     * @return bool|string
+     */
+    public function getSubName() {
+        return $_SESSION['user']['SubName'] ?? false;
+    }
+
+    /**
      * Gemmer navnet på abonnementet som brugeren har
      * @param $subName
      */
@@ -53,7 +61,7 @@ class Subscriptions {
     }
 
     /**
-     * Sender en API request til Stripe, og annullerer et abonnement
+     * Sender en API request til Stripe, og annullerer brugerens abonnement
      * @throws \Stripe\Exception\ApiErrorException
      */
     public function cancelSubscription(): void {
@@ -72,11 +80,11 @@ class Subscriptions {
 
         $this->RCMS->Logs->addLog(Logs::CANCEL_SUBSCRIPTION_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        Helpers::setNotification('Success', 'Abonnementet er blevet opsagt');
+        Helpers::setNotification('Succes', 'Abonnementet er blevet opsagt');
     }
 
     /**
-     * Sender en API request til Stripe, og opgraderer eller nedgraderer et abonnement via POST request
+     * Sender en API request til Stripe, og opgraderer eller nedgraderer brugerens abonnement via POST request
      * @throws \Stripe\Exception\ApiErrorException
      */
     public function upgradeDowngradeSubscription(): void {
@@ -105,11 +113,11 @@ class Subscriptions {
         $logType = $productName === 'Basis' ? Logs::DOWNGRADE_SUBSCRIPTION_TYPE_ID : Logs::UPGRADE_SUBSCRIPTION_TYPE_ID;
         $this->RCMS->Logs->addLog($logType, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        Helpers::setNotification('Success', 'Dit abonnement er blevet ændret og gemt!');
+        Helpers::setNotification('Succes', 'Dit abonnement er blevet ændret og gemt!');
     }
 
     /**
-     * Sender en API request til Stripe, og opretter et abonnement for en eksisterende kunde via POST request
+     * Sender en API request til Stripe, og opretter et abonnement for brugeren via POST request
      * @throws \Stripe\Exception\ApiErrorException
      */
     public function newSubscription(): void {
@@ -149,7 +157,7 @@ class Subscriptions {
             'expand' => ['latest_invoice.payment_intent'],
         ]);
 
-        Helpers::setNotification('Success', 'Du er nu abonneret!❤');
+        Helpers::setNotification('Succes', 'Du er nu abonneret!❤');
 
         $this->setSubName($_POST['product_name']);
 

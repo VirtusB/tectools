@@ -83,10 +83,6 @@ $TecTools = $GLOBALS['TecTools'];
                     array(
                         "button" => '<input type="button" class="btn tec-btn" onclick="location.pathname = `/tools/editQMARKtoolid=?`" value="Rediger værktøj" />',
                         "value" => "ToolID"
-                    ),
-                    array(
-                        "button" => '<input type="button" class="btn tec-btn red" onclick="deleteTool(?, this)" value="Slet værktøj" />',
-                        "value" => "ToolID"
                     )
                 );
 
@@ -314,7 +310,7 @@ $TecTools = $GLOBALS['TecTools'];
                     )
                 );
 
-                $order = "ORDER BY EndDate DESC, CheckedOut DESC";
+                $order = "ORDER BY EndDate ASC, CheckedOut DESC";
                 $settings = array('searchbar' => true, 'pageLimit' => 5);
 
                 $where = [
@@ -411,6 +407,79 @@ $TecTools = $GLOBALS['TecTools'];
             </div>
             <!-- endregion -->
 
+        <!-- region Reservationer tabel, personale -->
+            <div class="row responsive-table-container">
+                <h3>Reservationer</h3>
+
+                <?php
+                $columns = array(
+                    array(
+                        'column' => 'ReservationID',
+                        'label' => 'ID',
+                    ),
+                    array(
+                        'column' => 'Image',
+                        'label' => 'Billede',
+                        'function' => 'showToolImage'
+                    ),
+                    array(
+                        'column' => 'ToolName',
+                        'label' => 'Navn'
+                    ),
+                    array(
+                        'column' => "ManufacturerName",
+                        'label' => "Producent"
+                    ),
+                    array(
+                        'column' => "StartDate",
+                        'prefix' => 'r.StartDate AS ',
+                        'order_subq' => 'r',
+                        'label' => "Reservation start",
+                        'tdclass' => 'render-datetime',
+                        'tdattributes' => [
+                            [
+                                'name' => 'datetime',
+                                'valuefromcolumn' => 'StartDate'
+                            ]
+                        ]
+                    ),
+                    array(
+                        'column' => "EndDate",
+                        'prefix' => 'r.EndDate AS ',
+                        'order_subq' => 'r',
+                        'label' => "Reservation slut",
+                        'tdclass' => 'render-datetime',
+                        'tdattributes' => [
+                            [
+                                'name' => 'datetime',
+                                'valuefromcolumn' => 'EndDate'
+                            ]
+                        ]
+                    )
+                );
+
+                $order = "ORDER BY r.EndDate DESC";
+                $settings = array('searchbar' => true, 'pageLimit' => 5);
+
+                $where = [
+                    [
+                        'column' => 'EndDate',
+                        'direct_gteq' => 'NOW()'
+                    ]
+                ];
+
+                $buttons = [
+                    [
+                        'button' => '<button onclick="deleteReservation(?, this)" class="btn tec-btn red">Slet</button>',
+                        'value' => 'FK_UserID'
+                    ]
+                ];
+
+                $RCMSTables->createRCMSTable("reservations_table", "Reservations r LEFT JOIN Tools t ON t.ToolID = r.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID LEFT JOIN Statuses s ON s.StatusID = t.FK_StatusID", $columns, $settings, $where, $order, $buttons, null);
+                ?>
+            </div>
+        <!-- endregion -->
+
         <?php elseif ($this->RCMS->Login->isAdmin() === false && $this->RCMS->Login->isLoggedIn() === true): ?>
             <div class="row">
                 <div class="col s12">
@@ -420,7 +489,7 @@ $TecTools = $GLOBALS['TecTools'];
                                 <span style="display: block; margin-bottom: 24px" class="white-text">
                                     Velkommen, <?= $this->RCMS->Login->getFirstName() ?>
                                     <br>
-                                    <?= empty($TecTools->Users->getSubName()) ? 'Du har ikke noget abonnement' : "Du er {$TecTools->Users->getSubName()} bruger" ?>
+                                    <?= empty($TecTools->Subscriptions->getSubName()) ? 'Du har ikke noget abonnement' : "Du er {$TecTools->Subscriptions->getSubName()} bruger" ?>
                                 </span>
 
                                 <a class="btn tec-btn xl-up-mb0" href="/my-subscription">Mit abonnement</a>
@@ -498,7 +567,7 @@ $TecTools = $GLOBALS['TecTools'];
                     )
                 );
 
-                $order = "ORDER BY EndDate DESC, CheckedOut DESC";
+                $order = "ORDER BY EndDate ASC, CheckedOut DESC";
                 $settings = array('searchbar' => true, 'pageLimit' => 5);
 
                 $where = [
@@ -574,7 +643,7 @@ $TecTools = $GLOBALS['TecTools'];
                 );
 
                 $order = "ORDER BY r.EndDate DESC";
-                $settings = array('searchbar' => true, 'pageLimit' => 5, 'querylogger' => true, 'queryloggerpath' => '/home/virtusbc/tectools.virtusb.com/querylogger.txt');
+                $settings = array('searchbar' => true, 'pageLimit' => 5);
 
                 $where = [
                     [

@@ -321,3 +321,15 @@ a.btn:hover, button.btn:hover, .tec-submit-btn:hover {
     color: rgba(250,250,250,0.51);
     font-weight: bold;
 }
+
+input[type="color"] {
+    margin: .7666666667rem 0 .46rem 0;
+}
+
+#config-theme {
+    font-size: 23px;
+    height: 54px;
+    line-height: 54px;
+    vertical-align: middle;
+    display: none;
+}

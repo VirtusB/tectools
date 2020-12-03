@@ -117,7 +117,9 @@ class RCMS {
 
     public function __construct(string $host, string $user, string $pass, string $database, string $homefolder, string $templatefolder, string $uploadsfolder, string $secretStripeKey, string $environment = '') {
         if (!headers_sent() && session_status() === PHP_SESSION_NONE) {
-            session_start();
+            session_start([
+                'cookie_lifetime' => 1200,
+            ]);
         }
 
         $this->recursive_require_plugins(__DIR__ . '/plugins/');
@@ -146,7 +148,7 @@ class RCMS {
         $this->Login = new Login($this);
         $this->Template = new Template($this);
 
-        $this->loadPlugins();
+        $this->instantiatePlugins();
 
         ob_start();
 
@@ -164,7 +166,8 @@ class RCMS {
     }
 
     /**
-     * Instantiere alle de klasser som ligger i plugins mappen, så loadPlugins() metoden kan tilføje dem til $GLOBALS
+     * Loader alle de klasser som ligger i plugins mappen, så instantiatePlugins() metoden kan instantiere dem
+     * Loader IKKE klasser hvor shouldAutoLoad er false
      * @param string $path Stien til plugins mappen
      * @return void
      */
@@ -207,11 +210,12 @@ class RCMS {
     }
 
     /**
-     * Tilføjer alle klasser der ligger i plugins mappen til $GLOBALS, så de kan bruges alle steder i koden
+     * Instantiere alle plugins der ligger i $pluginsToLoad arrayet og tilføjer dem til $GLOBALS arrayet, så den kan bruges alle steder i koden
+     * Metoden instantiere IKKE abstrakte klasser
      * @return void
      * @throws ReflectionException
      */
-    private function loadPlugins(): void {
+    private function instantiatePlugins(): void {
         foreach ($this->pluginsToLoad as $plugin) {
             $className = $plugin['basename'];
 
@@ -224,12 +228,12 @@ class RCMS {
 
     /**
      * Opretter en variabel i $GLOBALS arrayet, $GLOBALS er et indbygget array i PHP som er tilgængeligt alle steder i koden
-     * @param string $newGlobal Navnet/key på det nye element
-     * @param object $value Et objekt/klasse
+     * @param string $name Navnet/key på det nye element
+     * @param object $obj Et objekt/klasse
      * @return void
      */
-    private function newGlobal(string $newGlobal, object $value): void {
-        $GLOBALS[$newGlobal] = $value;
+    private function newGlobal(string $name, object $obj): void {
+        $GLOBALS[$name] = $obj;
     }
 
     /**
@@ -287,7 +291,7 @@ class RCMS {
     }
 
     /**
-     * Eksekvere en MySQL query og bruger prepared statements for at undgå SQL injection
+     * Eksekvere en MySQL query og bruger Prepared Statements for at undgå SQL injection
      * @param string $query En MySQL query, f.eks. "SELECT * FROM Users"
      * @param null|array $parameters Et array af typer og parametre, f.eks. ['ssi', $username, $firstname, $userID] - første element er en string over typer (s for string, i for int), efterfølgende elementer er variabler givet med reference (& symbolet betyder reference pass-by-reference)
      * @return mysqli_result|void

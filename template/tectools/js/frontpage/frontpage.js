@@ -33,7 +33,7 @@ window.addEventListener('load', function () {
 });
 
 /**
- * Denne funktion søger for at at alle de forskellige værktøjer på forsiden har samme højde
+ * Denne funktion sørger for at at alle de forskellige værktøjer på forsiden har samme højde
  */
 function fixCardHeights() {
     let cardImages = document.querySelectorAll('#tools-row .card .card-image');

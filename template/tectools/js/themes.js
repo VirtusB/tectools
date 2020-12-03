@@ -57,7 +57,7 @@ function toggleTheme() {
 }
 
 /**
- * Genindlæs et HTML element
+ * Genindlæser et HTML element
  * @param {HTMLElement} element
  * @returns {undefined}
  */

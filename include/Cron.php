@@ -57,7 +57,7 @@ class Cron {
     /**
      * Tjekker om et tidsstempel matcher et cron format
      * F.eks. $cron = '5 0 * * *';
-     * Denne funktion er taget fra: https://www.binarytides.com/php-check-if-a-timestamp-matches-a-given-cron-schedule/
+     * Reference: https://www.binarytides.com/php-check-if-a-timestamp-matches-a-given-cron-schedule/
      * @param $time
      * @param $cron
      * @return bool

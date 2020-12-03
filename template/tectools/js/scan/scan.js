@@ -10,6 +10,7 @@ let barcodeScanner = document.getElementById('barcode-scanner');
 let scanContainer = document.getElementById('scan-container');
 let toolContainer = document.getElementById('tool-container');
 let toolContainerAdmin = document.getElementById('tool-container-admin');
+let checkInBtn = document.getElementById('check-in-btn');
 
 // Tjek om browseren har mulighed for at åbne en video-stream
 if (navigator.getUserMedia) {
@@ -32,7 +33,7 @@ function noVideoCameraError() {
  */
 function addScanBtnClickListener(stream) {
     stream.getTracks().forEach(t => t.stop()); // For at lukke det track, som vi brugte, til at tjekke om brugeren har et kamera
-    scanBtn.addEventListener('click', scanBtnClickHandler, {once: true});
+    scanBtn.addEventListener('click', scanBtnClickHandler);
 }
 
 /**
@@ -147,11 +148,25 @@ function showTool(barcode) {
 }
 
 /**
+ * Deaktiverer "Lån" knappen og gør at brugeren ikke kan klikke på den
+ */
+function disableCheckInBtn() {
+    checkInBtn.setAttribute('disabled', 'disabled');
+}
+
+/**
+ * Aktiverer "Lån" knappen og gør at brugeren kan klikke på den
+ */
+function enableCheckInBtn() {
+    checkInBtn.removeAttribute('disabled');
+}
+
+/**
  * Sender en AJAX request til serveren og udlåner et værktøj til brugeren
  * @param {string} barcode
  */
 function checkInTool(barcode) {
-    toolContainer.querySelector('#check-in-btn').setAttribute('disabled', 'disabled');
+    disableCheckInBtn();
     showLoader('#check-in-btn');
 
     $.post({
@@ -162,6 +177,7 @@ function checkInTool(barcode) {
         success: function(res) {
             NotificationControl.success('Udlånt', 'Værktøjet er nu udlånt til dig');
             showSuccessIcon('#check-in-btn', 'Udlånt');
+            setTimeout(afterCheckIn, 3200);
         },
         error: function (err) {
             NotificationControl.error('Fejl', err.responseJSON.result);
@@ -190,4 +206,17 @@ function checkOutTool(checkInID) {
 
     $(document.body).append(form);
     $('#check-out-tool-form').submit();
+}
+
+/**
+ * Funktion som kører efter brugeren har lånt et værktøj
+ * Den genstarter processen, så brugeren kan låne flere værktøj kort tid efter hinanden på samme side
+ */
+function afterCheckIn() {
+    if (!isAdmin()) {
+        $(toolContainer).slideUp();
+        enableCheckInBtn();
+        $(checkInBtn).html(`Lån   <i class="fal fa-shopping-basket"></i>`);
+        $(scanContainer).slideDown();
+    }
 }

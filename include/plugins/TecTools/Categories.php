@@ -77,7 +77,7 @@ class Categories {
         }
 
         $this->RCMS->execute('CALL removeCategory(?)', array('i', $categoryID));
-        Helpers::setNotification('Success', 'Kategorien blev slettet');
+        Helpers::setNotification('Succes', 'Kategorien blev slettet');
     }
 
     /**

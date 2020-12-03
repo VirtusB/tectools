@@ -39,10 +39,10 @@ class RCMSTables {
      * @param string $id
      * @param string $table
      * @param array $columns
-     * @param array $settings
-     * @param array $where
+     * @param array|null $settings
+     * @param array|null $where
      * @param null|string $order
-     * @param array $buttons
+     * @param array|null $buttons
      * @param null|array $dropdown
      * @return void
      */
@@ -235,7 +235,7 @@ class RCMSTables {
     }
 
     /**
-     * Loader data og udskriver tabellen som HTML men bruges til AJAX requests
+     * Loader data og udskriver tabellen som HTML som bruges til AJAX requests
      * @return void
      */
     private function loadAjax(): void {
@@ -497,7 +497,15 @@ class RCMSTables {
         if ($whereClause !== "" && !empty($whereArr)) {
             $query = "SELECT $selectColumns FROM $table WHERE $whereClause" . $order . $limit;
             $this->logQuery($settings, $query, $whereArr);
-            $result = $this->RCMS->execute($query, $whereArr);
+
+            // Vi er stadig nød til at tjekke rekursivt på om $whereArr er tomt,
+            // da arrayet vil se sådan her ud: array(array())
+            // Hvis der er brugt en af "direct_" mulighederne i WHERE, f.eks. direct_in
+            if (self::isEmpty($whereArr)) {
+                $result = $this->RCMS->execute($query);
+            } else {
+                $result = $this->RCMS->execute($query, $whereArr);
+            }
         } else {
             $query = "SELECT $selectColumns FROM $table" . $order . $limit;
             $this->logQuery($settings, $query, $whereArr);
@@ -515,6 +523,26 @@ class RCMSTables {
         }
 
         return [];
+    }
+
+    /**
+     * Tjekker rekursivt om et array er tomt
+     * @param array $array
+     * @return bool
+     */
+    public static function isEmpty(array $array): bool
+    {
+        $empty = true;
+
+        array_walk_recursive($array, static function ($leaf) use (&$empty) {
+            if ($leaf === [] || $leaf === '') {
+                return;
+            }
+
+            $empty = false;
+        });
+
+        return $empty;
     }
 
     /**
@@ -552,7 +580,7 @@ class RCMSTables {
      * @param string $prop Den property/key/egenskab der skal plukkes
      * @return array Array af egenskabsværdierne
      */
-    private static function pluck (array $a, string $prop ): array {
+    private static function pluck (array $a, string $prop): array {
         $out = array();
         $arrayLength = count($a);
 

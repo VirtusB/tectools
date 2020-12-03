@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 /**
  * Class Cronjobs
- * I denne klasse opretter vi én metode til hvert cronjob, vi gerne vil have der skal køre på TecTools siden
+ * I denne klasse opretter vi en metode til hvert cronjob, vi gerne vil have der skal køre på TecTools siden.
+ * Efter man har lavet metoden, skal den tilføjes til "Cron" arrayet i RCMS.
  */
 class Cronjobs {
     public RCMS $RCMS;

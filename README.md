@@ -26,7 +26,9 @@ For at køre tests:
       - Dokumentation genereret af Doxygen.
       - Åbn index.html for at læse dokumentationen.
     - documents
-      - ER diagram for databasen
+      - Brainstorm for TecTools og andre dokumenter
+    - images
+      - ER diagram for databasen og andet
     - mockups
       - Mockups for TecTools siden
     - scripts
@@ -85,6 +87,8 @@ For at køre tests:
     - Konfigurationsfil til apache
   - config.php
     - Konfigurationsfil til RCMS
+  - Doxyfile
+    - Konfigurationsfil til doxygen, til at generere dokumentation
   - index.php
     - Entry-point for TecTools / RCMS
   - README.me

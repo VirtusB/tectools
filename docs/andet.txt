@@ -208,7 +208,7 @@ abstract class Base {
     }
 
     /**
-     * Denne metode tjekker, om $_POST array'et indeholder navnet på en metode i denne klasse (og underklasse),
+     * Denne metode tjekker, om $_POST arrayet indeholder navnet på en metode i denne klasse (og underklasse),
      * tjekker derefter om det er en af de tilladte endpoints,
      * og eksekvere efterfølgende metoden hvis det er tilfældet
      *
@@ -266,4 +266,57 @@ abstract class Base {
             $this->$endpoint(...$args);
         }
     }
+}
+
+
+
+
+
+
+
+
+function initCustomColors() {
+    let confTheme =
+        `
+        <div style="min-width: 200px; min-height: 100px; user-select: none">
+            <h6>Brugerdefinerede farver</h6>
+
+            <input type="color" id="text-color" name="text-color" value="#e66465">
+            <label for="text-color">Tekst</label>
+            <br>
+            <input type="color" id="background-color" name="background-color" value="#e66465">
+            <label for="background-color">Baggrund</label>
+        </div>
+        `;
+
+    tippy('#config-theme', {
+        content: confTheme,
+        placement: 'right-start', //top-end
+        trigger: 'click',
+        allowHTML: true,
+        interactive: true,
+        // inertia: true,
+        animation: 'scale',
+        onMount: () => {
+            document.getElementById('text-color').addEventListener('input', customTextColorChange);
+            document.getElementById('background-color').addEventListener('input', customBackgroundColorChange);
+        }
+    });
+}
+
+function customBackgroundColorChange(event) {
+    let hexColor = event.target.value;
+    $(document.body).css('background-color', hexColor);
+    document.querySelectorAll('div, .card, nav, footer').forEach(el => {
+        $(el).css('background-color', hexColor);
+    });
+}
+
+function customTextColorChange(event) {
+    let hexColor = event.target.value;
+    $(document.body).css('color', hexColor);
+
+    document.querySelectorAll('div, .card, nav, footer, span, input').forEach(el => {
+        $(el).css('color', hexColor + ' !important;');
+    });
 }

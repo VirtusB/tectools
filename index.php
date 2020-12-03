@@ -6,6 +6,7 @@ ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 
+ini_set('session.gc_maxlifetime', '1200');
 ini_set( 'serialize_precision', '-1' );
 date_default_timezone_set('Europe/Copenhagen');
 setlocale(LC_ALL, 'da_DK');

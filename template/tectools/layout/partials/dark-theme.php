@@ -30,10 +30,6 @@ declare(strict_types=1);
         background: #1d1d1d !important;
     }
 
-    #des-editor div.ql-editor {
-        /*background: #909090;*/
-    }
-
     .card-panel.teal {
         background-color: #1d1d1d !important;
     }

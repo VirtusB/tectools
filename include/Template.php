@@ -26,9 +26,9 @@ class Template {
      * Hvis require_login er sat til true, kan man kun se siden hvis man er logget ind
      *
      * Hvis is_admin_page er sat til true, kan man kun se siden hvis man er admin
-     * @return void
+     * @return void|string
      */
-	public function display_content(): void {
+	public function display_content() {
 		$request = $this->RCMS->getRequestedPage();
 
 		if ($request === null) {
@@ -62,7 +62,7 @@ class Template {
 			}
 			require_once($request);
 		} else {
-			$request['content'];
+			return $request['content'];
 		}
 	}
 

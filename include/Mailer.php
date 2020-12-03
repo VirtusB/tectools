@@ -2,6 +2,11 @@
 
 declare(strict_types=1);
 
+/**
+ * Class Mailer
+ * Denne klasse fungerer som en wrapper til SwiftMailer.
+ * Den indeholder en metode, som gør det nemmere at sende mails og reducere mængden af kode der skal skrives.
+ */
 class Mailer {
     /**
      * @var RCMS $RCMS

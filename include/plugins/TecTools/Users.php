@@ -49,14 +49,6 @@ class Users {
     }
 
     /**
-     * Returnerer brugerens abonnement navn
-     * @return bool|string
-     */
-    public function getSubName() {
-        return $_SESSION['user']['SubName'] ?? false;
-    }
-
-    /**
      * Sletter en bruger via POST request
      * Tjekker om brugeren stadig har aktive udlejninger
      * Hvis brugeren har et abonnement, opsiges det
@@ -83,7 +75,7 @@ class Users {
 
         $this->RCMS->Logs->addLog(Logs::DELETE_USER_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        Helpers::setNotification('Success', 'Brugeren blev slettet');
+        Helpers::setNotification('Succes', 'Brugeren blev slettet');
 
         // Log ud hvis det er brugeren selv der sletter kontoen
         if ($userIDPost === $this->RCMS->Login->getUserID()) {
@@ -96,7 +88,7 @@ class Users {
     /**
      * Returnerer brugerens abonnement
      * @param int $userID
-     * @return array|bool
+     * @return array|false
      * @throws \Stripe\Exception\ApiErrorException
      */
     public function getUserProduct(int $userID) {

@@ -54,14 +54,29 @@ class NotificationControl {
         theme: 'error'
     });
 
+    /**
+     * Viser en succes besked
+     * @param title
+     * @param message
+     */
     static success(title, message) {
         this.successNotification({title, message});
     }
 
+    /**
+     * Viser en advarsel besked
+     * @param title
+     * @param message
+     */
     static warning(title, message) {
         this.warningNotification({title, message});
     }
 
+    /**
+     * Viser en fejl besked
+     * @param title
+     * @param message
+     */
     static error(title, message) {
         this.errorNotification({title, message});
     }

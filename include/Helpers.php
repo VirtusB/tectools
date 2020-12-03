@@ -31,8 +31,7 @@ class Helpers {
      * @param string $type
      * @throws JsonException
      */
-	public static function setNotification($title, $message, $type = 'success'): void {
-
+	public static function setNotification(string $title = '', string $message = '', string $type = 'success'): void {
         $data = json_encode([
             'title' => $title,
             'message' => $message,
@@ -45,14 +44,11 @@ class Helpers {
     /**
      * Genererer et GUID
      * Version 4 på 36 karakterer (med bindestreger)
-     * @param null $data
      * @return string
      * @throws Exception
      */
-    public static function guidv4($data = null): string {
-        $data = $data ?? random_bytes(16);
-
-        assert(strlen($data) === 16);
+    public static function guidv4(): string {
+        $data = random_bytes(16);
 
         $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // set version to 0100
         $data[8] = chr(ord($data[8]) & 0x3f | 0x80); // set bits 6-7 to 10
@@ -121,16 +117,13 @@ class Helpers {
     }
 
     /**
-     * Returnerer true hvis brugeren er logget ind og siden er en personale side
-     * @return bool
+     * Omdirigerer brugeren
+     * @param $page
      */
-	public function isAdminPage(): bool {
-		$request = $this->RCMS->getRequestedPage();
-		return $request['is_admin_page'] && $this->RCMS->Login->isLoggedIn();
-	}
-
 	public static function redirect($page): void {
-	    @header("Location:  $page");
+	    if (PHP_SAPI !== 'cli') {
+            @header("Location:  $page");
+        }
     }
 
     /**

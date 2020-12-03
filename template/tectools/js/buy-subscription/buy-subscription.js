@@ -82,7 +82,7 @@ function createPaymentMethod(card) {
 }
 
 /**
- * Opret abonnement for brugeren via POST request
+ * Opretter abonnement for brugeren via POST request
  * @param customerId
  * @param paymentMethodId
  * @param priceId

@@ -43,7 +43,7 @@ class Reservations {
     /**
      * Tjekker om et værktøj er reserveret
      *
-     * Returnerer false hvis det er brugeren selv, $userID, som har ejer reservationen
+     * Returnerer false hvis det er brugeren selv, $userID, som ejer reservationen
      * @param int $toolID
      * @param int $userID
      * @return bool
@@ -95,20 +95,20 @@ class Reservations {
      * Sletter en reservation via POST request
      */
     public function deleteReservation(): void {
+        $userID = $_POST['user_id'] ?? $this->RCMS->Login->getUserID();
+        $userID = (int) $userID;
         $reservationID = (int) $_POST['reservation_id'];
 
-        if (!$this->userOwnsReservation($reservationID)) {
+        if (!$this->userOwnsReservation($reservationID) && !$this->RCMS->Login->isAdmin()) {
             Helpers::setNotification('Fejl', 'Du ejer ikke denne reservation', 'error');
             return;
         }
-
-        $userID = $this->RCMS->Login->getUserID();
 
         $this->RCMS->execute('CALL removeReservation(?, ?)', array('ii', $userID, $reservationID));
 
         $this->RCMS->Logs->addLog(Logs::DELETE_RESERVATION_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        Helpers::setNotification('Success', 'Reservationen blev slettet');
+        Helpers::setNotification('Succes', 'Reservationen blev slettet');
     }
 
     /**
@@ -168,6 +168,6 @@ class Reservations {
 
         $this->RCMS->Logs->addLog(Logs::ADD_RESERVATION_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        Helpers::setNotification('Success', 'Værktøjet er nu reserveret til dig');
+        Helpers::setNotification('Succes', 'Værktøjet er nu reserveret til dig');
     }
 }

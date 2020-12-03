@@ -37,7 +37,7 @@ function updatePagination() {
 }
 
 /**
- * Opdaterer array'et med valgte log typer
+ * Opdaterer arrayet med valgte log typer
  * @param context
  */
 function updateSelectedTypes(context) {

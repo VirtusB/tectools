@@ -77,7 +77,7 @@ class Manufacturers {
         }
 
         $this->RCMS->execute('CALL removeManufacturer(?)', array('i', $manufacturerID));
-        Helpers::setNotification('Success', 'Producenten blev slettet');
+        Helpers::setNotification('Succes', 'Producenten blev slettet');
     }
 
     /**

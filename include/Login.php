@@ -150,7 +150,7 @@ HTML;
         $this->RCMS->execute('CALL updatePassword(?, ?)', array('ss', $email, $hashedPassword));
         $this->RCMS->execute('CALL setPasswordResetUsed(?)', array('s', $hash));
 
-        Helpers::setNotification('Success', 'Din adgangskode blev ændret');
+        Helpers::setNotification('Succes', 'Din adgangskode blev ændret');
 
         Helpers::redirect('/login');
     }
@@ -212,7 +212,7 @@ HTML;
 
                 $this->RCMS->Logs->addLog(Logs::LOG_IN_TYPE_ID, ['UserID' => $user['UserID']]);
 
-                Helpers::setNotification('Success', 'Du er nu logget på');
+                Helpers::setNotification('Succes', 'Du er nu logget på');
                 Helpers::redirect('/dashboard');
             } else {
                 Helpers::redirect('/login?wrong_email_or_password');
@@ -365,7 +365,7 @@ HTML;
 	}
 
     /**
-     * Salter brugerens adgangskode og krypterer med MD5
+     * Hasher og salter brugerens adgangskode
      * @param string $pass Brugerens adgangskode
      * @return string
      */

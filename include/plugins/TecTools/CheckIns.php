@@ -225,7 +225,7 @@ class CheckIns {
     }
 
     /**
-     * Funktion til at tjekke værktøj ud via POST request
+     * Tjekker et værktøj ud via POST request
      * Kan kun bruges af administratorer
      */
     public function checkOut(): void {
@@ -243,7 +243,7 @@ class CheckIns {
 
         $this->RCMS->execute('CALL checkout(?, ?)', array('ii', $toolID, $statusID));
 
-        Helpers::setNotification('Success', 'Værktøjet blev tjekket ud');
+        Helpers::setNotification('Succes', 'Værktøjet blev tjekket ud');
     }
 
     /**
@@ -268,9 +268,9 @@ class CheckIns {
 
     /**
      * Returnerer udlejninger som skal vises nederst på forsiden i det glidende element, marquee
-     * @return array|mixed
+     * @return array
      */
-    public function getCheckInsForMarquee() {
+    public function getCheckInsForMarquee(): array {
         $checkIns = $this->RCMS->execute('CALL getCheckInsForMarquee()')->fetch_all(MYSQLI_ASSOC) ?? [];
 
         foreach ($checkIns as &$checkIn) {

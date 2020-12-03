@@ -19,7 +19,7 @@ window.addEventListener('load', function () {
 });
 
 /**
- * Tilføjer tooltips til udlejninger der er overskredet datoen for indlevering
+ * Tilføjer tooltips til udlejninger der har overskredet datoen for indlevering
  */
 function handleExceededRentals() {
     let elements = document.querySelectorAll('td[data-exceeded-date="1"]');
@@ -45,12 +45,27 @@ function deleteReservation(id, context) {
         return;
     }
 
-    let form = `
-    <form style="display: none;" method="POST">
-        <input type="hidden" name="post_endpoint" value="deleteReservation">
-        <input type="hidden" name="reservation_id" value="${id}">
-    </form>
-    `;
+    // "id" variablen er reservations ID'et, hvis det er brugeren selv der sletter reservationen
+    // "id" variablen er et bruger ID, hvis det er en personale bruger der sletter en reservation som tilhører en bruger
+
+    if (isAdmin()) {
+        let reservationID = $(context).parent().parent().find('td').first().html();
+
+        var form = `
+        <form style="display: none;" method="POST">
+            <input type="hidden" name="post_endpoint" value="deleteReservation">
+            <input type="hidden" name="user_id" value="${id}">
+            <input type="hidden" name="reservation_id" value="${reservationID}">
+        </form>
+        `;
+    } else {
+        var form = `
+        <form style="display: none;" method="POST">
+            <input type="hidden" name="post_endpoint" value="deleteReservation">
+            <input type="hidden" name="reservation_id" value="${id}">
+        </form>
+        `;
+    }
 
     $(context).append(form);
     $(context).find(`input[value=${id}]`).parent().submit();
@@ -89,6 +104,7 @@ function hideExceededReservations() {
 function showCommentCheckIn(checkInID, context) {
     let commentModal = M.Modal.getInstance(document.getElementById('comment-modal'));
     let commentTextArea = document.getElementById('comment-textarea');
+    let btn = document.getElementById('comment-modal').querySelector('button');
     document.querySelector('#comment-modal button').setAttribute('data-checkin-id', checkInID);
 
     $.post({
@@ -101,9 +117,15 @@ function showCommentCheckIn(checkInID, context) {
 
             if (res.result.CheckedOut === 1) {
                 commentTextArea.setAttribute('readonly', 'readonly');
+                btn.innerText = 'Luk';
+                btn.onclick = '';
             } else {
                 if (!isAdmin()) {
                     commentTextArea.removeAttribute('readonly');
+                    btn.innerText = 'Gem';
+                    btn.onclick = function () {
+                        saveCheckInComment(btn.getAttribute('data-checkin-id'), btn)
+                    };
                 }
             }
 
@@ -116,7 +138,7 @@ function showCommentCheckIn(checkInID, context) {
 }
 
 /**
- * Gem en kommentar til en udlejning
+ * Gemmer en kommentar til en udlejning
  * @param checkInID
  * @param context
  */
@@ -138,7 +160,7 @@ function saveCheckInComment(checkInID, context) {
 }
 
 /**
- * Åbner et vindue hvor personale kan vælge status for værktøjet og tjekke det ud
+ * Åbner et vindue hvor personale kan vælge status for et værktøj og tjekke det ud
  * @param checkInID
  * @param context
  */
@@ -226,25 +248,4 @@ function deleteCategory(categoryID, context) {
 
     $(context).append(form);
     $(context).find(`input[value=${categoryID}]`).parent().submit();
-}
-
-/**
- * Slet værktøj
- * @param toolID
- * @param context
- */
-function deleteTool(toolID, context) {
-    if (!confirm('Er du helt sikker?')) {
-        return;
-    }
-
-    let form = `
-    <form style="display: none;" method="POST">
-        <input type="hidden" name="post_endpoint" value="deleteTool">
-        <input type="hidden" name="tool_id" value="${toolID}">
-    </form>
-    `;
-
-    $(context).append(form);
-    $(context).find(`input[value=${toolID}]`).parent().submit();
 }

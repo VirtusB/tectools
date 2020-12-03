@@ -102,7 +102,7 @@ class TecTools {
      * @var array|string[]
      */
     public static array $allowedEndpoints = [
-        'addTool', 'editTool', 'getToolByBarcodeAjax', 'deleteTool', 'contactCustomerService'
+        'addTool', 'editTool', 'getToolByBarcodeAjax', 'contactCustomerService'
     ];
 
     /**
@@ -198,7 +198,7 @@ class TecTools {
      * Uploader et billede for et værktøj via en POST request, bruger $_FILES array
      * @param string $imageName
      * @param string $tmpName
-     * @return bool|string
+     * @return string|false
      * @throws Exception
      */
     private function uploadImage(string $imageName, string $tmpName) {
@@ -271,25 +271,6 @@ class TecTools {
     }
 
     /**
-     * Sletter et værktøj via POST request
-     */
-    public function deleteTool(): void {
-        $toolID = (int) $_POST['tool_id'];
-        // Skal man kunne slette et værktøj der er i brug på aktive eller afsluttede udlejninger/reservationer?
-        // Skal metoden slette udlejninger og reservationer, eller skal metoden forhindre brugeren i at slette værktøjet?
-    }
-
-    /**
-     * Tjekker om et værktøj bliver benyttet på nuværende tidspunkt
-     * @param int $categoryID
-     * @return bool
-     */
-    private function isToolInUse(int $categoryID): bool {
-        // Tjek om der er nogen aktive eller afsluttede udlejninger og reservationer
-        // Slet også CategoryTools
-    }
-
-    /**
      * Henter et værktøj ud fra databasen
      * @param int $toolID
      * @return array|false
@@ -339,9 +320,9 @@ class TecTools {
 
     /**
      * Henter alle vores butikker ud af databasen
-     * @return array|mixed
+     * @return array
      */
-    public function getAllStores() {
+    public function getAllStores(): array {
         return $this->RCMS->execute('CALL getAllStores()')->fetch_all(MYSQLI_ASSOC) ?? [];
     }
 
@@ -362,7 +343,7 @@ class TecTools {
     }
 
     /**
-     * Returnerer mængden af værktøj der er i databasen (med filtre), til brug ved pagination
+     * Returnerer antal af værktøj der er i databasen (med filtre), til brug ved pagination
      * @return int
      */
     public function getToolCountWithFilters(): int {
@@ -452,7 +433,7 @@ class TecTools {
     }
 
     /**
-     * Henter værktøj ud af databasen, med mulighed for at filtrere på kategorier og søgetekst
+     * Henter værktøj ud af databasen og filtrere på kategorier og søgetekst hvis det er valgt
      * @return array
      */
     public function getAllToolsWithFilters(): array {
@@ -479,7 +460,7 @@ class TecTools {
     }
 
     /**
-     * Denne metode tjekker, om $_POST array'et indeholder navnet på en metode i denne klasse eller de andre TecTools underklasser,
+     * Denne metode tjekker, om $_POST arrayet indeholder navnet på en metode i denne klasse eller de andre TecTools underklasser,
      * tjekker derefter om det er en af de tilladte endpoints,
      * og eksekvere efterfølgende metoden hvis det er tilfældet
      *

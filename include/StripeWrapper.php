@@ -13,7 +13,7 @@ use Stripe\SubscriptionItem;
 /**
  * Class StripeWrapper
  * Denne klasse fungerer som en wrapper til Stripe API'et.
- * Den indeholder som gør det nemmere at arbejde med API'et og reducere mængden af kode der skal skrives.
+ * Den indeholder metoder som gør det nemmere at arbejde med API'et og reducere mængden af kode der skal skrives.
  * Den indeholder bl.a. metoder til at oprette, redigere og slette kunder og hente produkter
  */
 class StripeWrapper {
@@ -112,9 +112,8 @@ class StripeWrapper {
     }
 
     /**
-     * Tjekker om prisen for et produkt er over x kroner
+     * Tjekker om prisen for et produkt er over X kroner
      *
-     * Vi anser et produkt værende premium hvis det koster mere end x kroner
      * @param array $product
      * @param float $premiumPrice
      * @return bool
@@ -175,12 +174,12 @@ class StripeWrapper {
     /**
      * Returnerer ID'et for et abonnement for kunden med $customerID
      * @param string $customerID Kundens ID
-     * @return mixed|null
+     * @return string|null
      * @throws ApiErrorException
      */
-    public function getSubscriptionID(string $customerID) {
+    public function getSubscriptionID(string $customerID): ?string {
         $subscription = $this->getStripeClient()->subscriptions->all(['customer' => $customerID]);
-        return $subscription->data[0]->id;
+        return $subscription->data[0]->id ?? null;
     }
 
     /**
@@ -189,20 +188,20 @@ class StripeWrapper {
      * @return \Stripe\StripeObject
      * @throws ApiErrorException
      */
-    public function getSubscription(string $customerID) {
-        return $this->getStripeClient()->subscriptions->all(['customer' => $customerID])->data[0];
+    public function getSubscription(string $customerID): ?\Stripe\StripeObject {
+        return $this->getStripeClient()->subscriptions->all(['customer' => $customerID])->data[0] ?? null;
     }
 
     /**
      * Returnerer et Stripe produkt
      *
      * Reference for produkt: https://stripe.com/docs/api/products
-     * @param string $id ID på et Stripe produkt, F.eks. prod_HQWzfyxLdAjwWo
-     * @return bool|array
+     * @param string $productID ID på et Stripe produkt, F.eks. prod_HQWzfyxLdAjwWo
+     * @return false|array
      * @throws ApiErrorException
      */
-    public function getStripeProduct(string $id) {
-        $product = array_filter($this->getStripeProducts(), static fn($product) => $product['id'] === $id);
+    public function getStripeProduct(string $productID) {
+        $product = array_filter($this->getStripeProducts(), static fn($product) => $product['id'] === $productID);
 
         if ($product) {
             $product = reset($product);
@@ -216,12 +215,12 @@ class StripeWrapper {
      * Returnerer ID på det Stripe produkt som en kunde har abonneret på
      *
      * Reference for kunder: https://stripe.com/docs/api/customers
-     * @param string $customerStripeID Stripe customer ID som ligger i "StripeID" kolonnen i "Users" tabellen i databasen
-     * @return bool|string|Product|null
+     * @param string $customerID Stripe customer ID som ligger i "StripeID" kolonnen i "Users" tabellen i databasen
+     * @return false|string
      * @throws ApiErrorException
      */
-    public function getProductIDForCustomer(string $customerStripeID) {
-        $customer = $this->getStripeClient()->customers->retrieve($customerStripeID);
+    public function getProductIDForCustomer(string $customerID) {
+        $customer = $this->getStripeClient()->customers->retrieve($customerID);
 
         /**
          * @var Subscription $sub
@@ -237,7 +236,7 @@ class StripeWrapper {
          */
         $subItem = $sub->items->data[0];
 
-        return $subItem->plan->product;
+        return $subItem->plan->product ?? false;
     }
 
 }
