@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['savecheckincomment_305',['saveCheckInComment',['../class_check_ins.html#a31b942d9ef88b045f060e6f676ba9804',1,'CheckIns']]],
+  ['scan_2ejs_306',['scan.js',['../scan_8js.html',1,'']]],
+  ['scan_2ephp_307',['scan.php',['../scan_8php.html',1,'']]],
+  ['scan_5ftype_5fid_308',['SCAN_TYPE_ID',['../class_logs.html#a23f4c2a859d1ebda8961ce35da66dd81',1,'Logs']]],
+  ['sendemail_309',['sendEmail',['../class_mailer.html#ac6c85a2b2e8d8c33c3060bf8f337dee5',1,'Mailer']]],
+  ['sendmailoldreservationdeleted_310',['sendMailOldReservationDeleted',['../class_cronjobs.html#a74d0d41d10217757efbb87cdca64e859',1,'Cronjobs']]],
+  ['sendresetpasswordmail_311',['sendResetPasswordMail',['../class_login.html#a54e4f6825f5e1d396562cfa94ca97d84',1,'Login']]],
+  ['setlogincookies_312',['setLoginCookies',['../class_login.html#a1dc8e099b49244f4ac592ec91e2168fe',1,'Login']]],
+  ['setnotification_313',['setNotification',['../class_helpers.html#a91eb7cf171c4c21c7382e0a055e55bea',1,'Helpers']]],
+  ['setsubname_314',['setSubName',['../class_subscriptions.html#adcff01e67bc33a960224903d5bc6ad41',1,'Subscriptions']]],
+  ['setup_315',['setUp',['../class_login_test.html#a0bc688732d2b3b162ffebaf7812e78da',1,'LoginTest']]],
+  ['setuptestdatabase_316',['setupTestDatabase',['../setup_test_database_8php.html#a5ed72b0caa7b978bb3e5303adb02573b',1,'setupTestDatabase.php']]],
+  ['setuptestdatabase_2ephp_317',['setupTestDatabase.php',['../setup_test_database_8php.html',1,'']]],
+  ['shouldautoload_318',['shouldAutoLoad',['../class_r_c_m_s.html#a7c50e6b20c2d50d1a81460d9fc747db8',1,'RCMS']]],
+  ['showtoolbarcode_319',['showToolBarcode',['../class_global_handlers.html#a134487ba0a656b8049d07b00befbdc7e',1,'GlobalHandlers']]],
+  ['siden_320',['siden',['../andet_8txt.html#aea5838966ff30310bbe1d1cc830f8740',1,'andet.txt']]],
+  ['software_321',['software',['../_r_e_a_d_m_e__th__da___d_k_8txt.html#a0a79af59f7037c1bbe435911f05dfb39',1,'software():&#160;README_th_da_DK.txt'],['../_r_e_a_d_m_e__th__en-_u_s_8txt.html#a0a79af59f7037c1bbe435911f05dfb39',1,'software():&#160;README_th_en-US.txt']]],
+  ['sprogteknologi_322',['Sprogteknologi',['../th__desc__da___d_k_8txt.html#af001f6ff18f3590d5efc7a9cb6c48449',1,'Sprogteknologi():&#160;th_desc_da_DK.txt'],['../th__desc__en___u_s_8txt.html#af001f6ff18f3590d5efc7a9cb6c48449',1,'Sprogteknologi():&#160;th_desc_en_US.txt']]],
+  ['standard_5fuser_5flevel_323',['STANDARD_USER_LEVEL',['../class_login.html#aa05a7ccf9bd859d0e086843f327985e7',1,'Login']]],
+  ['street_324',['Street',['../_r_e_a_d_m_e__th__da___d_k_8txt.html#a42e43b160947f4b83236fd237c79bdc0',1,'Street():&#160;README_th_da_DK.txt'],['../_r_e_a_d_m_e__th__en-_u_s_8txt.html#a42e43b160947f4b83236fd237c79bdc0',1,'Street():&#160;README_th_en-US.txt']]],
+  ['stripewrapper_325',['StripeWrapper',['../class_stripe_wrapper.html',1,'']]],
+  ['stripewrapper_2ephp_326',['StripeWrapper.php',['../_stripe_wrapper_8php.html',1,'']]],
+  ['subscriptions_327',['Subscriptions',['../class_subscriptions.html',1,'']]],
+  ['subscriptions_2ephp_328',['Subscriptions.php',['../_subscriptions_8php.html',1,'']]]
+];

@@ -1,0 +1,5 @@
+<map id="sendResetPasswordMail" name="sendResetPasswordMail">
+<area shape="rect" id="node1" title=" " alt="" coords="5,31,171,57"/>
+<area shape="rect" id="node2" href="$class_r_c_m_s.html#aa9522960dcaf82546b8fd196cdbdc2f2" title=" " alt="" coords="219,5,389,32"/>
+<area shape="rect" id="node3" href="$class_mailer.html#ac6c85a2b2e8d8c33c3060bf8f337dee5" title=" " alt="" coords="243,56,365,83"/>
+</map>

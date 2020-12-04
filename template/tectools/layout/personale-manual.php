@@ -8,7 +8,6 @@ declare(strict_types=1);
     <div class="row">
         <div class="col s12 center mb2">
             <h4 class="bold mb2">Manual til personale</h4>
-            <p>Alle funktioner kræver at du er <a href="/login">logget ind</a></p>
             <p class="mb2">Tryk på knapperne for videoinstruktion</a></p>
 
             <button class="btn tec-btn play mb2">

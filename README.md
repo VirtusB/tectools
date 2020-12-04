@@ -10,6 +10,9 @@ For at køre tests:
 
 `include/vendor/bin/phpunit --testdox ../tests/`
 
+Dokumentation genereret af Doxygen kan læses her:
+URL: [Dokumentation](https://tectools.virtusb.com/docs/html/index.html)
+
 - Systemkrav
   - PHP 7.4
   - MySQL 5.7

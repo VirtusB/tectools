@@ -1,0 +1,11 @@
+<map id="StripeWrapper" name="StripeWrapper">
+<area shape="rect" id="node1" title=" " alt="" coords="513,145,657,355"/>
+<area shape="rect" id="node3" href="$class_r_c_m_s.html" title=" " alt="" coords="484,417,687,847"/>
+<area shape="rect" id="node2" title=" " alt="" coords="541,5,630,83"/>
+<area shape="rect" id="node4" href="$class_helpers.html" title=" " alt="" coords="5,975,184,1199"/>
+<area shape="rect" id="node5" href="$class_mailer.html" title=" " alt="" coords="208,1041,363,1133"/>
+<area shape="rect" id="node6" href="$class_login.html" title=" " alt="" coords="387,909,581,1265"/>
+<area shape="rect" id="node7" href="$class_cron.html" title=" " alt="" coords="605,1027,720,1148"/>
+<area shape="rect" id="node8" href="$class_logs.html" title=" " alt="" coords="745,946,981,1229"/>
+<area shape="rect" id="node9" href="$class_template.html" title=" " alt="" coords="1005,1034,1139,1141"/>
+</map>
