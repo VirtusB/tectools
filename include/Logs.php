@@ -33,6 +33,7 @@ class Logs {
     public const DELETE_RESERVATION_TYPE_ID = 17;
     public const ADD_COMMENT_TYPE_ID = 18;
     public const EDIT_COMMENT_TYPE_ID = 19;
+    public const CREATE_USER_TYPE_ID = 20;
 
     public function __construct(RCMS $RCMS) {
         $this->RCMS = $RCMS;

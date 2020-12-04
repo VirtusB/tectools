@@ -45,11 +45,11 @@ $_SESSION['contact_page_captcha'] = $result;
 
                     <div class="row">
                         <div class="input-field col m6 s12">
-                            <input required id="email" value="<?= $_POST['email'] ?? '' ?>" name="email" type="text" class="validate">
+                            <input required id="email" value="<?= $_POST['email'] ?? '' ?>" name="email" type="email" class="validate">
                             <label for="email" class="">Email</label>
                         </div>
                         <div class="input-field col m6 s12">
-                            <input required id="phone_number" value="<?= $_POST['phone'] ?? '' ?>" name="phone" type="tel" class="validate">
+                            <input pattern="\d*" minlength="8" required id="phone_number" value="<?= $_POST['phone'] ?? '' ?>" name="phone" type="text" class="validate">
                             <label for="phone_number" class="">Telefon nr.</label>
                         </div>
                     </div>

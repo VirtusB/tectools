@@ -915,7 +915,8 @@ RECURSIVE              = YES
 EXCLUDE                = config.php \
                          include/vendor \
                          docs/html \
-                         template/tectools/js/libs
+                         template/tectools/js/libs \
+                         tests
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
@@ -2374,7 +2375,7 @@ GROUP_GRAPHS           = YES
 # The default value is: NO.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
-UML_LOOK               = NO
+UML_LOOK               = YES
 
 # If the UML_LOOK tag is enabled, the fields and methods are shown inside the
 # class node. If there are many fields or methods and many nodes the graph may

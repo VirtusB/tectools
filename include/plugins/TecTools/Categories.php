@@ -22,7 +22,7 @@ class Categories {
     /**
      * Liste over POST endpoints (metoder), som kan eksekveres automatisk
      * Vi er nød til at have en liste over tilladte endpoints, så brugere ikke kan eksekvere alle metoder i denne klasse
-     * @var array|string[]
+     * @var $allowedEndpoints array|string[]
      */
     public static array $allowedEndpoints = [
         'addCategory', 'editCategory', 'deleteCategory'

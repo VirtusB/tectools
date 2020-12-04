@@ -22,7 +22,7 @@ class Users {
     /**
      * Liste over POST endpoints (metoder), som kan eksekveres automatisk
      * Vi er nød til at have en liste over tilladte endpoints, så brugere ikke kan eksekvere alle metoder i denne klasse
-     * @var array|string[]
+     * @var $allowedEndpoints array|string[]
      */
     public static array $allowedEndpoints = [
         'editUser', 'deleteUser'
@@ -41,11 +41,20 @@ class Users {
     }
 
     /**
-     * Returnerer brugerens Stripe Customer ID
-     * @return bool|string
+     * Returnerer Stripe Customer ID for den bruger som er logget ind
+     * @return false|string
      */
     public function getStripeID() {
         return $_SESSION['user']['StripeID'] ?? false;
+    }
+
+    /**
+     * Returnerer Stripe Customer ID for den bruger med $userID
+     * @param int $userID
+     * @return string|false
+     */
+    public function getStripeIDForUser(int $userID) {
+        return $this->RCMS->execute('CALL getStripeID(?)', array('i', $userID))->fetch_object()->StripeID ?? false;
     }
 
     /**
@@ -56,6 +65,7 @@ class Users {
      */
     public function deleteUser(): void {
         $userIDPost = (int) $_POST['userID'];
+        $stripeID = $userIDPost === $this->RCMS->Login->getUserID() ? $this->getStripeID() : $this->getStripeIDForUser($userIDPost);
 
         if ($userIDPost !== $this->RCMS->Login->getUserID() && !$this->RCMS->Login->isAdmin()) {
             return;
@@ -67,9 +77,7 @@ class Users {
             return;
         }
 
-        $this->TecTools->Subscriptions->cancelSubscription();
-
-        $this->RCMS->StripeWrapper->removeCustomer($this->getStripeID());
+        $this->RCMS->StripeWrapper->removeCustomer($stripeID);
 
         $this->RCMS->execute('CALL removeUser(?)', array('i', $userIDPost));
 

@@ -256,7 +256,9 @@ HTML;
 
         $stripeID = $this->addUserToStripe($firstname, $lastname, $email, $phone, $address, $zipcode, $city);
 
-        $this->RCMS->execute('CALL addUser(?, ?, ?, ?, ?, ?, ?, ?, ?)', array('sssssssss', $firstname, $lastname, $email, $hashedPass, $phone, $address, $zipcode, $city, $stripeID));
+        $res = $this->RCMS->execute('CALL addUser(?, ?, ?, ?, ?, ?, ?, ?, ?)', array('sssssssss', $firstname, $lastname, $email, $hashedPass, $phone, $address, $zipcode, $city, $stripeID));
+        $userID = $res->fetch_assoc()['lastInsertId'];
+        $this->RCMS->Logs->addLog(Logs::CREATE_USER_TYPE_ID, ['UserID' => $userID]);
 
         $this->log_in();
 	}
