@@ -134,6 +134,11 @@ function () {
   }
   // what the timer will do
   Timeago.prototype.doRender = function(node, date, locale) {
+    if (date === 'null' || date === null || date === '') {
+      node.innerHTML = '';
+      return;
+    }
+
     var diff = diffSec(date, this.nowDate),
       self = this,
       tid;

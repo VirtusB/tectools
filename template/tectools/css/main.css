@@ -337,3 +337,11 @@ input[type="color"] {
 .select-wrapper+label {
     position: initial;
 }
+
+.tabs .tab a {
+    color: #2d3e50;
+}
+
+.hiddendiv.common {
+    display: none;
+}

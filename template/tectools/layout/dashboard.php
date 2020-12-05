@@ -42,8 +42,20 @@ $TecTools = $GLOBALS['TecTools'];
                 </div>
             </div>
 
+            <ul id="dashboard-tabs" class="tabs tabs-fixed-width">
+                <li class="tab col s3"><a href="#tools-tab">Værktøj</a></li>
+                <li class="tab col s3"><a href="#users-tab">Brugere</a></li>
+                <li class="tab col s3"><a href="#categories-tab">Kategorier</a></li>
+                <li class="tab col s3"><a href="#manufacturers-tab">Producenter</a></li>
+                <li class="tab col s3"><a href="#checkins-tab">Udlejninger</a></li>
+<!--                <li class="tab col s3"><a href="#active-checkins-tab">Aktive udlejninger</a></li>-->
+<!--                <li class="tab col s3"><a href="#ended-checkins-tab">Afsluttede udlejninger</a></li>-->
+                <li class="tab col s3"><a href="#reservations-tab">Reservationer</a></li>
+                <li class="tab col s3"><a href="#fines-tab">Bøder</a></li>
+            </ul>
+
             <!-- region Værktøj tabel -->
-            <div class="row dashboard-row responsive-table-container">
+            <div id="tools-tab" class="row dashboard-row responsive-table-container mb4">
                 <h3 class="mt0">Værktøj</h3>
 
                 <?php
@@ -59,7 +71,8 @@ $TecTools = $GLOBALS['TecTools'];
                     ),
                     array(
                         'column' => "ToolName",
-                        'label' => "Navn"
+                        'label' => "Navn",
+                        'function' => 'addLinkToToolName'
                     ),
                     array(
                         'column' => "ManufacturerName",
@@ -92,8 +105,8 @@ $TecTools = $GLOBALS['TecTools'];
             <!-- endregion -->
 
             <!-- region Bruger tabel -->
-            <div class="row dashboard-row responsive-table-container">
-                <h3>Brugere</h3>
+            <div id="users-tab" class="row dashboard-row responsive-table-container mb4">
+                <h3 class="mt0">Brugere</h3>
 
                 <?php
                 $columns = array(
@@ -145,29 +158,33 @@ $TecTools = $GLOBALS['TecTools'];
             <!-- endregion -->
 
             <!-- region Kategori tabel -->
-            <div class="row dashboard-row responsive-table-container">
-                <h3>Kategorier</h3>
+            <div id="categories-tab" class="row dashboard-row responsive-table-container mb4">
+                <h3 class="mt0">Kategorier</h3>
 
                 <?php
                 $columns = array(
                     array(
                         'column' => 'CategoryID',
                         'label' => 'ID',
-                        'prefix' => 'p1.CategoryID AS'
+                        'prefix' => 'p1.CategoryID AS ',
+                        'order_subq' => 'p1'
                     ),
                     array(
                         'column' => "CategoryName",
                         'label' => "Navn",
-                        'prefix' => 'p1.CategoryName AS'
+                        'prefix' => 'p1.CategoryName AS ',
+                        'order_subq' => 'p1'
                     ),
                     array(
                         'column' => "toolCount",
                         'prefix' => 'COUNT(p2.FK_CategoryID) AS ',
-                        'label' => "Antal værktøj"
+                        'label' => "Antal værktøj",
+                        'like' => 'ignore'
                     )
                 );
 
                 $order = "ORDER BY p1.CategoryID DESC";
+                $group = "GROUP BY p1.CategoryID, p1.CategoryName";
                 $settings = array('searchbar' => true, 'pageLimit' => 5);
 
                 $buttons = array(
@@ -181,35 +198,39 @@ $TecTools = $GLOBALS['TecTools'];
                     )
                 );
 
-                $RCMSTables->createRCMSTable("categories_table", "Categories p1 LEFT JOIN CategoryTools p2 ON p2.FK_CategoryID = p1.CategoryID GROUP BY p1.CategoryID, p1.CategoryName", $columns, $settings, null, $order, $buttons, null);
+                $RCMSTables->createRCMSTable("categories_table", "Categories p1 LEFT JOIN CategoryTools p2 ON p2.FK_CategoryID = p1.CategoryID", $columns, $settings, null, $order, $buttons, null, $group);
                 ?>
             </div>
             <!-- endregion -->
 
             <!-- region Producent tabel -->
-            <div class="row dashboard-row responsive-table-container">
-                <h3>Producenter</h3>
+            <div id="manufacturers-tab" class="row dashboard-row responsive-table-container mb4">
+                <h3 class="mt0">Producenter</h3>
 
                 <?php
                 $columns = array(
                     array(
                         'column' => 'ManufacturerID',
                         'label' => 'ID',
-                        'prefix' => 'p1.ManufacturerID AS'
+                        'prefix' => 'p1.ManufacturerID AS',
+                        'order_subq' => 'p1'
                     ),
                     array(
                         'column' => "ManufacturerName",
                         'label' => "Navn",
-                        'prefix' => 'p1.ManufacturerName AS'
+                        'prefix' => 'p1.ManufacturerName AS',
+                        'order_subq' => 'p1'
                     ),
                     array(
                         'column' => "toolCount",
                         'prefix' => 'COUNT(p2.FK_ManufacturerID) AS ',
-                        'label' => "Antal værktøj"
+                        'label' => "Antal værktøj",
+                        'like' => 'ignore'
                     )
                 );
 
                 $order = "ORDER BY p1.ManufacturerID DESC";
+                $group = "GROUP BY p1.ManufacturerID, p1.ManufacturerName";
                 $settings = array('searchbar' => true, 'pageLimit' => 5);
 
                 $buttons = array(
@@ -223,7 +244,7 @@ $TecTools = $GLOBALS['TecTools'];
                     )
                 );
 
-                $RCMSTables->createRCMSTable("manufacturers_table", "Manufacturers p1 LEFT JOIN Tools p2 ON p2.FK_ManufacturerID = p1.ManufacturerID GROUP BY p1.ManufacturerID, p1.ManufacturerName", $columns, $settings, null, $order, $buttons, null);
+                $RCMSTables->createRCMSTable("manufacturers_table", "Manufacturers p1 LEFT JOIN Tools p2 ON p2.FK_ManufacturerID = p1.ManufacturerID", $columns, $settings, null, $order, $buttons, null, $group);
                 ?>
             </div>
             <!-- endregion -->
@@ -278,9 +299,9 @@ $TecTools = $GLOBALS['TecTools'];
             </div>
          <!-- endregion -->
 
-            <!-- region Aktive udlejninger, personale tabel -->
-            <div class="row dashboard-row responsive-table-container">
-                <h3>Aktive udlejninger</h3>
+            <!-- region Udlejninger, personale tabel -->
+            <div id="checkins-tab" class="row dashboard-row responsive-table-container mb4">
+                <h3 class="mt0">Aktive udlejninger</h3>
 
                 <?php
                 $columns = array(
@@ -291,7 +312,8 @@ $TecTools = $GLOBALS['TecTools'];
                     ),
                     array(
                         'column' => 'ToolName',
-                        'label' => 'Navn'
+                        'label' => 'Navn',
+                        'function' => 'addLinkToToolName'
                     ),
                     array(
                         'column' => "ManufacturerName",
@@ -354,19 +376,12 @@ $TecTools = $GLOBALS['TecTools'];
 
                 $RCMSTables->createRCMSTable("active_checkins_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, $buttons, null);
                 ?>
-            </div>
-            <!-- endregion -->
 
-            <!-- region Afsluttede udlejninger, personale tabel -->
-            <div class="row dashboard-row responsive-table-container mb4">
-                <h3>Afsluttede udlejninger</h3>
+
+                <h3 class="mt4">Afsluttede udlejninger</h3>
 
                 <?php
                 $columns = array(
-                    array(
-                        'column' => 'ToolName',
-                        'label' => 'Navn'
-                    ),
                     array(
                         'column' => 'Image',
                         'label' => 'Billede',
@@ -374,7 +389,8 @@ $TecTools = $GLOBALS['TecTools'];
                     ),
                     array(
                         'column' => 'ToolName',
-                        'label' => 'Navn'
+                        'label' => 'Navn',
+                        'function' => 'addLinkToToolName'
                     ),
                     array(
                         'column' => "ManufacturerName",
@@ -427,9 +443,9 @@ $TecTools = $GLOBALS['TecTools'];
             </div>
             <!-- endregion -->
 
-        <!-- region Reservationer tabel, personale -->
-            <div class="row responsive-table-container">
-                <h3>Reservationer</h3>
+            <!-- region Reservationer tabel, personale -->
+            <div id="reservations-tab" class="row dashboard-row responsive-table-container mb4">
+                <h3 class="mt0">Reservationer</h3>
 
                 <?php
                 $columns = array(
@@ -444,7 +460,8 @@ $TecTools = $GLOBALS['TecTools'];
                     ),
                     array(
                         'column' => 'ToolName',
-                        'label' => 'Navn'
+                        'label' => 'Navn',
+                        'function' => 'addLinkToToolName'
                     ),
                     array(
                         'column' => "ManufacturerName",
@@ -500,6 +517,68 @@ $TecTools = $GLOBALS['TecTools'];
             </div>
         <!-- endregion -->
 
+            <!-- region Bøder tabel -->
+            <div id="fines-tab" class="row dashboard-row responsive-table-container mb4">
+                <h3 class="mt0">Bøder</h3>
+
+                <?php
+                $columns = array(
+                    array(
+                        'column' => 'Image',
+                        'label' => 'Billede',
+                        'function' => 'showToolImage'
+                    ),
+                    array(
+                        'column' => 'ToolName',
+                        'label' => 'Navn',
+                        'function' => 'addLinkToToolName'
+                    ),
+                    array(
+                        'column' => "FineAmount",
+                        'label' => "Størrelse",
+                        'function' => 'formatPaymentAmount'
+                    ),
+                    array(
+                        'column' => "FineComment",
+                        'label' => "Årsag"
+                    ),
+                    array(
+                        'column' => "IsPaid",
+                        'label' => "Status",
+                        'function' => 'formatFineStatus'
+                    ),
+                    array(
+                        'column' => "Created",
+                        'label' => "Udstedt",
+                        'tdclass' => 'render-datetime',
+                        'tdattributes' => [
+                            [
+                                'name' => 'datetime',
+                                'valuefromcolumn' => 'Created'
+                            ]
+                        ]
+                    ),
+                    array(
+                        'column' => "PaymentDate",
+                        'label' => "Tidspunkt for betaling",
+                        'tdclass' => 'render-datetime',
+                        'tdattributes' => [
+                            [
+                                'name' => 'datetime',
+                                'valuefromcolumn' => 'PaymentDate'
+                            ]
+                        ]
+                    ),
+                );
+
+                $order = "ORDER BY IsPaid ASC, Created DESC";
+                $settings = array('searchbar' => true, 'pageLimit' => 5);
+
+                $RCMSTables->createRCMSTable("fines_table", "Fines f LEFT JOIN Tools t ON t.ToolID = (SELECT FK_ToolID FROM CheckIns WHERE CheckInID = f.FK_CheckInID)", $columns, $settings, [], $order, [], null);
+                ?>
+            </div>
+            <!-- endregion -->
+
         <?php elseif ($this->RCMS->Login->isAdmin() === false && $this->RCMS->Login->isLoggedIn() === true): ?>
             <div class="row">
                 <div class="col s12">
@@ -548,7 +627,8 @@ $TecTools = $GLOBALS['TecTools'];
                     ),
                     array(
                         'column' => 'ToolName',
-                        'label' => 'Navn'
+                        'label' => 'Navn',
+                        'function' => 'addLinkToToolName'
                     ),
                     array(
                         'column' => "ManufacturerName",
@@ -628,7 +708,8 @@ $TecTools = $GLOBALS['TecTools'];
                     ),
                     array(
                         'column' => 'ToolName',
-                        'label' => 'Navn'
+                        'label' => 'Navn',
+                        'function' => 'addLinkToToolName'
                     ),
                     array(
                         'column' => "ManufacturerName",
@@ -702,7 +783,8 @@ $TecTools = $GLOBALS['TecTools'];
                     ),
                     array(
                         'column' => 'ToolName',
-                        'label' => 'Navn'
+                        'label' => 'Navn',
+                        'function' => 'addLinkToToolName'
                     ),
                     array(
                         'column' => "ManufacturerName",
@@ -760,6 +842,92 @@ $TecTools = $GLOBALS['TecTools'];
                 ];
 
                 $RCMSTables->createRCMSTable("ended_checkins_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, $buttons, null);
+                ?>
+            </div>
+            <!-- endregion -->
+
+            <!-- region Bøder tabel -->
+            <div class="row responsive-table-container mb4">
+                <h3>Dine bøder</h3>
+
+                <?php
+                $columns = array(
+                    array(
+                        'column' => 'Image',
+                        'label' => 'Billede',
+                        'function' => 'showToolImage'
+                    ),
+                    array(
+                        'column' => 'ToolName',
+                        'label' => 'Navn',
+                        'function' => 'addLinkToToolName'
+                    ),
+                    array(
+                        'column' => "FineAmount",
+                        'label' => "Størrelse",
+                        'function' => 'formatPaymentAmount'
+                    ),
+                    array(
+                        'column' => "FineComment",
+                        'label' => "Årsag"
+                    ),
+                    array(
+                        'column' => "IsPaid",
+                        'label' => "Status",
+                        'function' => 'formatFineStatus',
+                        'conditional_attributes' => [
+                            [
+                                'name' => 'data-is-paid',
+                                'valuefromcolumn' => 'IsPaid',
+                                'condition' => static function ($valuefromcolumn) {
+                                    return $valuefromcolumn === 1;
+                                }
+                            ]
+                        ]
+                    ),
+                    array(
+                        'column' => "Created",
+                        'label' => "Udstedt",
+                        'tdclass' => 'render-datetime',
+                        'tdattributes' => [
+                            [
+                                'name' => 'datetime',
+                                'valuefromcolumn' => 'Created'
+                            ]
+                        ]
+                    ),
+                    array(
+                        'column' => "PaymentDate",
+                        'label' => "Tidspunkt for betaling",
+                        'tdclass' => 'render-datetime',
+                        'tdattributes' => [
+                            [
+                                'name' => 'datetime',
+                                'valuefromcolumn' => 'PaymentDate'
+                            ]
+                        ]
+                    ),
+                );
+
+                $order = "ORDER BY IsPaid ASC, Created DESC";
+                $settings = array('searchbar' => true, 'pageLimit' => 5);
+
+                $where = [
+                    [
+                        'column' => 'FK_UserID',
+                        'eq' => $this->RCMS->Login->getUserID(),
+                        'type' => 'i'
+                    ]
+                ];
+
+                $buttons = [
+                    [
+                        'button' => '<button onclick="location.href = `/pay-fineQMARKhash=?`" class="btn tec-btn pay-fine-btn">Betal</button>',
+                        'value' => 'PaymentHash'
+                    ]
+                ];
+
+                $RCMSTables->createRCMSTable("fines_table", "Fines f LEFT JOIN Tools t ON t.ToolID = (SELECT FK_ToolID FROM CheckIns WHERE CheckInID = f.FK_CheckInID)", $columns, $settings, $where, $order, $buttons, null);
                 ?>
             </div>
             <!-- endregion -->

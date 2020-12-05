@@ -5,6 +5,10 @@ Side: /dashboard
 Layout: dashboard.php
  */
 
+$(document).ready(function(){
+    $('.tabs').tabs();
+});
+
 window.addEventListener('load', e => {
     // JsBarcode laver vores stregkoder fra databasen om til SVG elementer som kan scannes
     JsBarcode(".barcode").init();
@@ -13,6 +17,7 @@ window.addEventListener('load', e => {
 window.addEventListener('load', function () {
     handleExceededRentals();
     hideExceededReservations();
+    disablePaidFines();
 
     var elems = document.querySelectorAll('.modal');
     var instances = M.Modal.init(elems);
@@ -94,6 +99,18 @@ function hideExceededReservations() {
             }
         });
     }, 500);
+}
+
+/**
+ * Denne funktion deaktiverer knappen "Betal bøde" hvis bøden allerede er betalt
+ */
+function disablePaidFines() {
+    let elements = document.querySelectorAll('td[data-is-paid="1"]');
+
+    elements.forEach(el => {
+        let btn = el.parentElement.querySelector('button.pay-fine-btn');
+        btn.setAttribute('disabled', 'disabled');
+    });
 }
 
 /**

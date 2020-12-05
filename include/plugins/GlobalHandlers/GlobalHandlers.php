@@ -36,11 +36,11 @@ class GlobalHandlers {
 
     /**
      * Returnerer "Standard" eller "Personale", alt efter om hvad niveau brugeren er på
-     * @param array $level
+     * @param array $data
      * @return string
      */
-    private function formatUserLevel(array $level): string {
-        $level = $level[0];
+    private function formatUserLevel(array $data): string {
+        $level = $data[0];
 
         switch ($level) {
             case 1:
@@ -55,12 +55,59 @@ class GlobalHandlers {
     }
 
     /**
+     * Returnerer "Betalt" eller "Ikke betalt", alt efter om bøden er betalt
+     * @param array $data
+     * @return string
+     */
+    private function formatFineStatus(array $data): string {
+        $status = $data[0];
+
+        switch ($status) {
+            case 1:
+                return 'Betalt';
+                break;
+            case 0:
+                return 'Ikke betalt';
+                break;
+        }
+
+        return 'N/A';
+    }
+
+    /**
+     * Returnerer "Betalt" eller "Ikke betalt", alt efter om bøden er betalt
+     * @param array $data
+     * @return string
+     */
+    private function formatPaymentAmount(array $data): string {
+        $amount = (float) $data[0];
+
+        return 'DKK ' . $amount . ',-';
+    }
+
+    /**
+     * Tilføjet et link til værktøjsnavnet
+     * @param array $data
+     * @return string
+     */
+    private function addLinkToToolName(array $data): string {
+        $row = $data[1];
+        $toolName = $row['ToolName'];
+        $toolID = $row['ToolID'] ?? $row['FK_ToolID'];
+
+        return <<<HTML
+        <a target="_blank" href="/tools/view?toolid=$toolID">$toolName</a>
+HTML;
+
+    }
+
+    /**
      * Returnerer HTML <img> element af værktøjets billede
      * @param array $image
      * @return string
      */
-    private function showToolImage(array $image): string {
-        $image = $image[0];
+    private function showToolImage(array $data): string {
+        $image = $data[0];
 
         /**
          * @var TecTools $TecTools
@@ -78,8 +125,8 @@ HTML;
      * @param array $barcode
      * @return string
      */
-    private function showToolBarcode(array $barcode): string {
-        $barcode = $barcode[0];
+    private function showToolBarcode(array $data): string {
+        $barcode = $data[0];
 
         return <<<HTML
             <svg class="barcode" style=" width: 48mm; height: 10mm; background-color: white;margin: 0; padding: 0; " 

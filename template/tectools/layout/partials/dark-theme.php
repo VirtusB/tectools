@@ -81,6 +81,14 @@ declare(strict_types=1);
         color: rgba(0,0,0,0.42);
         border-bottom: 1px dotted rgb(255 255 255 / 42%);
     }
+
+    .tabs .tab a {
+        color: #fff;
+    }
+
+    #dashboard-tabs {
+        background: #1d1d1d;
+    }
 </style>
 
 <script src="<?= $this->getTemplateFolder() ?>/js/themes.js"></script>

@@ -25,8 +25,9 @@ class RCMSTables {
      * @var array $buttons
      * @var array $dropdown
      * @var array $settings
+     * @var array $group
      */
-    private array $table, $columns, $where, $order, $buttons, $dropdown, $settings;
+    private array $table, $columns, $where, $order, $buttons, $dropdown, $settings, $group;
 
     public function __construct(RCMS $RCMS) {
         $this->RCMS = $RCMS;
@@ -44,9 +45,10 @@ class RCMSTables {
      * @param null|string $order
      * @param array|null $buttons
      * @param null|array $dropdown
+     * @param string|null $group
      * @return void
      */
-    public function createRCMSTable(string $id, string $table, array $columns, ?array $settings = array(), ?array $where = array(), ?string $order = null, ?array $buttons = array(), ?array $dropdown = null): void {
+    public function createRCMSTable(string $id, string $table, array $columns, ?array $settings = array(), ?array $where = array(), ?string $order = null, ?array $buttons = array(), ?array $dropdown = null, ?string $group = null): void {
         $this->columns = array();
         $this->table = array();
         $this->where = array();
@@ -63,6 +65,7 @@ class RCMSTables {
         $this->buttons[$id] = $buttons;
         $this->dropdown[$id] = $dropdown;
         $this->order[$id] = $order;
+        $this->group[$id] = $group;
 
         if (empty($settings['searchbar'])) {
             $settings['searchbar'] = false;
@@ -95,6 +98,7 @@ class RCMSTables {
         $columns = $this->columns[$id];
         $where = $this->where[$id];
         $order = $this->order[$id];
+        $group = $this->group[$id];
         $buttons = $this->buttons[$id];
         $settings = $this->settings[$id];
 
@@ -136,7 +140,7 @@ class RCMSTables {
 
         echo '</tr>';
 
-        $rows = $this->retrieveData($table, $columns, $where, $order, $settings);
+        $rows = $this->retrieveData($table, $columns, $where, $order, $settings, $group);
 
         // Udskriv alle rækkerne
         $this->buildRows($id, $rows);
@@ -155,6 +159,7 @@ class RCMSTables {
         $columns = $this->columns[$id];
         $where = $this->where[$id];
         $order = $this->order[$id];
+        $group = $this->group[$id];
         $buttons = $this->buttons[$id];
         $dropdown = $this->dropdown[$id];
         $settings = $this->settings[$id];
@@ -218,7 +223,7 @@ class RCMSTables {
             }
         }
 
-        $rowCount = $this->countRows($table, $columns, $where, $order, $settings);
+        $rowCount = $this->countRows($table, $columns, $where, $order, $settings, $group);
         $pages = ceil($rowCount / $settings['pageLimit']);
 
         echo '<tr class="dataRow pagination-tr">';
@@ -258,6 +263,7 @@ class RCMSTables {
         $columns = $this->columns[$id];
         $where = $this->where[$id];
         $order = $this->order[$id];
+        $group = $this->group[$id];
         $settings = $this->settings[$id];
 
         if (isset($_POST['pageNum'])) {
@@ -278,7 +284,7 @@ class RCMSTables {
 
         $this->settings[$id] = $settings;
 
-        $rows = $this->retrieveData($table, $columns, $where, $order, $settings);
+        $rows = $this->retrieveData($table, $columns, $where, $order, $settings, $group);
 
         $this->buildRows($id, $rows);
 
@@ -292,9 +298,10 @@ class RCMSTables {
      * @param array $where
      * @param string $order
      * @param array $settings
+     * @param string $group
      * @return int
      */
-    private function countRows(string $table, array $columns, array $where, string $order, array $settings): int {
+    private function countRows(string $table, array $columns, array $where, string $order, array $settings, ?string $group): int {
         $settings['noLimit'] = true;
 
         if (isset($_POST['pageNum'])) {
@@ -305,7 +312,7 @@ class RCMSTables {
             $settings['searchTxt'] = $_POST['searchTxt'];
         }
 
-        return count($this->retrieveData($table, $columns, $where, $order, $settings));
+        return count($this->retrieveData($table, $columns, $where, $order, $settings, $group));
     }
 
     /**
@@ -315,9 +322,10 @@ class RCMSTables {
      * @param array $where
      * @param string $order
      * @param array $settings
+     * @param string|null $group
      * @return array
      */
-    private function retrieveData(string $table, array $columns, array $where, string $order, array $settings): array {
+    private function retrieveData(string $table, array $columns, array $where, string $order, array $settings, ?string $group): array {
         $selectColumns = "*";
 
         if ($order === null) {
@@ -439,7 +447,8 @@ class RCMSTables {
 
         // Hvis $settings['searchTxt'] er sat, betyder det at brugeren gerne vil søge
         if (isset($settings['searchTxt']) && $settings['searchTxt'] !== "" && !empty($columns)) {
-            $columnsCount = count($columns);
+            $notIgnore = array_filter($columns, static fn($col) => (isset($col['like']) && $col['like'] !== 'ignore') || !isset($col['like']));
+            $columnsCount = count($notIgnore);
             $i = 0;
 
             if ($whereCount !== 0) {
@@ -493,9 +502,10 @@ class RCMSTables {
         array_unshift($whereArr, $types);
 
         $query = "";
+        $group = empty($group) ? '' : ' ' . $group . ' ';
 
         if ($whereClause !== "" && !empty($whereArr)) {
-            $query = "SELECT $selectColumns FROM $table WHERE $whereClause" . $order . $limit;
+            $query = "SELECT $selectColumns FROM $table WHERE $whereClause" . $group . $order . $limit;
             $this->logQuery($settings, $query, $whereArr);
 
             // Vi er stadig nød til at tjekke rekursivt på om $whereArr er tomt,
@@ -507,7 +517,7 @@ class RCMSTables {
                 $result = $this->RCMS->execute($query, $whereArr);
             }
         } else {
-            $query = "SELECT $selectColumns FROM $table" . $order . $limit;
+            $query = "SELECT $selectColumns FROM $table" . $group . $order . $limit;
             $this->logQuery($settings, $query, $whereArr);
             $result = $this->RCMS->execute($query);
         }

@@ -24,6 +24,11 @@ if ($fine['FK_UserID'] !== $this->RCMS->Login->getUserID()) {
     return;
 }
 
+if ($fine['IsPaid'] === 1) {
+    Helpers::outputError('Denne bøde er allerede betalt', 'h3', true);
+    return;
+}
+
 ?>
 
 <div class="section no-pad-bot">
