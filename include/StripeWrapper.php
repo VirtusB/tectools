@@ -171,6 +171,51 @@ class StripeWrapper {
         return $plan ?? null;
     }
 
+
+    /**
+     * Returnerer betalingsmetode ID'et for en kundes kort
+     * @param string $customerID
+     * @return false|string
+     * @throws ApiErrorException
+     */
+    public function getCustomerPaymentCardID(string $customerID) {
+        $methods = $this->getStripeClient()->paymentMethods->all([
+            'customer' => $customerID,
+            'type' => 'card'
+        ]);
+
+        $card = $methods->data[0] ?? null;
+
+        if ($card !== null && !empty($card->id)) {
+            return $card->id;
+        }
+
+        return false;
+    }
+
+    /**
+     * Hæver penge fra et betalingskort og returnerer ID'et for betalingen
+     * @param string $customerID
+     * @param float $amount
+     * @param string $cardID
+     * @param string $description
+     * @return string
+     * @throws ApiErrorException
+     */
+    public function createPaymentIntent(string $customerID, float $amount, string $cardID, string $description = '') {
+        $intent = $this->getStripeClient()->paymentIntents->create([
+            'amount' => $amount * 100,
+            'currency' => 'dkk',
+            'customer' => $customerID,
+            'payment_method' => $cardID,
+            'off_session' => true,
+            'confirm' => true,
+            'description' => $description ?? ''
+        ]);
+
+        return $intent->id;
+    }
+
     /**
      * Returnerer ID'et for et abonnement for kunden med $customerID
      * @param string $customerID Kundens ID

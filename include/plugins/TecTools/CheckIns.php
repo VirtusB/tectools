@@ -25,7 +25,9 @@ class CheckIns {
      * @var $allowedEndpoints array|string[]
      */
     public static array $allowedEndpoints = [
-        'checkIn', 'checkOut', 'getCheckInComment', 'saveCheckInComment', 'getCheckInAjax'
+        'checkIn', 'checkOut',
+        'getCheckInComment', 'saveCheckInComment', 'getCheckInAjax',
+        'payFine'
     ];
 
     /**
@@ -247,7 +249,7 @@ class CheckIns {
             $fineAmount = (float) $_POST['fine_amount'];
             $fineComment = $_POST['fine_comment'];
             $fineID = $this->addFineToCheckIn($checkIn, $fineAmount, $fineComment);
-            $this->sendFineEmail($fineID, $checkIn, $fineAmount, $fineComment);
+            $this->sendNewFineEmail($fineID, $checkIn, $fineAmount, $fineComment);
         }
 
         Helpers::setNotification('Succes', 'Værktøjet blev tjekket ud');
@@ -274,7 +276,63 @@ class CheckIns {
      * @return array|null
      */
     public function getFineByID(int $fineID): ?array {
-        return $this->RCMS->execute('CALL getFine(?)', array('i', $fineID))->fetch_assoc() ?? null;
+        $fine = $this->RCMS->execute('CALL getFine(?)', array('i', $fineID))->fetch_assoc() ?? null;
+
+        if ($fine) {
+            $fine['FineAmount'] = (float) $fine['FineAmount'];
+        }
+
+        return $fine;
+    }
+
+    /**
+     * Henter en bøde ud fra databasen via dens hash
+     * @param string $hash
+     * @return array|null
+     */
+    public function getFineByHash(string $hash): ?array {
+        $fine = $this->RCMS->execute('CALL getFineByHash(?)', array('s', $hash))->fetch_assoc() ?? null;
+
+        if ($fine) {
+            $fine['FineAmount'] = (float) $fine['FineAmount'];
+        }
+
+        return $fine;
+    }
+
+    /**
+     * Betaler en bøde via POST request
+     */
+    public function payFine(): void {
+        $paymentHash = $_POST['payment_hash'];
+        $fine = $this->getFineByHash($paymentHash);
+        $fineAmount = $fine['FineAmount'];
+        $fineComment = $fine['FineComment'];
+
+        $stripeCustomerID = $this->TecTools->Users->getStripeID();
+        $paymentCardID = $this->RCMS->StripeWrapper->getCustomerPaymentCardID($stripeCustomerID);
+
+        $paymentIntentID = $this->RCMS->StripeWrapper->createPaymentIntent($stripeCustomerID, $fineAmount, $paymentCardID, $fineComment);
+
+        if (empty($paymentIntentID)) {
+            Helpers::setNotification('Fejl', 'Bøden kunne ikke betales', 'error');
+            return;
+        }
+
+        $this->markFineAsPaid($fine['FineID'], $paymentIntentID);
+        $this->sendFinePaidEmail($fine);
+
+        Helpers::setNotification('Succes', 'Bøden blev betalt');
+        Helpers::redirect('/dashboard');
+    }
+
+    /**
+     * Sætter en bøde til at være betalt
+     * @param int $fineID
+     * @param string $paymentIntentID
+     */
+    private function markFineAsPaid(int $fineID, string $paymentIntentID): void {
+        $this->RCMS->execute('CALL markFineAsPaid(?, ?)', array('is', $fineID, $paymentIntentID));
     }
 
     /**
@@ -287,13 +345,49 @@ class CheckIns {
     }
 
     /**
+     * Denne metode sender en email til kunden, og informerer dem om at de har betalt en bøde
+     * @param array $fine
+     */
+    private function sendFinePaidEmail(array $fine): void {
+        $user = $this->TecTools->Users->getUserByID($fine['FK_UserID']);
+
+        $fullName = Helpers::formatFirstLastName($user['FirstName'], $user['LastName']);
+        $emailAddress = $user['Email'];
+        $fineAmount = $fine['FineAmount'];
+        $fineComment = $fine['FineComment'];
+
+        $body = <<<HTML
+        <p>Kære $fullName</p>
+        <p>Du har betalt en bøde.</p>
+        <br>
+        <h4>Bøden:</h4>
+        <p>Størrelse: DKK $fineAmount,-</p>
+        <p>Årsag: $fineComment</p>
+        <p>Status: Betalt</p>
+        <br>
+        <p>Med venlig hilsen TecTools</p>
+        <img style="max-height: 53px" src="cid:TTLogo" alt="Logo" />
+HTML;
+
+        $logoPath = __DIR__ . '/../../../' . $this->RCMS->getTemplateFolder() . '/images/logo.png';
+
+        Mailer::sendEmail(
+            SMTP_USERNAME,
+            SITE_NAME,
+            $emailAddress,
+            $fullName,
+            'TecTools - bøde betalt',
+            $body, [], [], 'TTLogo', $logoPath);
+    }
+
+    /**
      * Denne metode sender en email til kunden, og informerer dem om at de har fået en bøde
      * @param int $fineID
      * @param array $checkIn
      * @param float $fineAmount
      * @param string $fineComment
      */
-    private function sendFineEmail(int $fineID, array $checkIn, float $fineAmount, string $fineComment): void {
+    private function sendNewFineEmail(int $fineID, array $checkIn, float $fineAmount, string $fineComment): void {
         $user = $this->TecTools->Users->getUserByID($checkIn['FK_UserID']);
         $tool = $this->TecTools->getToolByID($checkIn['FK_ToolID']);
         $fine = $this->getFineByID($fineID);
@@ -304,7 +398,7 @@ class CheckIns {
         $emailAddress = $user['Email'];
         $startDate = date('d-m-Y H:i:s', strtotime($checkIn['StartDate']));
         $endDate = date('d-m-Y H:i:s', strtotime($checkIn['EndDate']));
-        $fineHash = $fine['PaymentLink'];
+        $fineHash = $fine['PaymentHash'];
 
         $toolLink = 'https://tectools.virtusb.com/tools/view?toolid=' . $tool['ToolID'];
         $paymentLink = 'https://tectools.virtusb.com/pay-fine?hash=' . $fineHash;

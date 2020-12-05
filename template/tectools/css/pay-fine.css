@@ -1,0 +1,30 @@
+span.title {
+    margin-left: 10px;
+}
+
+@media screen and (max-width: 380px) {
+    h2 {
+        font-size: 3rem;
+    }
+}
+
+.card-panel.teal {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    color: #eee;
+}
+
+/*.card-panel li:nth-child(even) {*/
+/*    padding-top: 10px;*/
+/*    padding-bottom: 10px;*/
+/*}*/
+
+.card-panel li {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#payment-form {
+    text-align: center;
+}
