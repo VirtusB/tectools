@@ -117,6 +117,16 @@ class Helpers {
     }
 
     /**
+     * Formaterer fornavn og efternavn til et fuldt navn
+     * @param string $firstName
+     * @param string $lastName
+     * @return string
+     */
+    public static function formatFirstLastName(string $firstName, string $lastName): string {
+	    return ucfirst($firstName) . ' ' . ucfirst($lastName);
+    }
+
+    /**
      * Omdirigerer brugeren
      * @param $page
      */

@@ -41,10 +41,10 @@ class Cronjobs {
      * @param array $reservation
      */
     private function sendMailOldReservationDeleted(array $reservation): void {
-        $fullName = $reservation['FirstName'] . ' ' . $reservation['LastName'];
+        $fullName = Helpers::formatFirstLastName($reservation['FirstName'], $reservation['LastName']);
         $emailAddress = $reservation['Email'];
-        $startDate = date('d-m-y H:i:s', strtotime($reservation['StartDate']));
-        $endDate = date('d-m-y H:i:s', strtotime($reservation['EndDate']));
+        $startDate = date('d-m-Y H:i:s', strtotime($reservation['StartDate']));
+        $endDate = date('d-m-Y H:i:s', strtotime($reservation['EndDate']));
         $toolName = $reservation['ToolName'];
         $manufacturerName = $reservation['ManufacturerName'];
         $link = 'https://tectools.virtusb.com/tools/view?toolid=' . $reservation['FK_ToolID'];

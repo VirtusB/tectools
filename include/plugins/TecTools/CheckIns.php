@@ -243,7 +243,101 @@ class CheckIns {
 
         $this->RCMS->execute('CALL checkout(?, ?)', array('ii', $toolID, $statusID));
 
+        if (isset($_POST['fine_amount'])) {
+            $fineAmount = (float) $_POST['fine_amount'];
+            $fineComment = $_POST['fine_comment'];
+            $fineID = $this->addFineToCheckIn($checkIn, $fineAmount, $fineComment);
+            $this->sendFineEmail($fineID, $checkIn, $fineAmount, $fineComment);
+        }
+
         Helpers::setNotification('Succes', 'Værktøjet blev tjekket ud');
+    }
+
+    /**
+     * Denne metode tilføjer en bøde for en udlejning
+     * @param array $checkIn
+     * @param float $fineAmount
+     * @param string $fineComment
+     * @return int
+     */
+    private function addFineToCheckIn(array $checkIn, float $fineAmount, string $fineComment): int {
+        $checkInID = $checkIn['CheckInID'];
+        $userID = $checkIn['FK_UserID'];
+
+        $res = $this->RCMS->execute('CALL addFineToCheckIn(?, ?, ?, ?)', array('iids', $checkInID, $userID, $fineAmount, $fineComment));
+        return $res->fetch_assoc()['lastInsertId'];
+    }
+
+    /**
+     * Henter en bøde ud fra databasen via ID
+     * @param int $fineID
+     * @return array|null
+     */
+    public function getFineByID(int $fineID): ?array {
+        return $this->RCMS->execute('CALL getFine(?)', array('i', $fineID))->fetch_assoc() ?? null;
+    }
+
+    /**
+     * Henter alle bøder som ikke er betalte for en bruger
+     * @param int $userID
+     * @return array
+     */
+    public function getUnpaidFinesForUser(int $userID): array {
+        return $this->RCMS->execute('CALL getUnpaidFinesForUser(?)', array('i', $userID))->fetch_all(MYSQLI_ASSOC) ?? [];
+    }
+
+    /**
+     * Denne metode sender en email til kunden, og informerer dem om at de har fået en bøde
+     * @param int $fineID
+     * @param array $checkIn
+     * @param float $fineAmount
+     * @param string $fineComment
+     */
+    private function sendFineEmail(int $fineID, array $checkIn, float $fineAmount, string $fineComment): void {
+        $user = $this->TecTools->Users->getUserByID($checkIn['FK_UserID']);
+        $tool = $this->TecTools->getToolByID($checkIn['FK_ToolID']);
+        $fine = $this->getFineByID($fineID);
+
+        $manufacturerName = $this->TecTools->Manufacturers->getManufacturer($tool['FK_ManufacturerID'])['ManufacturerName'];
+        $toolName = $tool['ToolName'];
+        $fullName = Helpers::formatFirstLastName($user['FirstName'], $user['LastName']);
+        $emailAddress = $user['Email'];
+        $startDate = date('d-m-Y H:i:s', strtotime($checkIn['StartDate']));
+        $endDate = date('d-m-Y H:i:s', strtotime($checkIn['EndDate']));
+        $fineHash = $fine['PaymentLink'];
+
+        $toolLink = 'https://tectools.virtusb.com/tools/view?toolid=' . $tool['ToolID'];
+        $paymentLink = 'https://tectools.virtusb.com/pay-fine?hash=' . $fineHash;
+
+        $body = <<<HTML
+        <p>Kære $fullName</p>
+        <p>Din udlejning er blevet tildelt en bøde.</p>
+        <br>
+        <h4>Bøden:</h4>
+        <p>Størrelse: DKK $fineAmount,-</p>
+        <p>Årsag: $fineComment</p>
+        <p><a href="$paymentLink">Betal bøden</a></p>
+        <br>
+        <h4>Udlejningen:</h4>
+        <p>Værktøj: $toolName</p>
+        <p>Producent: $manufacturerName</p>
+        <p>Start Dato: $startDate</p>
+        <p>Slut Dato: $endDate</p>
+        <p>Link: <a href="$toolLink">Klik her for at se værktøjet</a></p>
+        <br>
+        <p>Med venlig hilsen TecTools</p>
+        <img style="max-height: 53px" src="cid:TTLogo" alt="Logo" />
+HTML;
+
+        $logoPath = __DIR__ . '/../../../' . $this->RCMS->getTemplateFolder() . '/images/logo.png';
+
+        Mailer::sendEmail(
+            SMTP_USERNAME,
+            SITE_NAME,
+            $emailAddress,
+            $fullName,
+            'TecTools - bøde tilføjet',
+            $body, [], [], 'TTLogo', $logoPath);
     }
 
     /**

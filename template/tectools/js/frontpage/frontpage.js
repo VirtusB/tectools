@@ -52,6 +52,10 @@ function fixCardHeights() {
 setInterval(function () {
     var marquees = Array.from(document.querySelectorAll('.marquee'));
 
+    if (marquees.length === 0) {
+        return;
+    }
+
     var visibleMarquee = marquees.filter(el => el.style.display !== 'none')[0];
     var visibleMarqueeIndex = marquees.findIndex(m => m === visibleMarquee);
 

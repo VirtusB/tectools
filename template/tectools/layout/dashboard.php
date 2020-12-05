@@ -244,16 +244,36 @@ $TecTools = $GLOBALS['TecTools'];
             <!-- region Tjek Ud modal for personale til aktive  udlejninger -->
             <div id="check-out-modal" class="modal">
                 <div class="modal-content">
-                    <h4>Tjek Ud - Vælg status</h4>
+                    <div class="row">
+                        <div class="col s12">
+                            <h4>Tjek Ud - Vælg status</h4>
+                        </div>
 
-                    <label for="check-out-status-select">Status</label>
-                    <select id="check-out-status-select" class="mat-select">
-                        <option selected value="1">På lager</option>
-                        <option value="4">Ikke på lager</option>
-                        <option value="5">Beskadiget</option>
-                    </select>
+                        <div class="col s12 m6">
+                            <label for="check-out-status-select">Status</label>
+                            <select id="check-out-status-select" class="mat-select">
+                                <option selected value="1">På lager</option>
+                                <option value="4">Ikke på lager</option>
+                                <option value="5">Beskadiget</option>
+                            </select>
+                        </div>
 
-                    <button onclick="checkOut(this.getAttribute('data-checkin-id'), this)" class="btn tec-btn right modal-close mt2 mb2">Tjek Ud</button>
+                        <div class="col s12 mt2 mb2">
+                            <label>
+                                <input id="add-fine-checkbox" onchange="fineCheckBoxChange(this)" type="checkbox" />
+                                <span>Tilføj bøde?</span>
+                            </label>
+                        </div>
+
+                        <div style="opacity: 0.3" id="fine-container" class="col s12 m6">
+                            <label for="fine-amount">Bøde størrelse (DKK)</label>
+                            <input min="0" class="mb2" step="any" disabled value="0" type="number" id="fine-amount">
+
+                            <label for="fine-comment">Bøde kommentar</label>
+                            <textarea disabled id="fine-comment" class="materialize-textarea"></textarea>
+                        </div>
+                    </div>
+                    <button onclick="checkOut(this.getAttribute('data-checkin-id'), this)" class="btn tec-btn right modal-close mt2 mb4">Tjek Ud</button>
                 </div>
             </div>
          <!-- endregion -->

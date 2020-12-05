@@ -117,6 +117,7 @@ $chunks = array_chunk($checkInsMarquee, 3);
 
     </form>
 
+    <?php if (count($chunks)): ?>
     <div id="latest-checkins" class="row">
         <div class="col s12 mt2 marquee-container">
 
@@ -153,6 +154,8 @@ $chunks = array_chunk($checkInsMarquee, 3);
 
         </div>
     </div>
+    <?php endif; ?>
+
 </div>
 
 <link rel="stylesheet" href="<?= $this->RCMS->getTemplateFolder() ?>/css/frontpage.css">

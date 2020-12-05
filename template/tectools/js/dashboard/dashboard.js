@@ -167,7 +167,21 @@ function saveCheckInComment(checkInID, context) {
 function showCheckOutModal(checkInID, context) {
     let checkOutModal = M.Modal.getInstance(document.getElementById('check-out-modal'));
     let checkOutStatusSelect = document.getElementById('check-out-status-select');
+    let fineContainer = document.getElementById('fine-container');
+    let fineAmountInput = document.getElementById('fine-amount');
+    let fineCommentTextarea = document.getElementById('fine-comment');
+    let addFineCheckbox = document.getElementById('add-fine-checkbox');
+
+    // Reset inputs
     document.querySelector('#check-out-modal button').setAttribute('data-checkin-id', checkInID);
+    fineAmountInput.setAttribute('disabled', 'disabled');
+    fineCommentTextarea.setAttribute('disabled', 'disabled');
+    fineAmountInput.value = 0;
+    fineCommentTextarea.value = '';
+    checkOutStatusSelect.value = 1;
+    checkOutStatusSelect.dispatchEvent(new Event('change'));
+    addFineCheckbox.checked = false;
+    fineContainer.style.opacity = '0.3';
 
     $.post({
         url: location.origin + location.pathname,
@@ -194,18 +208,44 @@ function checkOut(checkInID, context) {
         return;
     }
 
-    let statusID = context.parentElement.querySelector('#check-out-status-select').selectedOptions[0].value;
+    let checkOutStatusSelect = document.getElementById('check-out-status-select');
+    let fineAmountInput = document.getElementById('fine-amount');
+    let fineCommentTextarea = document.getElementById('fine-comment');
+    let addFineCheckbox = document.getElementById('add-fine-checkbox');
+
+    let statusID = checkOutStatusSelect.selectedOptions[0].value;
+    let fineAmount = +fineAmountInput.value;
+    let fineComment = fineCommentTextarea.value;
+    let shouldAddFine = addFineCheckbox.checked && fineAmount !== 0;
 
     let form = `
     <form style="display: none;" method="POST">
         <input type="hidden" name="post_endpoint" value="checkOut">
         <input type="hidden" name="check_in_id" value="${checkInID}">
         <input type="hidden" name="status_id" value="${statusID}">
+        ${shouldAddFine ? `<input type="hidden" name="fine_amount" value="${fineAmount}">` : ''}
+        ${shouldAddFine ? `<input type="hidden" name="fine_comment" value="${fineComment}">` : ''}
     </form>
     `;
 
     $(context).append(form);
     $(context).find(`input[value=${checkInID}]`).parent().submit();
+}
+
+/**
+ * Denne funktion kører, når tjekboksen "Tilføj bøde?" ændres
+ * @param context
+ */
+function fineCheckBoxChange(context) {
+    document.getElementById('fine-amount').toggleAttribute('disabled');
+    document.getElementById('fine-comment').toggleAttribute('disabled');
+    let fineContainer = document.getElementById('fine-container');
+
+    if (context.checked) {
+        fineContainer.style.opacity = '1';
+    } else {
+        fineContainer.style.opacity = '0.3';
+    }
 }
 
 /**
