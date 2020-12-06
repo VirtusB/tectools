@@ -275,7 +275,7 @@ class CheckIns {
      * @param int $fineID
      * @return array|null
      */
-    public function getFineByID(int $fineID): ?array {
+    private function getFineByID(int $fineID): ?array {
         $fine = $this->RCMS->execute('CALL getFine(?)', array('i', $fineID))->fetch_assoc() ?? null;
 
         if ($fine) {
@@ -333,15 +333,6 @@ class CheckIns {
      */
     private function markFineAsPaid(int $fineID, string $paymentIntentID): void {
         $this->RCMS->execute('CALL markFineAsPaid(?, ?)', array('is', $fineID, $paymentIntentID));
-    }
-
-    /**
-     * Henter alle bøder som ikke er betalte for en bruger
-     * @param int $userID
-     * @return array
-     */
-    public function getUnpaidFinesForUser(int $userID): array {
-        return $this->RCMS->execute('CALL getUnpaidFinesForUser(?)', array('i', $userID))->fetch_all(MYSQLI_ASSOC) ?? [];
     }
 
     /**

@@ -211,3 +211,49 @@ div.card-action a {
     height: 208px;
     vertical-align: top;
 }
+
+.btn.cta {
+    width: 260px;
+    background: #618AF4;
+    /*background: #0c8dff;*/
+    height: 47px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-transform: none;
+
+    /*background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);*/
+    /*background: linear-gradient(-45deg, #1d1d1d, #618af4, #ff9800);*/
+
+    /*background: linear-gradient(-45deg, #7095f5, #618af4, #4d6ec3, #263761, #b0c4f9);*/
+    /*background-size: 400% 400%;*/
+    /*animation: gradient 8s ease infinite;*/
+
+    /*background: #ff9800;*/
+}
+
+.cta-row {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    margin-bottom: 0;
+    /*background: linear-gradient(249deg,#cccccc6b 1.42%,rgba(226,160,125,0)),#cccccc26;*/
+
+    /*background: linear-gradient(-45deg, #7095f5, #618af4, #4d6ec3, #263761, #b0c4f9);*/
+    /*background-size: 400% 400%;*/
+    /*animation: gradient 15s ease infinite;*/
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+#footer {
+    margin-top: 2rem;
+}

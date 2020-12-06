@@ -25,7 +25,7 @@ $chunks = array_chunk($checkInsMarquee, 3);
     }
 </style>
 
-<div class="container">
+<div class="container aaa">
     <div class="hero-container">
         <span>Nem og billig adgang til alle slags værktøj</span>
         <span>Planer starter fra kun 200 kroner / md.</span>
@@ -68,7 +68,7 @@ $chunks = array_chunk($checkInsMarquee, 3);
 
             <?php foreach ($tools as $tool): ?>
 
-                <div class="col s12 m6 l3 xl3">
+                <div class="col s12 m6 l4 xl3">
                     <div onclick="location.href = '/tools/view?toolid=<?= $tool['ToolID'] ?>'" class="card large">
                         <div class="card-image">
                             <img class="" src="<?= $TecTools->RELATIVE_TOOL_IMAGE_FOLDER . '/' . $tool['Image'] ?>" alt="">
@@ -97,7 +97,7 @@ $chunks = array_chunk($checkInsMarquee, 3);
 
             <?php if (count($tools)): ?>
 
-            <div class="col s12">
+            <div class="col s12 mb2">
                 <div class="pagination-container">
                     Side
 
@@ -109,7 +109,7 @@ $chunks = array_chunk($checkInsMarquee, 3);
 
             <?php else: ?>
 
-            <div class="col s12">
+            <div class="col s12 mb2">
                 <h5>Der er ingen værktøj, der matcher dine kriterier</h5>
             </div>
 
@@ -118,8 +118,8 @@ $chunks = array_chunk($checkInsMarquee, 3);
     </form>
 
     <?php if (count($chunks)): ?>
-    <div id="latest-checkins" class="row">
-        <div class="col s12 mt2 marquee-container">
+    <div id="latest-checkins" style="margin-bottom: 0" class="row">
+        <div class="col s12 marquee-container">
 
             <h5 class="center mb2">Seneste lån foretaget af vores medlemmer!</h5>
 
@@ -155,8 +155,19 @@ $chunks = array_chunk($checkInsMarquee, 3);
         </div>
     </div>
     <?php endif; ?>
+</div>
 
 </div>
+
+<?php if(!$this->RCMS->Login->isLoggedIn()): ?>
+
+<div class="row center cta-row">
+    <div class="col s12">
+        <button type="button" onclick="location.href = '/register'" class="btn cta">Blev medlem <i class="far fa-tools right"></i></button>
+    </div>
+</div>
+
+<?php endif; ?>
 
 <link rel="stylesheet" href="<?= $this->RCMS->getTemplateFolder() ?>/css/frontpage.css">
 

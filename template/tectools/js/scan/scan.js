@@ -13,7 +13,7 @@ let toolContainerAdmin = document.getElementById('tool-container-admin');
 let checkInBtn = document.getElementById('check-in-btn');
 
 // Tjek om browseren har mulighed for at åbne en video-stream
-if (navigator.getUserMedia) {
+if (navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices.getUserMedia({video: true, audio: false}).then(addScanBtnClickListener, noVideoCameraError);
 } else {
     noVideoCameraError();
@@ -22,7 +22,8 @@ if (navigator.getUserMedia) {
 /**
  * Denne funktion køre, hvis browseren IKKE understøtter video-streaming
  */
-function noVideoCameraError() {
+function noVideoCameraError(err) {
+    console.log(err)
     alert('Din enhed eller browser understøtter ikke scanning');
     scanBtn.setAttribute('disabled', 'disabled');
 }

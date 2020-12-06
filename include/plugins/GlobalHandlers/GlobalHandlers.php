@@ -75,7 +75,7 @@ class GlobalHandlers {
     }
 
     /**
-     * Returnerer "Betalt" eller "Ikke betalt", alt efter om bøden er betalt
+     * Formaterer en pris så det inkluderer "DKK" og ",-"
      * @param array $data
      * @return string
      */
@@ -98,7 +98,6 @@ class GlobalHandlers {
         return <<<HTML
         <a target="_blank" href="/tools/view?toolid=$toolID">$toolName</a>
 HTML;
-
     }
 
     /**

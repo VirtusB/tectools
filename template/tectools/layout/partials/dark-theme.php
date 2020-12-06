@@ -89,6 +89,14 @@ declare(strict_types=1);
     #dashboard-tabs {
         background: #1d1d1d;
     }
+
+    .marquee-element {
+        background: linear-gradient(249.01deg,#1d1d1d 1.42%,rgba(226,160,125,0)),#252527 !important;
+    }
+
+    .btn.cta {
+        background: #2c3840 !important;
+    }
 </style>
 
 <script src="<?= $this->getTemplateFolder() ?>/js/themes.js"></script>

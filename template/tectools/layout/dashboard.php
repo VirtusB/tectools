@@ -43,15 +43,13 @@ $TecTools = $GLOBALS['TecTools'];
             </div>
 
             <ul id="dashboard-tabs" class="tabs tabs-fixed-width">
-                <li class="tab col s3"><a href="#tools-tab">Værktøj</a></li>
-                <li class="tab col s3"><a href="#users-tab">Brugere</a></li>
-                <li class="tab col s3"><a href="#categories-tab">Kategorier</a></li>
-                <li class="tab col s3"><a href="#manufacturers-tab">Producenter</a></li>
-                <li class="tab col s3"><a href="#checkins-tab">Udlejninger</a></li>
-<!--                <li class="tab col s3"><a href="#active-checkins-tab">Aktive udlejninger</a></li>-->
-<!--                <li class="tab col s3"><a href="#ended-checkins-tab">Afsluttede udlejninger</a></li>-->
-                <li class="tab col s3"><a href="#reservations-tab">Reservationer</a></li>
-                <li class="tab col s3"><a href="#fines-tab">Bøder</a></li>
+                <li class="tab col s3"><a data-toggle="tab" href="#tools-tab">Værktøj</a></li>
+                <li class="tab col s3"><a data-toggle="tab" href="#users-tab">Brugere</a></li>
+                <li class="tab col s3"><a data-toggle="tab" href="#categories-tab">Kategorier</a></li>
+                <li class="tab col s3"><a data-toggle="tab" href="#manufacturers-tab">Producenter</a></li>
+                <li class="tab col s3"><a data-toggle="tab" href="#checkins-tab">Udlejninger</a></li>
+                <li class="tab col s3"><a data-toggle="tab" href="#reservations-tab">Reservationer</a></li>
+                <li class="tab col s3"><a data-toggle="tab" href="#fines-tab">Bøder</a></li>
             </ul>
 
             <!-- region Værktøj tabel -->

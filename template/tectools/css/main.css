@@ -345,3 +345,7 @@ input[type="color"] {
 .hiddendiv.common {
     display: none;
 }
+
+.card .card-title {
+    font-weight: 400;
+}

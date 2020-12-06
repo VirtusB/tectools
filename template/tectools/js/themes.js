@@ -2,13 +2,15 @@
  * Denne fil indeholder klient kode som gøre at brugere kan vælge imellem Light Theme og Dark Theme på siden
  */
 
-const themeSwitch = document.getElementById('dark-theme-input');
+document.addEventListener('DOMContentLoaded', function () {
+    const themeSwitch = document.getElementById('dark-theme-input');
 
-if (themeSwitch) {
-    initTheme();
-}
+    if (themeSwitch) {
+        initTheme();
+    }
 
-addThemeSwitchListener();
+    addThemeSwitchListener();
+});
 
 /**
  * Tilføjer en EventListener til tema-kontakten

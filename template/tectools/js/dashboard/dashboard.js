@@ -7,6 +7,20 @@ Layout: dashboard.php
 
 $(document).ready(function(){
     $('.tabs').tabs();
+
+    if (location.hash !== '') {
+        $('.tabs').tabs('select', location.hash);
+    }
+
+    $('a[data-toggle="tab"]').click(function(e) {
+        if (history.replaceState) {
+            history.replaceState(null, null, '#' + $(e.target).attr('href').substr(1));
+        } else {
+            location.hash = '#' + $(e.target).attr('href').substr(1);
+        }
+
+        $(window).trigger('hashchange');
+    });
 });
 
 window.addEventListener('load', e => {
