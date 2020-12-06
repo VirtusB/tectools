@@ -19,3 +19,13 @@ span.title {
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
+.info {
+    text-align: center;
+    text-decoration: underline;
+    margin-bottom: 2rem;
+}
+
+.card-panel.teal i.material-icons {
+    color: #4CAF50;
+}

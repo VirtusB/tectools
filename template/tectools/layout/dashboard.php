@@ -136,7 +136,11 @@ $TecTools = $GLOBALS['TecTools'];
                         'column' => "Level",
                         'label' => "Niveau",
                         'function' => 'formatUserLevel'
-                    )
+                    ),
+                    array(
+                        'column' => "SubName",
+                        'label' => "Abonnement"
+                    ),
                 );
 
                 $order = "ORDER BY UserID DESC";

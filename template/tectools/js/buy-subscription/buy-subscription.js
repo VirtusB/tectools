@@ -67,9 +67,8 @@ function createPaymentMethod(card) {
           }
       }).then((result) => {
           if (result.error) {
-              alert('Fejl');
-              console.log('Fejl');
-              console.log(result);
+              console.error(result);
+              NotificationControl.error('Fejl', result.error.message);
           } else {
               createSubscription(
                   customerID,

@@ -24,7 +24,7 @@ $product = $this->RCMS->StripeWrapper->getStripeProduct($productID);
 <div class="section no-pad-bot">
     <div class="container">
         <br><br>
-        <h2 class="header center"><?= $product['name'] ?>-abonnementet</h2>
+        <h2 class="header center mt0"><?= $product['name'] ?>-abonnementet</h2>
 
         <div class="row">
             <div class="col s12 m6 offset-m3" style="display: flex; justify-content: center">
@@ -42,12 +42,16 @@ $product = $this->RCMS->StripeWrapper->getStripeProduct($productID);
         </div>
 
         <div class="row">
+            <div class="col s12">
+                <h6 class="info">Udfyld kortoplysninger</h6>
+            </div>
             <div class="col s10 offset-s1 m8 offset-m2 l4 l6 offset-l3 xl4 offset-xl4">
                 <div id="card-element" class="MyCardElement">
                     <!-- Elements will create input elements here -->
                 </div>
 
                 <div id="card-errors" role="alert"></div>
+                <hr>
             </div>
 
             <div class="col s12 center mt2">
