@@ -9,6 +9,10 @@ $_SESSION['contact_page_captcha'] = $result;
 
 ?>
 
+<!-- Start of  Zendesk Widget script -->
+<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=7f328083-80f6-430e-8542-26dea49d5906"> </script>
+<!-- End of  Zendesk Widget script -->
+
 <div class="container">
     <div class="row">
         <div class="col s12">

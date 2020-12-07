@@ -51,6 +51,11 @@ declare(strict_types=1);
             <p>Der tages ikke gebyr for betaling med betalingskort. Beløbet hæves først på dit kort, når abonnementet aktiveres, og der kan aldrig trækkes et større beløb end det, du har godkendt ved købet.</p>
             <p>TecTools krypterer alle dine kortoplysninger med den såkaldte SSL (Secure Socket Layer) protokol. Det betyder, at uvedkommende ikke kan aflæse dit kortnummer eller andre informationer under transaktionen med Stripe.</p>
 
+            <h4 class="bold">Udsendelse af mails</h4>
+
+            <p>Vi forbeholder os retten til at sende dig e-mails, med henblik på at give dig information omkring dine lån, reservationer og eventuelle bøder.</p>
+            <p>Denne service kan slås fra ved at slette sin konto.</p>
+
             <h4 class="bold">Underdatabehandlere</h4>
             <p>Vi benytter følgende underdatabehandlere:</p>
             <br>

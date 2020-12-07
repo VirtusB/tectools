@@ -4,3 +4,7 @@
     width: fit-content;
     border-radius: 3px;
 }
+
+.tec-floating-container {
+    display: none;
+}

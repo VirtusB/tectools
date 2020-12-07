@@ -102,8 +102,19 @@ class Helpers {
      * @param string $str
      * @return string
      */
-	public function escape(string $str): string {
+	public static function escape(string $str): string {
         return htmlentities($str, ENT_QUOTES, 'UTF-8');
+    }
+
+    /**
+     * Omdirigerer en bruger til den URL der blev postet, hvis den er sat
+     */
+    public static function customLocation(): void {
+        if (isset($_POST['custom_location'])) {
+            $location = self::escape($_POST['custom_location']);
+            header('Location: ' . $location);
+            return;
+        }
     }
 
     /**

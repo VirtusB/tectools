@@ -615,10 +615,21 @@ HTML;
                 </div>
             </div>
 
+            <?php
+                $unpaidFinesCount = $TecTools->CheckIns->getCountOfUnpaidFinesForUser();
+                $unpaidFinesBadge = $unpaidFinesCount === 0 ? '' : " <span class='new badge fines-badge red'>$unpaidFinesCount</span>";
+
+                if ($unpaidFinesCount === 1) {
+                    $unpaidFinesBadge = " <span data-badge-caption='' class='new badge fines-badge red'>$unpaidFinesCount ny</span>";
+                } else if ($unpaidFinesCount > 1) {
+                    $unpaidFinesBadge = " <span data-badge-caption='' class='new badge fines-badge red'>$unpaidFinesCount nye</span>";
+                }
+            ?>
+
             <ul id="dashboard-tabs" class="tabs tabs-fixed-width">
                 <li class="tab col s3"><a data-toggle="tab" href="#checkins-tab">Udlejninger</a></li>
                 <li class="tab col s3"><a data-toggle="tab" href="#reservations-tab">Reservationer</a></li>
-                <li class="tab col s3"><a data-toggle="tab" href="#fines-tab">Bøder</a></li>
+                <li class="tab col s3"><a data-toggle="tab" href="#fines-tab">Bøder<?= $unpaidFinesBadge ?></a></li>
             </ul>
 
             <!-- region Kommentar modal for brugere til aktive og afsluttede udlejninger -->

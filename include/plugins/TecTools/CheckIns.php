@@ -301,6 +301,20 @@ HTML;
         $this->RCMS->Logs->addLog(Logs::CHECK_OUT_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
         Helpers::setNotification('Succes', 'Værktøjet blev tjekket ud');
+        Helpers::customLocation();
+    }
+
+    /**
+     * Returnerer antal af ubetalte bøder brugeren har
+     * @param int|null $userID
+     * @return int
+     */
+    public function getCountOfUnpaidFinesForUser(?int $userID = null): int {
+        if (!$userID) {
+            $userID = $this->RCMS->Login->getUserID();
+        }
+
+        return $this->RCMS->execute('SELECT getCountOfUnpaidFinesForUser(?) AS count', array('i', $userID))->fetch_object()->count ?? 0;
     }
 
     /**

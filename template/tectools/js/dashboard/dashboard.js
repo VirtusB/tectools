@@ -67,6 +67,8 @@ function deleteReservation(id, context) {
     // "id" variablen er reservations ID'et, hvis det er brugeren selv der sletter reservationen
     // "id" variablen er et bruger ID, hvis det er en personale bruger der sletter en reservation som tilhører en bruger
 
+    let url = location.pathname + window.location.hash;
+
     if (isAdmin()) {
         let reservationID = $(context).parent().parent().find('td').first().html();
 
@@ -75,6 +77,7 @@ function deleteReservation(id, context) {
             <input type="hidden" name="post_endpoint" value="deleteReservation">
             <input type="hidden" name="user_id" value="${id}">
             <input type="hidden" name="reservation_id" value="${reservationID}">
+            <input type="hidden" name="custom_location" value="${url}">
         </form>
         `;
     } else {
@@ -82,6 +85,7 @@ function deleteReservation(id, context) {
         <form style="display: none;" method="POST">
             <input type="hidden" name="post_endpoint" value="deleteReservation">
             <input type="hidden" name="reservation_id" value="${id}">
+            <input type="hidden" name="custom_location" value="${url}">
         </form>
         `;
     }
@@ -248,12 +252,14 @@ function checkOut(checkInID, context) {
     let fineAmount = +fineAmountInput.value;
     let fineComment = fineCommentTextarea.value;
     let shouldAddFine = addFineCheckbox.checked && fineAmount !== 0;
+    let url = location.pathname + window.location.hash;
 
     let form = `
     <form style="display: none;" method="POST">
         <input type="hidden" name="post_endpoint" value="checkOut">
         <input type="hidden" name="check_in_id" value="${checkInID}">
         <input type="hidden" name="status_id" value="${statusID}">
+        <input type="hidden" name="custom_location" value="${url}">
         ${shouldAddFine ? `<input type="hidden" name="fine_amount" value="${fineAmount}">` : ''}
         ${shouldAddFine ? `<input type="hidden" name="fine_comment" value="${fineComment}">` : ''}
     </form>

@@ -340,7 +340,11 @@ input[type="color"] {
 
 .tabs .tab a {
     color: #2d3e50;
+    /*font-size: 13px;*/
+    /*text-transform: none;*/
 }
+
+
 
 .hiddendiv.common {
     display: none;

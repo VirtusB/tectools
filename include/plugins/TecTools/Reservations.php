@@ -109,6 +109,7 @@ class Reservations {
         $this->RCMS->Logs->addLog(Logs::DELETE_RESERVATION_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
         Helpers::setNotification('Succes', 'Reservationen blev slettet');
+        Helpers::customLocation();
     }
 
     /**

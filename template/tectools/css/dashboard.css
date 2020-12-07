@@ -58,10 +58,23 @@ td[data-exceeded-date="1"]::after {
     }
 }
 
-/*.tabs-content.carousel .carousel-item {*/
-/*    height: 100% !important;*/
-/*}*/
+span.badge.fines-badge {
+    float: none;
+}
 
-.tabs-content.carousel .carousel-item {
-    height: auto !important;
+@media all and (max-width: 410px) {
+    .tabs .tab a {
+        text-transform: none;
+    }
+
+    #dashboard-tabs {
+        position: absolute;
+        left: 0;
+        right: 0;
+        width: 96%;
+    }
+
+    .row.responsive-table-container {
+        margin-top: 4rem;
+    }
 }
