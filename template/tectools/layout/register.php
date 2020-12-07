@@ -11,7 +11,7 @@ if ($this->RCMS->Login->isLoggedIn()) {
 }
 ?>
 
-<div class="container mt4">
+<div class="container mt0">
     <div class="row">
         <form method="post"  class="col s12 m4 offset-m4">
             <h1 class="center">Opret konto</h1>

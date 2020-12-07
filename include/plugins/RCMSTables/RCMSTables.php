@@ -102,6 +102,13 @@ class RCMSTables {
         $buttons = $this->buttons[$id];
         $settings = $this->settings[$id];
 
+        $rows = $this->retrieveData($table, $columns, $where, $order, $settings, $group);
+
+        if (isset($settings['no_results_html']) && !count($rows)) {
+            echo $settings['no_results_html'];
+            return;
+        }
+
         // Tilføj HTML klasse til tabellen hvis sortering er aktiveret
         $hasSorting = '';
         if(!empty($settings['ajaxsort']) && $settings['ajaxsort']) {
@@ -139,8 +146,6 @@ class RCMSTables {
         }
 
         echo '</tr>';
-
-        $rows = $this->retrieveData($table, $columns, $where, $order, $settings, $group);
 
         // Udskriv alle rækkerne
         $this->buildRows($id, $rows);

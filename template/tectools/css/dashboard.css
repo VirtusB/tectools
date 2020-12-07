@@ -26,3 +26,42 @@ td[data-exceeded-date="1"]::after {
     /*overflow-y: visible;*/
 }
 
+.empty-row {
+    background: #d8d8d8;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius: 8px;
+}
+
+.empty-row i {
+    font-size: 40px;
+}
+
+.empty-row h5 {
+    margin: 0;
+    margin-top: 20px;
+}
+
+@media all and (max-width: 600px) {
+    .empty-row {
+        padding-top: 15px;
+        padding-bottom: 15px;
+        border-radius: 8px;
+    }
+
+    .empty-row i {
+        font-size: 30px;
+    }
+
+    .empty-row h5 {
+        font-size: 1.4rem;
+    }
+}
+
+/*.tabs-content.carousel .carousel-item {*/
+/*    height: 100% !important;*/
+/*}*/
+
+.tabs-content.carousel .carousel-item {
+    height: auto !important;
+}

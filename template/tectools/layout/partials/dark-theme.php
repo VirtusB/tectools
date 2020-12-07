@@ -18,7 +18,7 @@ declare(strict_types=1);
         background-color: #1d1d1d !important;
     }
 
-    table.RCMSTable tr {
+    table.RCMSTable tr, #logs tr {
         border-bottom: 1px solid rgb(255, 255, 255);
     }
 
@@ -96,6 +96,10 @@ declare(strict_types=1);
 
     .btn.cta {
         background: #2c3840 !important;
+    }
+
+    .empty-row {
+        background: #2C3840 !important;
     }
 </style>
 

@@ -21,6 +21,7 @@ $TecTools = $GLOBALS['TecTools'];
     <?php if ($TecTools->RCMS->Login->isAdmin()): ?>
     <h4 class="center">Personale - Tjek Ud</h4>
     <p class="center mb0">Her kan du som Personale tjekke værktøj ud, så det kommer på lager igen</p>
+    <hr style="width: 80%">
     <?php endif; ?>
 
     <div class="container" id="scan-container">
@@ -71,12 +72,9 @@ $TecTools = $GLOBALS['TecTools'];
 
     <div style="display: none" id="tool-container-admin">
 
-
-        <br><br>
-
         <div class="row center" style="">
             <div class="col s12 m8 l6 xl4 offset-m2 offset-l3 offset-xl4">
-                <img style="max-width: 65%; object-fit: scale-down;" src="" alt="">
+                <img style="max-width: 45%; object-fit: scale-down;" src="" alt="">
             </div>
 
             <div class="col s12 m8 l6 xl4 offset-m2 offset-l3 offset-xl4">
@@ -110,12 +108,25 @@ $TecTools = $GLOBALS['TecTools'];
             </div>
 
             <div class="col s10 offset-s1 mt2">
-                <label>Status</label>
+                <label for="tool-status">Status</label>
                 <select id="tool-status" required class="mat-select">
                     <option selected value="1">På lager</option>
                     <option value="4">Ikke på lager</option>
                     <option value="5">Beskadiget</option>
                 </select>
+
+                <label style="display: flex; margin-top: 2rem;">
+                    <input id="add-fine-checkbox" onchange="fineCheckBoxChange()" type="checkbox" />
+                    <span>Tilføj bøde?</span>
+                </label>
+            </div>
+
+            <div style="display: none" id="fine-container" class="col s10 offset-s1 mt2">
+                <label for="fine-amount">Bøde størrelse (DKK)</label>
+                <input min="2.5" max="999999" class="mb2" step="any" disabled value="2.5" type="number" id="fine-amount">
+
+                <label for="fine-comment">Bøde kommentar</label>
+                <textarea disabled id="fine-comment" class="materialize-textarea"></textarea>
             </div>
 
             <button onclick="checkOutTool(this.getAttribute('data-checkin-id'))" data-checkin-id="" id="check-out-btn" class="btn green-btn mt2">Tjek Ud   <i class="fad fa-dolly"></i></button>

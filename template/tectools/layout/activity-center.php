@@ -22,6 +22,14 @@ $pages = ceil(count($logs) / 10);
     <br><br>
     <h2 class="header center">Aktivitet Center</h2>
 
+    <div class="row">
+        <div class="col s12 m6 offset-m3">
+            <div class="card-panel teal">
+                <p class="white-text">Alle bruger-ID'er for hændelser er ID'et for brugeren der har foretaget hændelsen,
+                    så bruger-ID'et for bl.a. "Tilføj bøde" og "Tjek ud" tilhører altid en personale bruger</p>
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <?php foreach ($logTypes as $logType): ?>

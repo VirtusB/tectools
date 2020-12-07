@@ -158,7 +158,7 @@ a.btn, button.btn {
     background-color: #2C3F50;
 }
 
-a.btn:hover, button.btn:hover, .tec-submit-btn:hover {
+a.btn:hover, button.btn:hover, .tec-submit-btn:hover, input.tec-btn:hover {
     background-color: #ff9800 !important;
     border-color: #ff9800 !important;
 }

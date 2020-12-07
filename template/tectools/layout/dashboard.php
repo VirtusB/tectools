@@ -16,6 +16,18 @@ $RCMSTables = $GLOBALS['RCMSTables'];
  */
 $TecTools = $GLOBALS['TecTools'];
 
+$noResultsHTML = <<<HTML
+    <div class="row center empty-row">
+        <div class="col s12">
+            <i class="fad fa-person-dolly-empty"></i>
+        </div>
+        
+        <div class="col s12">
+            <h5>Her er tomt...</h5>
+        </div>
+    </div>
+HTML;
+
 ?>
 
 <link rel="stylesheet" href="<?= $this->RCMS->getTemplateFolder() ?>/css/dashboard.css">
@@ -290,7 +302,7 @@ $TecTools = $GLOBALS['TecTools'];
 
                         <div style="opacity: 0.3" id="fine-container" class="col s12 m6">
                             <label for="fine-amount">Bøde størrelse (DKK)</label>
-                            <input min="0" class="mb2" step="any" disabled value="0" type="number" id="fine-amount">
+                            <input min="2.5" max="999999" class="mb2" step="any" disabled value="2.5" type="number" id="fine-amount">
 
                             <label for="fine-comment">Bøde kommentar</label>
                             <textarea disabled id="fine-comment" class="materialize-textarea"></textarea>
@@ -603,6 +615,12 @@ $TecTools = $GLOBALS['TecTools'];
                 </div>
             </div>
 
+            <ul id="dashboard-tabs" class="tabs tabs-fixed-width">
+                <li class="tab col s3"><a data-toggle="tab" href="#checkins-tab">Udlejninger</a></li>
+                <li class="tab col s3"><a data-toggle="tab" href="#reservations-tab">Reservationer</a></li>
+                <li class="tab col s3"><a data-toggle="tab" href="#fines-tab">Bøder</a></li>
+            </ul>
+
             <!-- region Kommentar modal for brugere til aktive og afsluttede udlejninger -->
             <div id="comment-modal" class="modal">
                 <div class="modal-content">
@@ -616,10 +634,9 @@ $TecTools = $GLOBALS['TecTools'];
             </div>
             <!-- endregion -->
 
-            <!-- region Aktive udlejninger, bruger tabel -->
-            <div class="row responsive-table-container">
+            <!-- region Udlejninger, bruger tabel -->
+            <div id="checkins-tab" class="row responsive-table-container mb4">
                 <h3>Aktive udlejninger</h3>
-
                 <?php
                 $columns = array(
                     array(
@@ -670,7 +687,7 @@ $TecTools = $GLOBALS['TecTools'];
                 );
 
                 $order = "ORDER BY EndDate ASC, CheckedOut DESC";
-                $settings = array('searchbar' => true, 'pageLimit' => 5);
+                $settings = array('searchbar' => true, 'pageLimit' => 5, 'no_results_html' => $noResultsHTML);
 
                 $where = [
                     [
@@ -694,11 +711,83 @@ $TecTools = $GLOBALS['TecTools'];
 
                 $RCMSTables->createRCMSTable("active_checkins_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, $buttons, null);
                 ?>
+
+
+                <h3>Afsluttede udlejninger</h3>
+                <?php
+                $columns = array(
+                    array(
+                        'column' => 'Image',
+                        'label' => 'Billede',
+                        'function' => 'showToolImage'
+                    ),
+                    array(
+                        'column' => 'ToolName',
+                        'label' => 'Navn',
+                        'function' => 'addLinkToToolName'
+                    ),
+                    array(
+                        'column' => "ManufacturerName",
+                        'label' => "Producent"
+                    ),
+                    array(
+                        'column' => "StartDate",
+                        'prefix' => 'c.StartDate AS ',
+                        'order_subq' => 'c',
+                        'label' => "Udlejning start",
+                        'tdclass' => 'render-datetime',
+                        'tdattributes' => [
+                            [
+                                'name' => 'datetime',
+                                'valuefromcolumn' => 'StartDate'
+                            ]
+                        ]
+                    ),
+                    array(
+                        'column' => "EndDate",
+                        'prefix' => 'c.EndDate AS ',
+                        'order_subq' => 'c',
+                        'label' => "Udlejning slut",
+                        'tdclass' => 'render-datetime',
+                        'tdattributes' => [
+                            [
+                                'name' => 'datetime',
+                                'valuefromcolumn' => 'EndDate'
+                            ]
+                        ]
+                    )
+                );
+
+                $order = "ORDER BY EndDate DESC, CheckedOut DESC";
+                $settings = array('searchbar' => true, 'pageLimit' => 5, 'no_results_html' => $noResultsHTML);
+
+                $where = [
+                    [
+                        'column' => 'FK_UserID',
+                        'eq' => $this->RCMS->Login->getUserID(),
+                        'type' => 'i'
+                    ],
+                    [
+                        'column' => 'CheckedOut',
+                        'eq' => 1,
+                        'type' => 'i'
+                    ]
+                ];
+
+                $buttons = [
+                    [
+                        'button' => '<button onclick="showCommentCheckIn(?, this)" class="btn tec-btn">Vis Kommentar</button>',
+                        'value' => 'CheckInID'
+                    ]
+                ];
+
+                $RCMSTables->createRCMSTable("ended_checkins_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, $buttons, null);
+                ?>
             </div>
             <!-- endregion -->
 
             <!-- region Reservationer tabel -->
-            <div class="row responsive-table-container">
+            <div id="reservations-tab" class="row responsive-table-container mb4">
                 <h3>Dine reservationer</h3>
 
                 <?php
@@ -746,7 +835,7 @@ $TecTools = $GLOBALS['TecTools'];
                 );
 
                 $order = "ORDER BY r.EndDate DESC";
-                $settings = array('searchbar' => true, 'pageLimit' => 5);
+                $settings = array('searchbar' => true, 'pageLimit' => 5, 'no_results_html' => $noResultsHTML);
 
                 $where = [
                     [
@@ -772,84 +861,8 @@ $TecTools = $GLOBALS['TecTools'];
             </div>
             <!-- endregion -->
 
-            <!-- region Afsluttede udlejninger, bruger tabel -->
-            <div class="row responsive-table-container">
-                <h3>Afsluttede udlejninger</h3>
-
-                <?php
-                $columns = array(
-                    array(
-                        'column' => 'Image',
-                        'label' => 'Billede',
-                        'function' => 'showToolImage'
-                    ),
-                    array(
-                        'column' => 'ToolName',
-                        'label' => 'Navn',
-                        'function' => 'addLinkToToolName'
-                    ),
-                    array(
-                        'column' => "ManufacturerName",
-                        'label' => "Producent"
-                    ),
-                    array(
-                        'column' => "StartDate",
-                        'prefix' => 'c.StartDate AS ',
-                        'order_subq' => 'c',
-                        'label' => "Udlejning start",
-                        'tdclass' => 'render-datetime',
-                        'tdattributes' => [
-                            [
-                                'name' => 'datetime',
-                                'valuefromcolumn' => 'StartDate'
-                            ]
-                        ]
-                    ),
-                    array(
-                        'column' => "EndDate",
-                        'prefix' => 'c.EndDate AS ',
-                        'order_subq' => 'c',
-                        'label' => "Udlejning slut",
-                        'tdclass' => 'render-datetime',
-                        'tdattributes' => [
-                            [
-                                'name' => 'datetime',
-                                'valuefromcolumn' => 'EndDate'
-                            ]
-                        ]
-                    )
-                );
-
-                $order = "ORDER BY EndDate DESC, CheckedOut DESC";
-                $settings = array('searchbar' => true, 'pageLimit' => 5);
-
-                $where = [
-                    [
-                        'column' => 'FK_UserID',
-                        'eq' => $this->RCMS->Login->getUserID(),
-                        'type' => 'i'
-                    ],
-                    [
-                        'column' => 'CheckedOut',
-                        'eq' => 1,
-                        'type' => 'i'
-                    ]
-                ];
-
-                $buttons = [
-                    [
-                        'button' => '<button onclick="showCommentCheckIn(?, this)" class="btn tec-btn">Vis Kommentar</button>',
-                        'value' => 'CheckInID'
-                    ]
-                ];
-
-                $RCMSTables->createRCMSTable("ended_checkins_table", "CheckIns c LEFT JOIN Tools t ON t.ToolID = c.FK_ToolID LEFT JOIN Manufacturers m ON m.ManufacturerID = t.FK_ManufacturerID", $columns, $settings, $where, $order, $buttons, null);
-                ?>
-            </div>
-            <!-- endregion -->
-
             <!-- region Bøder tabel -->
-            <div class="row responsive-table-container mb4">
+            <div id="fines-tab" class="row responsive-table-container mb4">
                 <h3>Dine bøder</h3>
 
                 <?php
@@ -912,7 +925,7 @@ $TecTools = $GLOBALS['TecTools'];
                 );
 
                 $order = "ORDER BY IsPaid ASC, Created DESC";
-                $settings = array('searchbar' => true, 'pageLimit' => 5);
+                $settings = array('searchbar' => true, 'pageLimit' => 5, 'no_results_html' => $noResultsHTML);
 
                 $where = [
                     [

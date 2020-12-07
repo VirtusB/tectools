@@ -47,7 +47,7 @@ class Cronjobs {
         $endDate = date('d-m-Y H:i:s', strtotime($reservation['EndDate']));
         $toolName = $reservation['ToolName'];
         $manufacturerName = $reservation['ManufacturerName'];
-        $link = 'https://tectools.virtusb.com/tools/view?toolid=' . $reservation['FK_ToolID'];
+        $link = Helpers::getHTTPHost() . '/tools/view?toolid=' . $reservation['FK_ToolID'];
 
         $body = <<<HTML
         <p>Kære $fullName</p>

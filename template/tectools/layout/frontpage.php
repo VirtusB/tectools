@@ -35,7 +35,7 @@ $chunks = array_chunk($checkInsMarquee, 3);
     <form action="" method="get">
         <div class="row" style="margin-top: 2rem; margin-bottom: 0">
             <div class="col s12 m12 l4 xl4">
-                <input value="<?= isset($_GET['search-text']) ? $_GET['search-text'] : '' ?>" name="search-text" type="text" placeholder="Fritekst...">
+                <input value="<?= isset($_GET['search-text']) ? $_GET['search-text'] : '' ?>" name="search-text" type="text" placeholder="Søg efter...">
             </div>
 
             <div id="category-select-col" class="col s12 m12 l4 xl4">

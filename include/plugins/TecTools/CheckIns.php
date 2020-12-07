@@ -190,12 +190,58 @@ class CheckIns {
 
         $checkInDuration = (int) $userProduct['metadata']['MaxCheckoutDays']['value'];
 
-        $this->RCMS->execute('CALL addCheckIn(?, ?, ?)', array('iii', $userID, $toolID, $checkInDuration));
+        $res = $this->RCMS->execute('CALL addCheckIn(?, ?, ?)', array('iii', $userID, $toolID, $checkInDuration));
+        $checkInID = $res->fetch_assoc()['lastInsertId'];
 
+        $this->sendNewCheckInEmail($checkInID);
         $this->RCMS->Logs->addLog(Logs::CHECK_IN_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
         $response['result'] = 'success';
         Helpers::outputAJAXResult(200, $response);
+    }
+
+    /**
+     * Denne metode sender en email til kunden, og informerer om deres nye lån
+     * @param int $checkInID
+     */
+    private function sendNewCheckInEmail(int $checkInID): void {
+        $checkIn = $this->getCheckIn($checkInID);
+        $user = $this->TecTools->Users->getUserByID($checkIn['FK_UserID']);
+        $tool = $this->TecTools->getToolByID($checkIn['FK_ToolID']);
+
+        $manufacturerName = $this->TecTools->Manufacturers->getManufacturer($tool['FK_ManufacturerID'])['ManufacturerName'];
+        $toolName = $tool['ToolName'];
+        $fullName = Helpers::formatFirstLastName($user['FirstName'], $user['LastName']);
+        $emailAddress = $user['Email'];
+        $startDate = date('d-m-Y H:i:s', strtotime($checkIn['StartDate']));
+        $endDate = date('d-m-Y H:i:s', strtotime($checkIn['EndDate']));
+
+        $toolLink = Helpers::getHTTPHost() . '/tools/view?toolid=' . $tool['ToolID'];
+
+        $body = <<<HTML
+        <p>Kære $fullName</p>
+        <p>Et nyt lån er blevet tilføjet til din konto.</p>
+        <br>
+        <h4>Udlejningen:</h4>
+        <p>Værktøj: $toolName</p>
+        <p>Producent: $manufacturerName</p>
+        <p>Start Dato: $startDate</p>
+        <p>Slut Dato: $endDate</p>
+        <p>Link: <a href="$toolLink">Klik her for at se værktøjet</a></p>
+        <br>
+        <p>Med venlig hilsen TecTools</p>
+        <img style="max-height: 53px" src="cid:TTLogo" alt="Logo" />
+HTML;
+
+        $logoPath = __DIR__ . '/../../../' . $this->RCMS->getTemplateFolder() . '/images/logo.png';
+
+        Mailer::sendEmail(
+            SMTP_USERNAME,
+            SITE_NAME,
+            $emailAddress,
+            $fullName,
+            'TecTools - nyt lån',
+            $body, [], [], 'TTLogo', $logoPath);
     }
 
     /**
@@ -252,6 +298,8 @@ class CheckIns {
             $this->sendNewFineEmail($fineID, $checkIn, $fineAmount, $fineComment);
         }
 
+        $this->RCMS->Logs->addLog(Logs::CHECK_OUT_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
+
         Helpers::setNotification('Succes', 'Værktøjet blev tjekket ud');
     }
 
@@ -265,6 +313,8 @@ class CheckIns {
     private function addFineToCheckIn(array $checkIn, float $fineAmount, string $fineComment): int {
         $checkInID = $checkIn['CheckInID'];
         $userID = $checkIn['FK_UserID'];
+
+        $this->RCMS->Logs->addLog(Logs::FINE_ISSUED_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
         $res = $this->RCMS->execute('CALL addFineToCheckIn(?, ?, ?, ?)', array('iids', $checkInID, $userID, $fineAmount, $fineComment));
         return $res->fetch_assoc()['lastInsertId'];
@@ -321,6 +371,7 @@ class CheckIns {
 
         $this->markFineAsPaid($fine['FineID'], $paymentIntentID);
         $this->sendFinePaidEmail($fine);
+        $this->RCMS->Logs->addLog(Logs::FINE_PAID_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
         Helpers::setNotification('Succes', 'Bøden blev betalt');
         Helpers::redirect('/dashboard');
@@ -391,8 +442,8 @@ HTML;
         $endDate = date('d-m-Y H:i:s', strtotime($checkIn['EndDate']));
         $fineHash = $fine['PaymentHash'];
 
-        $toolLink = 'https://tectools.virtusb.com/tools/view?toolid=' . $tool['ToolID'];
-        $paymentLink = 'https://tectools.virtusb.com/pay-fine?hash=' . $fineHash;
+        $toolLink = Helpers::getHTTPHost() . '/tools/view?toolid=' . $tool['ToolID'];
+        $paymentLink = Helpers::getHTTPHost() . '/pay-fine?hash=' . $fineHash;
 
         $body = <<<HTML
         <p>Kære $fullName</p>

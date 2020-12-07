@@ -163,6 +163,17 @@ function enableCheckInBtn() {
 }
 
 /**
+ * Denne funktion kører, når tjekboksen "Tilføj bøde?" ændres
+ */
+function fineCheckBoxChange() {
+    document.getElementById('fine-amount').toggleAttribute('disabled');
+    document.getElementById('fine-comment').toggleAttribute('disabled');
+    let fineContainer = document.getElementById('fine-container');
+
+    $(fineContainer).slideToggle();
+}
+
+/**
  * Sender en AJAX request til serveren og udlåner et værktøj til brugeren
  * @param {string} barcode
  */
@@ -196,12 +207,21 @@ function checkInTool(barcode) {
  */
 function checkOutTool(checkInID) {
     let statusID = document.getElementById('tool-status').selectedOptions[0].value;
+    let fineAmountInput = document.getElementById('fine-amount');
+    let fineCommentTextarea = document.getElementById('fine-comment');
+    let addFineCheckbox = document.getElementById('add-fine-checkbox');
+
+    let fineAmount = +fineAmountInput.value;
+    let fineComment = fineCommentTextarea.value;
+    let shouldAddFine = addFineCheckbox.checked && fineAmount !== 0;
 
     let form = `
     <form id="check-out-tool-form" style="display: none;" method="POST">
         <input type="hidden" name="post_endpoint" value="checkOut">
         <input type="hidden" name="check_in_id" value="${checkInID}">
         <input type="hidden" name="status_id" value="${statusID}">
+        ${shouldAddFine ? `<input type="hidden" name="fine_amount" value="${fineAmount}">` : ''}
+        ${shouldAddFine ? `<input type="hidden" name="fine_comment" value="${fineComment}">` : ''}
     </form>
     `;
 

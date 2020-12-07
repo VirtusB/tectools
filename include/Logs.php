@@ -34,6 +34,9 @@ class Logs {
     public const ADD_COMMENT_TYPE_ID = 18;
     public const EDIT_COMMENT_TYPE_ID = 19;
     public const CREATE_USER_TYPE_ID = 20;
+    public const FINE_ISSUED_TYPE_ID = 21;
+    public const FINE_PAID_TYPE_ID = 22;
+    public const CHECK_OUT_TYPE_ID = 23;
 
     public function __construct(RCMS $RCMS) {
         $this->RCMS = $RCMS;

@@ -12,7 +12,7 @@ if ($this->RCMS->Login->isLoggedIn()) {
 
 ?>
 
-<div class="container mt4">
+<div class="container">
     <div class="row">
 
         <form method="post" class="col s12 m4 offset-m4">
