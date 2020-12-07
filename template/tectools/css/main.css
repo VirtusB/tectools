@@ -344,7 +344,9 @@ input[type="color"] {
     /*text-transform: none;*/
 }
 
-
+.hide {
+    display: none;
+}
 
 .hiddendiv.common {
     display: none;

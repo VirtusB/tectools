@@ -645,9 +645,9 @@ HTML;
             </div>
             <!-- endregion -->
 
-            <!-- region Udlejninger, bruger tabel -->
+            <!-- region Lån, bruger tabel -->
             <div id="checkins-tab" class="row responsive-table-container mb4">
-                <h3>Aktive udlejninger</h3>
+                <h3>Aktive Lån</h3>
                 <?php
                 $columns = array(
                     array(
@@ -666,7 +666,7 @@ HTML;
                     ),
                     array(
                         'column' => "StartDate",
-                        'label' => "Udlejning start",
+                        'label' => "Lån start",
                         'tdclass' => 'render-datetime',
                         'tdattributes' => [
                             [
@@ -677,7 +677,7 @@ HTML;
                     ),
                     array(
                         'column' => "EndDate",
-                        'label' => "Udlejning slut",
+                        'label' => "Lån slut",
                         'tdclass' => 'render-datetime',
                         'tdattributes' => [
                             [
@@ -724,7 +724,7 @@ HTML;
                 ?>
 
 
-                <h3>Afsluttede udlejninger</h3>
+                <h3>Afsluttede lån</h3>
                 <?php
                 $columns = array(
                     array(
@@ -745,7 +745,7 @@ HTML;
                         'column' => "StartDate",
                         'prefix' => 'c.StartDate AS ',
                         'order_subq' => 'c',
-                        'label' => "Udlejning start",
+                        'label' => "Lån start",
                         'tdclass' => 'render-datetime',
                         'tdattributes' => [
                             [
@@ -758,7 +758,7 @@ HTML;
                         'column' => "EndDate",
                         'prefix' => 'c.EndDate AS ',
                         'order_subq' => 'c',
-                        'label' => "Udlejning slut",
+                        'label' => "Lån slut",
                         'tdclass' => 'render-datetime',
                         'tdattributes' => [
                             [

@@ -13,7 +13,7 @@ $TecTools = $GLOBALS['TecTools'];
 
 ?>
 
-<div id="store-locations-json" class="hiddendiv">
+<div id="store-locations-json" class="hide">
     <?= json_encode($TecTools->getStoreLocations()) ?>
 </div>
 

@@ -67,7 +67,7 @@ class Subscriptions {
     public function cancelSubscription(): void {
         // Tjek om brugeren har nogen aktive check ins
         if ($this->TecTools->CheckIns->getCheckInCountForUser($this->RCMS->Login->getUserID()) !== 0) {
-            Helpers::setNotification('Fejl', 'Brugeren har stadig aktive udlejninger', 'error');
+            Helpers::setNotification('Fejl', 'Kontoen har stadig aktive lån', 'error');
             return;
         }
 

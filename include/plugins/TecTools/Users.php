@@ -71,9 +71,14 @@ class Users {
             return;
         }
 
+        if ($this->TecTools->CheckIns->getCountOfUnpaidFinesForUser($userIDPost) !== 0) {
+            Helpers::setNotification('Fejl', 'Kontoen har stadig ubetalte bøder', 'error');
+            return;
+        }
+
         // Tjek om brugeren har nogen aktive check ins
         if ($this->TecTools->CheckIns->getCheckInCountForUser($userIDPost) !== 0) {
-            Helpers::setNotification('Fejl', 'Brugeren har stadig aktive udlejninger', 'error');
+            Helpers::setNotification('Fejl', 'Kontoen har stadig aktive lån', 'error');
             return;
         }
 
@@ -83,7 +88,7 @@ class Users {
 
         $this->RCMS->Logs->addLog(Logs::DELETE_USER_TYPE_ID, ['UserID' => $this->RCMS->Login->getUserID()]);
 
-        Helpers::setNotification('Succes', 'Brugeren blev slettet');
+        Helpers::setNotification('Succes', 'Kontoen blev slettet');
 
         // Log ud hvis det er brugeren selv der sletter kontoen
         if ($userIDPost === $this->RCMS->Login->getUserID()) {

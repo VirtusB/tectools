@@ -53,11 +53,11 @@ class CheckIns {
         $checkIn = $this->getCheckIn($checkInID);
 
         if (!$checkIn) {
-            Helpers::outputAJAXResult(400, ['result' => 'Udlejningen kunne ikke findes']);
+            Helpers::outputAJAXResult(400, ['result' => 'Lånet kunne ikke findes']);
         }
 
         if ($checkIn['FK_UserID'] !== $userID && !$this->RCMS->Login->isAdmin()) {
-            Helpers::outputAJAXResult(400, ['result' => 'Du ejer ikke denne udlejning']);
+            Helpers::outputAJAXResult(400, ['result' => 'Du ejer ikke dette lån']);
         }
 
         $logType = empty($checkIn['Comment']) ? Logs::ADD_COMMENT_TYPE_ID : Logs::EDIT_COMMENT_TYPE_ID;
@@ -77,11 +77,11 @@ class CheckIns {
         $checkIn = $this->getCheckIn($checkInID);
 
         if (!$checkIn) {
-            Helpers::outputAJAXResult(400, ['result' => 'Udlejningen kunne ikke findes']);
+            Helpers::outputAJAXResult(400, ['result' => 'Lånet kunne ikke findes']);
         }
 
         if ($checkIn['FK_UserID'] !== $userID && !$this->RCMS->Login->isAdmin()) {
-            Helpers::outputAJAXResult(400, ['result' => 'Du ejer ikke denne udlejning']);
+            Helpers::outputAJAXResult(400, ['result' => 'Du ejer ikke dette lån']);
         }
 
         Helpers::outputAJAXResult(200, ['result' => ['Comment' => $checkIn['Comment'], 'CheckedOut' => $checkIn['CheckedOut']]]);
@@ -222,7 +222,7 @@ class CheckIns {
         <p>Kære $fullName</p>
         <p>Et nyt lån er blevet tilføjet til din konto.</p>
         <br>
-        <h4>Udlejningen:</h4>
+        <h4>Lånet:</h4>
         <p>Værktøj: $toolName</p>
         <p>Producent: $manufacturerName</p>
         <p>Start Dato: $startDate</p>
@@ -461,14 +461,14 @@ HTML;
 
         $body = <<<HTML
         <p>Kære $fullName</p>
-        <p>Din udlejning er blevet tildelt en bøde.</p>
+        <p>Dit lån er blevet tildelt en bøde.</p>
         <br>
         <h4>Bøden:</h4>
         <p>Størrelse: DKK $fineAmount,-</p>
         <p>Årsag: $fineComment</p>
         <p><a href="$paymentLink">Betal bøden</a></p>
         <br>
-        <h4>Udlejningen:</h4>
+        <h4>Lånet:</h4>
         <p>Værktøj: $toolName</p>
         <p>Producent: $manufacturerName</p>
         <p>Start Dato: $startDate</p>
