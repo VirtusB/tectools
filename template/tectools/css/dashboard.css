@@ -1,5 +1,5 @@
 .dashboard-row {
-    margin-top: 4rem;
+    /*margin-top: 4rem;*/
 }
 
 td[data-exceeded-date="1"] {
@@ -19,6 +19,7 @@ td[data-exceeded-date="1"]::after {
     h3 {
         font-size: 2rem;
         text-align: center;
+        text-decoration: underline;
     }
 }
 
@@ -64,14 +65,21 @@ span.badge.fines-badge {
 
 @media all and (max-width: 410px) {
     .tabs .tab a {
-        text-transform: none;
+        /*text-transform: none;*/
     }
+
+    /*#dashboard-tabs {*/
+    /*    position: absolute;*/
+    /*    left: 0;*/
+    /*    right: 0;*/
+    /*    width: 96%;*/
+    /*}*/
 
     #dashboard-tabs {
         position: absolute;
         left: 0;
         right: 0;
-        width: 96%;
+        width: 95%;
     }
 
     .row.responsive-table-container {

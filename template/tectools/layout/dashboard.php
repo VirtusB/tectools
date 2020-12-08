@@ -28,6 +28,7 @@ $noResultsHTML = <<<HTML
     </div>
 HTML;
 
+
 ?>
 
 <link rel="stylesheet" href="<?= $this->RCMS->getTemplateFolder() ?>/css/dashboard.css">
@@ -66,7 +67,7 @@ HTML;
 
             <!-- region Værktøj tabel -->
             <div id="tools-tab" class="row dashboard-row responsive-table-container mb4">
-                <h3 class="mt0">Værktøj</h3>
+                <h3>Værktøj</h3>
 
                 <?php
                 $columns = array(
@@ -116,7 +117,7 @@ HTML;
 
             <!-- region Bruger tabel -->
             <div id="users-tab" class="row dashboard-row responsive-table-container mb4">
-                <h3 class="mt0">Brugere</h3>
+                <h3>Brugere</h3>
 
                 <?php
                 $columns = array(
@@ -173,7 +174,7 @@ HTML;
 
             <!-- region Kategori tabel -->
             <div id="categories-tab" class="row dashboard-row responsive-table-container mb4">
-                <h3 class="mt0">Kategorier</h3>
+                <h3>Kategorier</h3>
 
                 <?php
                 $columns = array(
@@ -219,7 +220,7 @@ HTML;
 
             <!-- region Producent tabel -->
             <div id="manufacturers-tab" class="row dashboard-row responsive-table-container mb4">
-                <h3 class="mt0">Producenter</h3>
+                <h3>Producenter</h3>
 
                 <?php
                 $columns = array(
@@ -315,7 +316,7 @@ HTML;
 
             <!-- region Udlejninger, personale tabel -->
             <div id="checkins-tab" class="row dashboard-row responsive-table-container mb4">
-                <h3 class="mt0">Aktive udlejninger</h3>
+                <h3>Aktive udlejninger</h3>
 
                 <?php
                 $columns = array(
@@ -332,6 +333,11 @@ HTML;
                     array(
                         'column' => "ManufacturerName",
                         'label' => "Producent"
+                    ),
+                    array(
+                        'column' => "(SELECT CONCAT(CONCAT(LEFT(FirstName, 1), '. '), LastName) FROM Users u WHERE u.UserID = c.FK_UserID)",
+                        'label' => "Bruger",
+                        'function' => 'addLinkToUserFullName'
                     ),
                     array(
                         'column' => "StartDate",
@@ -367,7 +373,7 @@ HTML;
                 );
 
                 $order = "ORDER BY EndDate ASC, CheckedOut DESC";
-                $settings = array('searchbar' => true, 'pageLimit' => 5);
+                $settings = array('searchbar' => true, 'pageLimit' => 5, 'querylogger' => true, 'queryloggerpath' => '/home/virtusbc/tectools.virtusb.com/querylogger.txt');
 
                 $where = [
                     [
@@ -392,7 +398,7 @@ HTML;
                 ?>
 
 
-                <h3 class="mt4">Afsluttede udlejninger</h3>
+                <h3>Afsluttede udlejninger</h3>
 
                 <?php
                 $columns = array(
@@ -408,7 +414,12 @@ HTML;
                     ),
                     array(
                         'column' => "ManufacturerName",
-                        'label' => "Producent"
+                        'label' => "Producent",
+                    ),
+                    array(
+                        'column' => "(SELECT CONCAT(CONCAT(LEFT(FirstName, 1), '. '), LastName) FROM Users u WHERE u.UserID = c.FK_UserID)",
+                        'label' => "Bruger",
+                        'function' => 'addLinkToUserFullName'
                     ),
                     array(
                         'column' => "StartDate",
@@ -459,7 +470,7 @@ HTML;
 
             <!-- region Reservationer tabel, personale -->
             <div id="reservations-tab" class="row dashboard-row responsive-table-container mb4">
-                <h3 class="mt0">Reservationer</h3>
+                <h3>Reservationer</h3>
 
                 <?php
                 $columns = array(
@@ -480,6 +491,11 @@ HTML;
                     array(
                         'column' => "ManufacturerName",
                         'label' => "Producent"
+                    ),
+                    array(
+                        'column' => "(SELECT CONCAT(CONCAT(LEFT(FirstName, 1), '. '), LastName) FROM Users u WHERE u.UserID = r.FK_UserID)",
+                        'label' => "Bruger",
+                        'function' => 'addLinkToUserFullName'
                     ),
                     array(
                         'column' => "StartDate",
@@ -533,7 +549,7 @@ HTML;
 
             <!-- region Bøder tabel -->
             <div id="fines-tab" class="row dashboard-row responsive-table-container mb4">
-                <h3 class="mt0">Bøder</h3>
+                <h3>Bøder</h3>
 
                 <?php
                 $columns = array(
@@ -546,6 +562,11 @@ HTML;
                         'column' => 'ToolName',
                         'label' => 'Navn',
                         'function' => 'addLinkToToolName'
+                    ),
+                    array(
+                        'column' => "(SELECT CONCAT(CONCAT(LEFT(FirstName, 1), '. '), LastName) FROM Users u WHERE u.UserID = f.FK_UserID)",
+                        'label' => "Bruger",
+                        'function' => 'addLinkToUserFullName'
                     ),
                     array(
                         'column' => "FineAmount",
@@ -627,7 +648,7 @@ HTML;
             ?>
 
             <ul id="dashboard-tabs" class="tabs tabs-fixed-width">
-                <li class="tab col s3"><a data-toggle="tab" href="#checkins-tab">Udlejninger</a></li>
+                <li class="tab col s3"><a data-toggle="tab" href="#checkins-tab">Lån</a></li>
                 <li class="tab col s3"><a data-toggle="tab" href="#reservations-tab">Reservationer</a></li>
                 <li class="tab col s3"><a data-toggle="tab" href="#fines-tab">Bøder<?= $unpaidFinesBadge ?></a></li>
             </ul>

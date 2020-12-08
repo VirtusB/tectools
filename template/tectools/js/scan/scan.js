@@ -24,7 +24,7 @@ if (navigator.mediaDevices.getUserMedia) {
  */
 function noVideoCameraError(err) {
     console.log(err)
-    alert('Din enhed eller browser understøtter ikke scanning');
+    alert('Din enhed eller browser understøtter ikke scanning. Kontakt TecTools personale.');
     scanBtn.setAttribute('disabled', 'disabled');
 }
 

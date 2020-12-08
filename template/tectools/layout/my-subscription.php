@@ -78,7 +78,7 @@ $userProduct = $TecTools->Users->getUserProduct($this->RCMS->Login->getUserID())
 
                                                 <input type="hidden" name="product_name" value="<?= $product['name'] ?>">
 
-                                                <button class='btn orange downgrade-subscription'>Nedgrader
+                                                <button class='btn red downgrade-subscription'>Nedgrader
                                                 </button>
                                             </form>
                                         <?php endif; ?>
@@ -109,6 +109,7 @@ $userProduct = $TecTools->Users->getUserProduct($this->RCMS->Login->getUserID())
         <div class="row">
             <div class="col s12 m4 offset-m1">
                 <p class="grey-text">*Opsig fra dag til dag - ingen bindinger</p>
+                <p class="grey-text">*Alle priser er inkl. moms</p>
             </div>
         </div>
 

@@ -17,7 +17,7 @@ var Geofence = {
             navigator.geolocation.getCurrentPosition((position) => {
                 this.userLat = position.coords.latitude;
                 this.userLong = position.coords.longitude;
-                console.log('User location set');
+                console.log('Bruger lokation sat');
 
                 if (typeof success === 'function') {
                     success(position);
@@ -39,7 +39,7 @@ var Geofence = {
      */
     isUserWithinRadius: function (locationLat, locationLong, maxDistance) {
         if (this.userLat === undefined || this.userLong === undefined) {
-            console.log('User location missing');
+            console.log('Bruger lokation mangler');
             return false;
         }
 

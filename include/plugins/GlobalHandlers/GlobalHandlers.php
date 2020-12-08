@@ -101,6 +101,30 @@ HTML;
     }
 
     /**
+     * Tilføjet et link til brugerens navn
+     * @param array $data
+     * @return string
+     */
+    private function addLinkToUserFullName(array $data): string {
+        $row = $data[1];
+        $fullName = '';
+        $userID = $row['UserID'] ?? $row['FK_UserID'];
+
+        $longestKey = '';
+        foreach ($row as $key => $val) {
+            if (strlen($key) > $longestKey) {
+                $longestKey = $key;
+            }
+        }
+
+        $fullName = $row[$longestKey];
+
+        return <<<HTML
+        <a target="_blank" href="/users/edit?userid=$userID">$fullName</a>
+HTML;
+    }
+
+    /**
      * Returnerer HTML <img> element af værktøjets billede
      * @param array $image
      * @return string

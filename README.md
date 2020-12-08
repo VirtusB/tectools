@@ -41,7 +41,7 @@ URL: [Dokumentation](https://tectools.virtusb.com/docs/html/index.html)
       - PHP klasser som RCMS automatisk loader
       - GlobalHandlers
       - RCMSTables
-      - Tectools
+      - TecTools
     - vendor
       - Mappe hvor composer ligger biblioteker i
     - composer.json
