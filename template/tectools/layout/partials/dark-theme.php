@@ -13,9 +13,11 @@ declare(strict_types=1);
     body, .option-label {
         color: #d8d8d8;
         background-color: #121212;
+        /*background-color: #06090F;*/
     }
     nav#header, #footer {
         background-color: #1d1d1d !important;
+        /*background-color: #161B22 !important;*/
     }
 
     table.RCMSTable tr, #logs tr {
@@ -100,6 +102,12 @@ declare(strict_types=1);
 
     .empty-row {
         background: #2C3840 !important;
+    }
+
+    .how-to-tectools.how-to-steps {
+        background: #121212 !important;
+        /*background: #06090F !important;*/
+        color: #fff !important;
     }
 </style>
 

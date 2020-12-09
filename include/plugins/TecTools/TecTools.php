@@ -395,8 +395,7 @@ class TecTools {
      * @return string
      */
     private function getFilterQueryString(): string {
-        $queryString = $_SERVER['QUERY_STRING'];
-        $queryString = urldecode($queryString);
+        $queryString = urldecode($_SERVER['QUERY_STRING']);
 
         $q = parse_url($queryString);
         $qs = [];

@@ -166,8 +166,9 @@ function enableCheckInBtn() {
  * Denne funktion kører, når tjekboksen "Tilføj bøde?" ændres
  */
 function fineCheckBoxChange() {
-    document.getElementById('fine-amount').toggleAttribute('disabled');
-    document.getElementById('fine-comment').toggleAttribute('disabled');
+    toggleAttr('#fine-amount', 'disabled', 'disabled');
+    toggleAttr('#fine-comment', 'disabled', 'disabled');
+
     let fineContainer = document.getElementById('fine-container');
 
     $(fineContainer).slideToggle();

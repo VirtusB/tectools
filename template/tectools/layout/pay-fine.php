@@ -54,7 +54,7 @@ if ($fine['IsPaid'] === 1) {
         <div class="row">
             <div class="col s12 center mt2">
                 <label class="" for="consent">
-                    <input onchange="document.getElementById('submitBtn').toggleAttribute('disabled');" required="required" class="" name="consent" placeholder="" id="consent" type="checkbox">
+                    <input onchange="toggleAttr('#submitBtn', 'disabled', 'disabled')" required="required" class="" name="consent" placeholder="" id="consent" type="checkbox">
                     <span>Jeg har læst og accepteret <a target="_blank" href="/tos">betingelserne</a></span>
                 </label>
             </div>

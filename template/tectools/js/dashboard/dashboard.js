@@ -274,8 +274,8 @@ function checkOut(checkInID, context) {
  * @param context
  */
 function fineCheckBoxChange(context) {
-    document.getElementById('fine-amount').toggleAttribute('disabled');
-    document.getElementById('fine-comment').toggleAttribute('disabled');
+    toggleAttr('#fine-amount', 'disabled', 'disabled');
+    toggleAttr('#fine-comment', 'disabled', 'disabled');
     let fineContainer = document.getElementById('fine-container');
 
     if (context.checked) {

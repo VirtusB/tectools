@@ -32,6 +32,30 @@ notifikationer via email
 UX test - bruger gruppe som skal teste sidens anvendelighed
 
 
+let columns = [];
+
+columns.forEach(col => {
+    let cards = col.element.parentElement.parentElement.parentElement.parentElement.querySelectorAll('div.mr-4');
+
+    cards.forEach(card => {
+
+        let body = card.querySelector('.js-comment-body').innerText;
+        let addedBy = card.querySelector('small.text-gray-light').innerText;
+
+        let c = {'body': body, 'addedBy': addedBy};
+
+        col.cards.push(c);
+
+    });
+});
+
+columns.forEach(col => {
+    delete col.element;
+});
+
+JSON.stringify(columns)
+
+
 
 <?php
 

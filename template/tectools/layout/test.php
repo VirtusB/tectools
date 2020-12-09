@@ -1,0 +1,42 @@
+<?php
+
+$json = '[{"name":"To do","cards":[{"body":"Filtrering på kategori virker ikke, prøv at vælg alle kategorier på","addedBy":"Added by VirtusB"},{"body":"Opdater navn på bilag skrevet i produktrapport og andre dokumenter","addedBy":"Added by VirtusB"},{"body":"JS validering ved oprettelse af konto","addedBy":"Added by VirtusB"},{"body":"Mail når værktøjet tjekkes ud og kommer på lager igen\nMail når værktøj snart skal afleveres\nMail ved nyt abonnement\nMail ved opgradering/nedgradering abonnement\nMail ved annullering af abonnement","addedBy":"Added by VirtusB"},{"body":"Hvornår skal bruger påmindes om aflevering snart, evt. præference?","addedBy":"Added by VirtusB"},{"body":"Opdater dokumenter:\n\ntilføjet Fines tabellen\nopdater ER diagram osv.","addedBy":"Added by VirtusB"},{"body":"Håndter fejl ved betaling, test med kort der ikke virker f.eks.","addedBy":"Added by VirtusB"},{"body":"Statistik side","addedBy":"Added by VirtusB"},{"body":"Page Manager (CMS system til at tilføje, redigere og slette sider)","addedBy":"Added by VirtusB"},{"body":"Gør siden pænere","addedBy":"Added by VirtusB"},{"body":"Forklar cronjob mere i rapport el. lign.","addedBy":"Added by VirtusB"},{"body":"PHP 8","addedBy":"Added by VirtusB"},{"body":"Dobbelt tjek at alle fejl beskeder virker","addedBy":"Added by VirtusB"},{"body":"CM send link og repo","addedBy":"Added by VirtusB"}]},{"name":"In progress","cards":[{"body":"Alt kode skal dokumenteres. Generer efterfølgende HTML doc","addedBy":"Added by VirtusB"},{"body":"(Flyttet til bunden af noter)\nHvad kan?\n\nBruger:\n...\nPersonale:\n...","addedBy":"Added by VirtusB"},{"body":"Besked-system:\nBesked hvis reservation slettes (done)\nBesked hvis bøde bliver udstedt (done)\nBesked når personale har udtjekket værktøjet","addedBy":"Added by MightyMomo"}]},{"name":"Done","cards":[{"body":"Fjern POST data efter der er blevet postet","addedBy":"Added by VirtusB"},{"body":"\"Vi forbeholder os retten til at sende dig e-mails, med henblik på at give dig information omkring dine lån, reservationer og eventuelle bøder\". tilføj til betingelser","addedBy":"Added by VirtusB"},{"body":"Vis nye bøder badge","addedBy":"Added by VirtusB"},{"body":"Send besked til kunde ved nyt lån","addedBy":"Added by VirtusB"},{"body":"skriv besked om hændelser på aktivitetssiden","addedBy":"Added by VirtusB"},{"body":"Test Safari, problemer","addedBy":"Added by VirtusB"},{"body":"Bøde-system:\nBøde hvis værktøj afleveret for sent\nBøde hvis værktøjet er blevet misvedligeholdt eller ødelagt","addedBy":"Added by MightyMomo"},{"body":"Tilføj link til værktøj i tabellerne på dashboard siden","addedBy":"Added by VirtusB"},{"body":"Gem/Vis tabeller på dashboard siden for personale, nu hvor der er så mange, så det ikke er for rodet","addedBy":"Added by VirtusB"},{"body":"Opret intent\nSæt intent id i DB på bøde\nBruger betaler den\nOpdater bøde i DB med IsPaid\nSend mail om at den er blevet betalt","addedBy":"Added by VirtusB"},{"body":"Udarbejd manual til personalet og almindelige brugere","addedBy":"Added by VirtusB"},{"body":"Dokumenter alle procedures og functions i databasen","addedBy":"Added by VirtusB"},{"body":"Udarbejd design manual","addedBy":"Added by VirtusB"},{"body":"Gør så personale kan slette reservationer","addedBy":"Added by VirtusB"},{"body":"Mulighed for en bruger at sende en besked til personalet via Kontakt siden","addedBy":"Added by VirtusB"},{"body":"Send mail når reservation bliver slettet","addedBy":"Added by VirtusB"},{"body":"Gendan password","addedBy":"Added by VirtusB"},{"body":"Geo fencing:\n\nTjek om personen er inden for området af en af butikkerne","addedBy":"Added by MightyMomo"},{"body":"Slet kategori","addedBy":"Added by VirtusB"},{"body":"Slet producent","addedBy":"Added by VirtusB"},{"body":"Aktivitetscenter","addedBy":"Added by VirtusB"},{"body":"Gennemgå for GDPR regler","addedBy":"Added by VirtusB"},{"body":"Slet Stripe bruger når brugeren slettes","addedBy":"Added by VirtusB"},{"body":"Betingelser ved oprettelse af bruger","addedBy":"Added by VirtusB"},{"body":"Tilføj marquee på forsiden som viser nyeste udlejninger","addedBy":"Added by VirtusB"},{"body":"Implementer scanning af stregkoder","addedBy":"Added by VirtusB"},{"body":"Personale skal kunne melde værktøj helt ud af systemet ved checkud, hvis det er for slidt til flere udlån.","addedBy":"Added by MightyMomo"},{"body":"Personale skal kunne tjekke værktøj ud","addedBy":"Added by MightyMomo"},{"body":"Tjek at \"Beskadigt\" statussen fungerer. Bør værktøj som er beskadigt vises på forsiden?","addedBy":"Added by VirtusB"},{"body":"Brugere skal kunne tjekke værktøj ind","addedBy":"Added by MightyMomo"},{"body":"Opret CRON job til at slette reservationer","addedBy":"Added by MightyMomo"},{"body":"Tjek for at kategorien / producenten ikke allerede eksisterer ved oprettelse","addedBy":"Added by MightyMomo"},{"body":"Brugere skal kunne tilføje kommentarer til deres udlejninger","addedBy":"Added by VirtusB"},{"body":"Alle forms skal ligne \"Rediger bruger\" formen","addedBy":"Added by VirtusB"},{"body":"Mulighed for at slette sin bruger:\n\nSlet reservationer\nSlet Checkins\nSlet bruger\nBehold stripe i 5 år\nTjek at de ikke har aktive checkins","addedBy":"Added by MightyMomo"},{"body":"Opret MySQL databasen og tabellerne","addedBy":"Added by VirtusB"},{"body":"Opsæt Apache og .htaccess konfiguration","addedBy":"Added by VirtusB"},{"body":"Tilføj cookie plugin","addedBy":"Added by VirtusB"},{"body":"Login funktionalitet","addedBy":"Added by VirtusB"},{"body":"Brugere skal kunne reservere et værktøj","addedBy":"Added by MightyMomo"},{"body":"Brugere skal kunne slette en reservation","addedBy":"Added by MightyMomo"},{"body":"Vis hvilken bruger og abonnement type man er på dashboardet","addedBy":"Added by MightyMomo"},{"body":"Tjek at det uploadede billede kun accepterer JPEG eller PNG","addedBy":"Added by MightyMomo"},{"body":"Mulighed for at en bruger kan opsige sit abonnement","addedBy":"Added by VirtusB"},{"body":"Mulighed for at en bruger kan opgradere/nedgradere sit abonnement","addedBy":"Added by VirtusB"},{"body":"Personale skal kunne ændre på brugernes information","addedBy":"Added by VirtusB"},{"body":"Mulighed for at en bruger kan ændre sine oplysninger","addedBy":"Added by VirtusB"},{"body":"Mulighed for en bruger at oprette sig på siden","addedBy":"Added by VirtusB"},{"body":"Køb domæne navn","addedBy":"Added by VirtusB"},{"body":"Stripe betalingsgateway skal opsættes","addedBy":"Added by VirtusB"},{"body":"Implementer generering af stregkoder","addedBy":"Added by VirtusB"},{"body":"Gør at kodeord ikke er i clear-text på redigering af sin bruger-profil.","addedBy":"Added by MightyMomo"},{"body":"Implementer Dark Theme","addedBy":"Added by MightyMomo"},{"body":"Mulighed for en bruger at oprette et abonnement","addedBy":"Added by VirtusB"}]},{"name":"Extra features if we have more time","cards":[{"body":"Stripe skal sende faktura når bruger køber abonnement","addedBy":"Added by VirtusB"},{"body":"Ordrebekræftelse skal sendes til bruger og personale, når en bruger låner et værktøj","addedBy":"Added by VirtusB"},{"body":"OAuth","addedBy":"Added by VirtusB"},{"body":"Tilføj Google Maps over fysiske butikker","addedBy":"Added by VirtusB"},{"body":"Tilføj \"Store Locator\" side hvor brugere kan finde den butik der er nærmest dem, og se åbningstider","addedBy":"Added by VirtusB"},{"body":"Tilføj TrustPilot","addedBy":"Added by VirtusB"},{"body":"Tilføj Instagram/Facebook/LinkedIn moduler på siden","addedBy":"Added by VirtusB"}]}]';
+
+$columns = json_decode($json, true);
+
+?>
+
+<div class="row">
+    <?php foreach ($columns as $column): ?>
+
+        <div class="col xl3">
+            <h5 class="center"><?= $column['name'] ?></h5>
+
+            <div class="cards-container">
+                <?php foreach ($column['cards'] as $card): ?>
+                    <div class="card">
+                        <div class="card-content">
+                            <p><?= $card['body'] ?></p>
+                            <br>
+                            <p class="grey-text"><?= $card['addedBy'] ?></p>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+
+        </div>
+
+    <?php endforeach; ?>
+</div>
+
+<style>
+    /*.cards-container {*/
+    /*    max-height: 500px;*/
+    /*    overflow-y: auto;*/
+    /*}*/
+
+    /*.card {*/
+    /*    margin-left: 10px;*/
+    /*    margin-right: 10px;*/
+    /*}*/
+</style>

@@ -583,13 +583,13 @@ HTML;
                         'function' => 'formatFineStatus'
                     ),
                     array(
-                        'column' => "Created",
+                        'column' => "FineCreated",
                         'label' => "Udstedt",
                         'tdclass' => 'render-datetime',
                         'tdattributes' => [
                             [
                                 'name' => 'datetime',
-                                'valuefromcolumn' => 'Created'
+                                'valuefromcolumn' => 'FineCreated'
                             ]
                         ]
                     ),
@@ -606,7 +606,7 @@ HTML;
                     ),
                 );
 
-                $order = "ORDER BY IsPaid ASC, Created DESC";
+                $order = "ORDER BY IsPaid ASC, FineCreated DESC";
                 $settings = array('searchbar' => true, 'pageLimit' => 5);
 
                 $RCMSTables->createRCMSTable("fines_table", "Fines f LEFT JOIN Tools t ON t.ToolID = (SELECT FK_ToolID FROM CheckIns WHERE CheckInID = f.FK_CheckInID)", $columns, $settings, [], $order, [], null);
@@ -933,13 +933,13 @@ HTML;
                         ]
                     ),
                     array(
-                        'column' => "Created",
+                        'column' => "FineCreated",
                         'label' => "Udstedt",
                         'tdclass' => 'render-datetime',
                         'tdattributes' => [
                             [
                                 'name' => 'datetime',
-                                'valuefromcolumn' => 'Created'
+                                'valuefromcolumn' => 'FineCreated'
                             ]
                         ]
                     ),
@@ -956,7 +956,7 @@ HTML;
                     ),
                 );
 
-                $order = "ORDER BY IsPaid ASC, Created DESC";
+                $order = "ORDER BY IsPaid ASC, FineCreated DESC";
                 $settings = array('searchbar' => true, 'pageLimit' => 5, 'no_results_html' => $noResultsHTML);
 
                 $where = [
