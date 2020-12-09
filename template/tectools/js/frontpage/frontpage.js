@@ -4,6 +4,8 @@ Side: /
 Layout: frontpage.php
  */
 
+history.pushState(location.href,null, location.href.split('?')[0]);
+
 document.addEventListener('DOMContentLoaded', function() {
     let categorySelect = document.getElementById('category-select');
 

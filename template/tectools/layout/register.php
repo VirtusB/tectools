@@ -13,7 +13,7 @@ if ($this->RCMS->Login->isLoggedIn()) {
 
 <div class="container mt0">
     <div class="row">
-        <form method="post"  class="col s12 m4 offset-m4">
+        <form onsubmit="validateRegister(event)" method="post"  class="col s12 m4 offset-m4">
             <h1 class="center">Opret konto</h1>
             <div>
                 <a style="text-align: center; display: block" href="/login">Har du allerede en konto? Log ind her</a>
@@ -68,12 +68,12 @@ if ($this->RCMS->Login->isLoggedIn()) {
                 </div>
 
                 <div class="input-field col s6">
-                    <input autocomplete="new-password" required id="password" name="password" type="password" class="validate">
+                    <input minlength="8" autocomplete="new-password" required id="password" name="password" type="password" class="validate">
                     <label for="password">Adgangskode</label>
                 </div>
 
                 <div class="input-field col s6">
-                    <input autocomplete="new-password" required id="repeat_password" name="repeat_password" type="password" class="validate">
+                    <input minlength="8" autocomplete="new-password" required id="repeat_password" name="repeat_password" type="password" class="validate">
                     <label for="repeat_password">Gentag adgangskode</label>
                 </div>
 
@@ -96,3 +96,4 @@ if ($this->RCMS->Login->isLoggedIn()) {
         </form>
     </div>
 </div>
+

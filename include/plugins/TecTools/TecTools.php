@@ -360,6 +360,7 @@ class TecTools {
         $pages = ceil($rowCount / self::TOOLS_PER_PAGE);
 
         $query = $this->getFilterQueryString();
+        //var_dump($query);
 
         echo '<span class="page-pagination">';
         for ($i = 1; $i <= $pages; $i++) {
@@ -394,29 +395,20 @@ class TecTools {
      * @return string
      */
     private function getFilterQueryString(): string {
-        $vars = explode('&', $_SERVER['QUERY_STRING']);
+        $queryString = $_SERVER['QUERY_STRING'];
+        $queryString = urldecode($queryString);
 
-        $final = array();
+        $q = parse_url($queryString);
+        $qs = [];
+        parse_str($q['path'], $qs);
 
-        if (!empty($vars)) {
-            foreach($vars as $var) {
-                if (empty($var)) {
-                    continue;
-                }
-
-                $parts = explode('=', $var);
-
-                $key = $parts[0];
-                $val = $parts[1];
-
-                if (!array_key_exists($key, $final) && $key !== 'pagenum') {
-                    $final[$key] = $val;
-                }
-
+        foreach ($qs as $key => $var) {
+            if ($key === 'pagenum') {
+                unset($qs[$key]);
             }
         }
 
-        return http_build_query($final);
+        return urldecode(http_build_query($qs));
     }
 
     /**
@@ -439,7 +431,12 @@ class TecTools {
     public function getAllToolsWithFilters(): array {
         $filters = $this->getPaginationFilters();
 
+        //echo '<pre>';
+        //print_r($filters);
+        //echo '</pre>';
+
         $res = $this->RCMS->execute('CALL getToolsBySearch(?, ?, ?, ?)', array('ssii', $filters['search-text'], $filters['categories'], $filters['only_in_stock'], $filters['pagenum']));
+
         $tools = $res->fetch_all(MYSQLI_ASSOC);
 
         foreach ($tools as $key => $tool) {
