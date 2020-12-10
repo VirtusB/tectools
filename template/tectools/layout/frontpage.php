@@ -15,6 +15,7 @@ $GlobalHandlers = $GLOBALS['GlobalHandlers'];
 $categories = $TecTools->Categories->getAllCategories();
 $tools = $TecTools->getAllToolsWithFilters();
 
+
 ?>
 
 <style>

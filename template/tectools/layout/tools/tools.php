@@ -102,7 +102,7 @@ $chunks = array_chunk($checkInsMarquee, 3);
                     Side
 
                     <?php
-                        $TecTools->displayFrontPagePagination();
+                        $TecTools->displayToolsPagePagination();
                     ?>
                 </div>
             </div>

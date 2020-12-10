@@ -353,9 +353,9 @@ class TecTools {
     }
 
     /**
-     * Udskriver links til forsiden så man kan skifte side og se flere værktøj
+     * Udskriver links til Tools siden så man kan skifte side og se flere værktøj
      */
-    public function displayFrontPagePagination(): void {
+    public function displayToolsPagePagination(): void {
         $rowCount = $this->getToolCountWithFilters();
         $pages = ceil($rowCount / self::TOOLS_PER_PAGE);
 
@@ -376,7 +376,7 @@ class TecTools {
     }
 
     /**
-     * Udskriver beskeden på forsiden hvor der står "Viser 1 - x af x på side x"
+     * Udskriver beskeden på Tools siden hvor der står "Viser 1 - x af x på side x"
      */
     public function displayToolCountMessage(): void {
         $page = $_GET['pagenum'] ?? 1;
