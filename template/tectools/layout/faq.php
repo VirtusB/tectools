@@ -63,7 +63,7 @@ declare(strict_types=1);
                     <p><span class="bold">Kan jeg ikke reservere flere stykker værktøj?</span></p>
                     <p>Dette kan være fordi dit abonnement ikke tillader flere, værktøjet allerede er reserveret eller at værktøjet ikke er på lager.</p>
                     <br>
-                    <p><span class="bold">Fik jeg en bøde</span></p>
+                    <p><span class="bold">Fik jeg en bøde?</span></p>
                     <p>Du kan få en bøde, hvis du ikke afleverer til tiden eller hvis du har slemt misvedligeholdt et stykke lånt værktøj. Bøden afspejler hvor sent værktøjet blev afleveret eller graden af skaden på værktøjet.</p>
                     <br>
                     <p><span class="bold">Har I ikke værktøjet x og y?</span></p>
