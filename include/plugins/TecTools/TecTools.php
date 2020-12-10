@@ -353,6 +353,21 @@ class TecTools {
     }
 
     /**
+     * Returnerer de nyeste værktøjet tilføjet til databasen
+     * @param int $count Hvor mange værktøj der skal hentes maks
+     * @return array
+     */
+    public function getNewestTools(int $count): array {
+        $tools = $this->RCMS->execute('CALL getNewestTools(?)', array('i', $count))->fetch_all(MYSQLI_ASSOC) ?? [];
+
+        foreach ($tools as &$tool) {
+            $tool['Image'] = $this->cleanImagePath($tool['Image']);
+        }
+
+        return $tools;
+    }
+
+    /**
      * Udskriver links til Tools siden så man kan skifte side og se flere værktøj
      */
     public function displayToolsPagePagination(): void {

@@ -15,6 +15,7 @@ $GlobalHandlers = $GLOBALS['GlobalHandlers'];
 $categories = $TecTools->Categories->getAllCategories();
 $tools = $TecTools->getAllToolsWithFilters();
 
+$carouselTools = $TecTools->getNewestTools(10);
 
 ?>
 
@@ -64,26 +65,14 @@ $tools = $TecTools->getAllToolsWithFilters();
         <div class="col s12 center">
             <h4 style="margin-top: 4rem" class="center">Nyeste værktøj i sortimentet</h4>
             <div class="carousel">
-                <a class="carousel-item" href="#one!">
-                    <span class="center tool-name">Bosch Skruetrækker</span>
-                    <img src="/uploads/tools/images/03062020180721_542d.png">
+                <?php foreach ($carouselTools as $tool): ?>
+
+                <a class="carousel-item" href="/tools/view?toolid=<?= $tool['ToolID'] ?>">
+                    <span class="center tool-name"><?= $tool['ManufacturerName'] . ' ' . $tool['ToolName'] ?></span>
+                    <img src="<?= $tool['Image'] ?>">
                 </a>
-                <a class="carousel-item" href="#two!">
-                    <span class="center tool-name">Bosch Skruetrækker</span>
-                    <img src="/uploads/tools/images/22102020092401_150a.png">
-                </a>
-                <a class="carousel-item" href="#three!">
-                    <span class="center tool-name">Bosch Skruetrækker</span>
-                    <img src="/uploads/tools/images/22102020092322_9ca2.png">
-                </a>
-                <a class="carousel-item" href="#four!">
-                    <span class="center tool-name">Bosch Skruetrækker</span>
-                    <img src="/uploads/tools/images/04062020101544_ca10.png">
-                </a>
-                <a class="carousel-item" href="#five!">
-                    <span class="center tool-name">Bosch Skruetrækker</span>
-                    <img src="/uploads/tools/images/04062020095556_3616.png">
-                </a>
+
+                <?php endforeach; ?>
             </div>
 
             <button onclick="location.href= '/tools'" class="btn view-all-btn">Se alle</button>
