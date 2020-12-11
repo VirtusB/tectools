@@ -28,6 +28,8 @@ $TecTools = $GLOBALS['TecTools'];
         <br><br>
         <button id="scan-btn" class="btn green-btn">Scan   <i class="fal fa-scanner"></i></button>
 
+        <h6 class="center mt2">Scan med din smartphone <i class="fad fa-mobile-alt" style="font-size: 25px;vertical-align: middle;"></i></h6>
+
         <div class="row center" style="margin-top: 4rem;">
             <div class="col s12 m8 l6 xl4 offset-m2 offset-l3 offset-xl4">
                 <div id="barcode-scanner">

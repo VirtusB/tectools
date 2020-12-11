@@ -27,7 +27,8 @@ $carouselTools = $TecTools->getNewestTools(10);
 
 <div class="hero-container">
     <h3>Hvilket værktøj har du brug for?</h3>
-    <h5>Find det her!</h5>
+<!--    <h5>Find det her!</h5>-->
+    <h5>Find det her og afhent i en af vores <a href="/stores">butikker</a>!</h5>
 
     <div class="container">
         <div class="row search-row">
@@ -60,6 +61,33 @@ $carouselTools = $TecTools->getNewestTools(10);
 
 </div>
 
+<div class="row how-to-tectools">
+    <div class="col s12 center">
+        <h3>Okay, hvad er TecTools?</h3>
+    </div>
+
+    <div class="col s12 l4">
+        <div class="content">
+            <i class="fad fa-tools"></i>
+            <h6>TecTools er en platform for udlejning af værktøj til private. Du scanner selv, med din smartphone, det værktøj du vil låne, i en af vores <a href="/stores">fysiske butikker</a></h6>
+        </div>
+    </div>
+    <div class="col s12 l4">
+        <div class="content">
+            <i class="fad fa-piggy-bank"></i>
+            <h6>Det er til dig, som mangler et professionelt stykke værktøj, men ikke har lyst til at tømme sparegrisen. Det kan jo være, at du kun skal bruge værktøjet én gang, ikke?</h6>
+        </div>
+    </div>
+    <div class="col s12 l4">
+        <div class="content">
+            <i class="fad fa-recycle"></i>
+            <!--            <h6>Hos TecTools gør vi lån af værktøj nemt, billigt og sikkert - og samtidigt er du med til at reducere CO<sub>2</sub> udledningen; dig kan vi godt lide ❤</h6>-->
+            <!--            <h6>Hos TecTools gør vi lån af værktøj nemt, billigt og sikkert - og som medlem er du med til at reducere CO<sub>2</sub> udledningen❤</h6>-->
+            <h6>Hos TecTools gør vi lån af værktøj nemt, billigt og sikkert. Som medlem kan du være stolt af, at du er med til at reducere CO<sub>2</sub> udledningen❤</h6>
+        </div>
+    </div>
+</div>
+
 <div class="container">
     <div class="row">
         <div class="col s12 center">
@@ -75,7 +103,7 @@ $carouselTools = $TecTools->getNewestTools(10);
                 <?php endforeach; ?>
             </div>
 
-            <button onclick="location.href= '/tools'" class="btn view-all-btn">Se alle</button>
+            <button onclick="location.href= '/tools'" class="btn view-all-btn">Se alt værktøj</button>
 
         </div>
     </div>
@@ -83,32 +111,7 @@ $carouselTools = $TecTools->getNewestTools(10);
 
 </div>
 
-<div class="row how-to-tectools">
-    <div class="col s12 center">
-        <h3>Okay, hvad er TecTools?</h3>
-    </div>
 
-    <div class="col s12 l4">
-        <div class="content">
-            <i class="fad fa-tools"></i>
-            <h6>TecTools er en platform for udlejning af værktøj til private</h6>
-        </div>
-    </div>
-    <div class="col s12 l4">
-        <div class="content">
-            <i class="fad fa-piggy-bank"></i>
-            <h6>Det er til dig, som mangler et professionelt stykke værktøj, men ikke har lyst til at tømme sparegrisen. Det kan jo være, at du kun skal bruge værktøjet en gang, ikke?</h6>
-        </div>
-    </div>
-    <div class="col s12 l4">
-        <div class="content">
-            <i class="fad fa-recycle"></i>
-<!--            <h6>Hos TecTools gør vi lån af værktøj nemt, billigt og sikkert - og samtidigt er du med til at reducere CO<sub>2</sub> udledningen; dig kan vi godt lide ❤</h6>-->
-<!--            <h6>Hos TecTools gør vi lån af værktøj nemt, billigt og sikkert - og som medlem er du med til at reducere CO<sub>2</sub> udledningen❤</h6>-->
-            <h6>Hos TecTools gør vi lån af værktøj nemt, billigt og sikkert. Som medlem kan du være stolt af, at du er med til at reducere CO<sub>2</sub> udledningen❤</h6>
-        </div>
-    </div>
-</div>
 
 <div class="row how-to-tectools how-to-steps">
     <div class="col s12 center">
@@ -132,7 +135,7 @@ $carouselTools = $TecTools->getNewestTools(10);
                 <div class="step-container">
                     <p class="step">2</p>
                 </div>
-                <h6>Vælg et abonnement</h6>
+                <h6><a style="text-decoration: underline" href="/subscriptions">Vælg et abonnement</a></h6>
             </div>
         </div>
     </div>
@@ -142,7 +145,7 @@ $carouselTools = $TecTools->getNewestTools(10);
                 <div class="step-container">
                     <p class="step">3</p>
                 </div>
-                <h6>Find og lån det værktøj du mangler</h6>
+                <h6>Find, scan og lån det værktøj du mangler</h6>
             </div>
         </div>
     </div>

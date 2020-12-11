@@ -30,7 +30,7 @@ $stores = $TecTools->getAllStores();
                             <br>
                             <?= $store['Address']  ?>
                             <br>
-                            <?= $store['ZipCode'] . ' Helsingør'  ?>
+                            <?= $store['ZipCode'] . ' ' . $store['City']  ?>
                         </p>
                     </div>
                 </div>
@@ -38,7 +38,7 @@ $stores = $TecTools->getAllStores();
 
             <div class="col s12">
                 <div class="content">
-                    <p>Denne butik...</p>
+                    <p><?= $store['StoreDescription'] ?></p>
                 </div>
             </div>
         </div>
@@ -59,6 +59,7 @@ $stores = $TecTools->getAllStores();
 
     .col.s12 {
         padding-left: 40px;
+        padding-right: 40px;
     }
 
     .store-name {

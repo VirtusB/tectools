@@ -359,3 +359,10 @@ input[type="color"] {
 button, input, optgroup, select, textarea {
     font-family: 'Open Sans';
 }
+
+@media only screen and (min-width: 993px) {
+    #header .nav-wrapper {
+        /*width: 80%;*/
+        width: 92%;
+    }
+}

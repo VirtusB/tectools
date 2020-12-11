@@ -656,7 +656,7 @@ HTML;
             <!-- region Kommentar modal for brugere til aktive og afsluttede udlejninger -->
             <div id="comment-modal" class="modal">
                 <div class="modal-content">
-                    <h4>Kommentar til udlejning</h4>
+                    <h4>Kommentér dit lån</h4>
 
                     <label for="comment-textarea">Din kommentar</label>
                     <textarea class="materialize-textarea" id="comment-textarea" cols="30" rows="10"></textarea>
@@ -736,7 +736,7 @@ HTML;
 
                 $buttons = [
                     [
-                        'button' => '<button onclick="showCommentCheckIn(?, this)" class="btn tec-btn">Kommentar</button>',
+                        'button' => '<button onclick="showCommentCheckIn(?, this)" class="btn tec-btn">Kommentér</button>',
                         'value' => 'CheckInID'
                     ]
                 ];

@@ -22,6 +22,11 @@ declare(strict_types=1);
 
                 <h2 class="heading3" id="general">Generelt</h2>
 
+                <h3 class="toggle solid-border section-title-large">Hvordan kan jeg afhente værktøj?</h3>
+                <div class="toggle-content" style="">
+                    <p>Se vores <a href="https://tectools.virtusb.com/stores">liste af butikker</a> her.</p>
+                </div>
+
                 <h3 class="toggle solid-border section-title-large">Hvordan gør jeg x?</h3>
                 <div class="toggle-content" style="">
                     <p>Se vores <a href="https://tectools.virtusb.com/bruger-manual">manual</a> for korte video instruktioner til brugen af hjemmesiden.</p> 

@@ -85,7 +85,7 @@ span.tool-name {
     background: #eee;
     color: #333;
     border: 1px solid #333;
-    width: 150px;
+    width: 160px;
     font-weight: 600;
 }
 
@@ -124,7 +124,7 @@ span.tool-name {
     /*background: #493F38;*/
     color: #fff;
     /*background: #A46A46;*/
-    margin-top: 4rem;
+    margin-top: 0;
     /*background: #4D4C4A;*/
     /*background: #2C3F50;*/
     /*background: #97653B;*/
@@ -137,13 +137,22 @@ span.tool-name {
     .how-to-tectools h6 {
         text-align: center;
     }
+
+    .how-to-tectools:not(.how-to-steps) h3 {
+        padding-top: 30px;
+    }
+
+    .how-to-tectools:not(.how-to-steps) .content {
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
 }
 
 @media all and (min-width: 992px) {
     .how-to-tectools:not(.how-to-steps) {
-        border-radius: 170px;
-        margin-left: 15px;
-        margin-right: 15px;
+        /*border-radius: 170px;*/
+        /*margin-left: 15px;*/
+        /*margin-right: 15px;*/
     }
 }
 
@@ -154,6 +163,7 @@ span.tool-name {
 .how-to-tectools.how-to-steps {
     background: #eee;
     color: #2c3f50;
+    margin-top: 4rem;
 }
 .how-to-tectools.how-to-steps h3 {
     padding-top: 0;

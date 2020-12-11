@@ -82,7 +82,9 @@ class Users {
             return;
         }
 
-        $this->RCMS->StripeWrapper->removeCustomer($stripeID);
+        if (!empty($stripeID)) {
+            $this->RCMS->StripeWrapper->removeCustomer($stripeID);
+        }
 
         $this->RCMS->execute('CALL removeUser(?)', array('i', $userIDPost));
 

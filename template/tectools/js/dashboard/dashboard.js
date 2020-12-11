@@ -21,7 +21,54 @@ $(document).ready(function(){
 
         $(window).trigger('hashchange');
     });
+
+    if (!isAdmin()) {
+        addDashboardTooltip();
+    }
 });
+
+/**
+ * Lukker tooltip til tab-menuen på dashboard siden
+ * @param instance
+ */
+function closeTooltip(instance) {
+    instance[0].destroy();
+    setCookie('seen_dashboard_tooltip', 'true', 3650);
+}
+
+/**
+ * Tilføjer et tooltip til tab-menuen på dashboard siden
+ */
+function addDashboardTooltip() {
+    if (getCookie('seen_dashboard_tooltip') === 'true') {
+        return;
+    }
+
+    let t =
+        `
+        <div style="user-select: none; max-width: 150px">
+            <h6 class="center">Menu</h6>
+
+            <p class="center">Klik på et af disse punkter for at se mere information</p>
+            <button id="closeTooltip" style="background: #0c8dff; width: 100%" class="btn">OK</button>
+        </div>
+        `;
+
+    let instance = tippy('#dashboard-tabs', {
+        content: t,
+        trigger: 'manual',
+        // placement: 'top-start',
+        interactive: true,
+        allowHTML: true,
+        hideOnClick: false,
+        showOnCreate: true,
+        onMount: () => {
+            document.getElementById('closeTooltip').addEventListener('click', function () {
+               closeTooltip(instance);
+            });
+        }
+    });
+}
 
 window.addEventListener('load', e => {
     // JsBarcode laver vores stregkoder fra databasen om til SVG elementer som kan scannes

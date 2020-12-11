@@ -100,7 +100,7 @@ declare(strict_types=1);
         background: #2c3840 !important;
     }
 
-    .empty-row {
+    .empty-row, .store-row {
         background: #2C3840 !important;
     }
 
