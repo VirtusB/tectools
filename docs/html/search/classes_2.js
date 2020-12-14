@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['globalhandlers_395',['GlobalHandlers',['../class_global_handlers.html',1,'']]]
+  ['helpers_384',['Helpers',['../class_helpers.html',1,'']]]
 ];

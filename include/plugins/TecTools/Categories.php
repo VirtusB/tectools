@@ -43,6 +43,7 @@ class Categories {
     /**
      * Tilføjer en kategori via en POST request
      * @return void
+     * @throws JsonException
      */
     public function addCategory(): void {
         if (!$this->RCMS->Login->isAdmin()) {
@@ -113,6 +114,7 @@ class Categories {
     /**
      * Redigerer en kategori via en POST request
      * @return void
+     * @throws JsonException
      */
     public function editCategory(): void {
         if (!is_numeric($_POST['category_id']) || !$this->RCMS->Login->isAdmin() ) {

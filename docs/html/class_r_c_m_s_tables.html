@@ -97,7 +97,7 @@ Collaboration diagram for RCMSTables:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a10f468a6e3cde83e9061def52e24628a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_c_m_s_tables.html#a10f468a6e3cde83e9061def52e24628a">__construct</a> (<a class="el" href="class_r_c_m_s.html">RCMS</a> $<a class="el" href="class_r_c_m_s.html">RCMS</a>)</td></tr>
 <tr class="separator:a10f468a6e3cde83e9061def52e24628a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9323b85fd7bceb151473d26dae7d3746"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_c_m_s_tables.html#a9323b85fd7bceb151473d26dae7d3746">createRCMSTable</a> (string $id, string $table, array $<a class="el" href="andet_8txt.html#a2bbf84d705340538237151a9bfe76c68">columns</a>, ?array $settings=array(), ?array $where=array(), ?string $order=null, ?array $buttons=array(), ?array $dropdown=null, ?string $group=null)</td></tr>
+<tr class="memitem:a9323b85fd7bceb151473d26dae7d3746"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_c_m_s_tables.html#a9323b85fd7bceb151473d26dae7d3746">createRCMSTable</a> (string $id, string $table, array $columns, ?array $settings=array(), ?array $where=array(), ?string $order=null, ?array $buttons=array(), ?array $dropdown=null, ?string $group=null)</td></tr>
 <tr class="separator:a9323b85fd7bceb151473d26dae7d3746"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
@@ -132,9 +132,9 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a53c2eff3569fbcf37528b10364694c8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4cd8f403d3768ba3d545122d4ff0a7ca"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_c_m_s_tables.html#a4cd8f403d3768ba3d545122d4ff0a7ca">loadAjax</a> ()</td></tr>
 <tr class="separator:a4cd8f403d3768ba3d545122d4ff0a7ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acecb7913bf6fcca2343c1ea6a7615258"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_c_m_s_tables.html#acecb7913bf6fcca2343c1ea6a7615258">countRows</a> (string $table, array $<a class="el" href="andet_8txt.html#a2bbf84d705340538237151a9bfe76c68">columns</a>, array $where, string $order, array $settings, ?string $group)</td></tr>
+<tr class="memitem:acecb7913bf6fcca2343c1ea6a7615258"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_c_m_s_tables.html#acecb7913bf6fcca2343c1ea6a7615258">countRows</a> (string $table, array $columns, array $where, string $order, array $settings, ?string $group)</td></tr>
 <tr class="separator:acecb7913bf6fcca2343c1ea6a7615258"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9673e32d50f682e526f89cc9f8b81182"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_c_m_s_tables.html#a9673e32d50f682e526f89cc9f8b81182">retrieveData</a> (string $table, array $<a class="el" href="andet_8txt.html#a2bbf84d705340538237151a9bfe76c68">columns</a>, array $where, string $order, array $settings, ?string $group)</td></tr>
+<tr class="memitem:a9673e32d50f682e526f89cc9f8b81182"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_c_m_s_tables.html#a9673e32d50f682e526f89cc9f8b81182">retrieveData</a> (string $table, array $columns, array $where, string $order, array $settings, ?string $group)</td></tr>
 <tr class="separator:a9673e32d50f682e526f89cc9f8b81182"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a199dc857faa0be705a38dc8f1b7f852c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_c_m_s_tables.html#a199dc857faa0be705a38dc8f1b7f852c">logQuery</a> (array $settings, string $query, array $whereArr)</td></tr>
 <tr class="separator:a199dc857faa0be705a38dc8f1b7f852c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -222,7 +222,7 @@ Private Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="_r_c_m_s_tables_8php_source.html#l00162">162</a> of file <a class="el" href="_r_c_m_s_tables_8php_source.html">RCMSTables.php</a>.</p>
 
-<p class="reference">References <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$buttons</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$columns</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$dropdown</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$group</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$order</a>, <a class="el" href="activity-center_8php_source.html#l00017">$pages</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$settings</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$table</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$where</a>, <a class="el" href="andet_8txt_source.html#l00035">columns</a>, and <a class="el" href="_r_c_m_s_tables_8php_source.html#l00309">countRows()</a>.</p>
+<p class="reference">References <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$buttons</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$columns</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$dropdown</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$group</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$order</a>, <a class="el" href="activity-center_8php_source.html#l00017">$pages</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$settings</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$table</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$where</a>, and <a class="el" href="_r_c_m_s_tables_8php_source.html#l00309">countRows()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="_r_c_m_s_tables_8php_source.html#l00096">createHTML()</a>, and <a class="el" href="_r_c_m_s_tables_8php_source.html#l00251">loadAjax()</a>.</p>
 <div class="dynheader">
@@ -385,7 +385,7 @@ Here is the caller graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="_r_c_m_s_tables_8php_source.html#l00096">96</a> of file <a class="el" href="_r_c_m_s_tables_8php_source.html">RCMSTables.php</a>.</p>
 
-<p class="reference">References <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$buttons</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$columns</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$group</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$order</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$settings</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$table</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$where</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00162">buildRows()</a>, <a class="el" href="andet_8txt_source.html#l00035">columns</a>, and <a class="el" href="_r_c_m_s_tables_8php_source.html#l00333">retrieveData()</a>.</p>
+<p class="reference">References <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$buttons</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$columns</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$group</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$order</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$settings</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$table</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$where</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00162">buildRows()</a>, and <a class="el" href="_r_c_m_s_tables_8php_source.html#l00333">retrieveData()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="_r_c_m_s_tables_8php_source.html#l00051">createRCMSTable()</a>.</p>
 <div class="dynheader">
@@ -499,7 +499,7 @@ Here is the caller graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="_r_c_m_s_tables_8php_source.html#l00051">51</a> of file <a class="el" href="_r_c_m_s_tables_8php_source.html">RCMSTables.php</a>.</p>
 
-<p class="reference">References <a class="el" href="frontpage_8php_source.html#l00043">$_GET</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$buttons</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$columns</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$dropdown</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$group</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$order</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$settings</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$table</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$where</a>, <a class="el" href="andet_8txt_source.html#l00035">columns</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00096">createHTML()</a>, and <a class="el" href="_r_c_m_s_tables_8php_source.html#l00251">loadAjax()</a>.</p>
+<p class="reference">References <a class="el" href="frontpage_8php_source.html#l00043">$_GET</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$buttons</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$columns</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$dropdown</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$group</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$order</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$settings</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$table</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$where</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00096">createHTML()</a>, and <a class="el" href="_r_c_m_s_tables_8php_source.html#l00251">loadAjax()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -579,7 +579,7 @@ Here is the call graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="_r_c_m_s_tables_8php_source.html#l00251">251</a> of file <a class="el" href="_r_c_m_s_tables_8php_source.html">RCMSTables.php</a>.</p>
 
-<p class="reference">References <a class="el" href="frontpage_8php_source.html#l00043">$_GET</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$columns</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$group</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$order</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$settings</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$table</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$where</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00162">buildRows()</a>, <a class="el" href="andet_8txt_source.html#l00035">columns</a>, and <a class="el" href="_r_c_m_s_tables_8php_source.html#l00333">retrieveData()</a>.</p>
+<p class="reference">References <a class="el" href="frontpage_8php_source.html#l00043">$_GET</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$columns</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$group</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$order</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$settings</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$table</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00030">$where</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00162">buildRows()</a>, and <a class="el" href="_r_c_m_s_tables_8php_source.html#l00333">retrieveData()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="_r_c_m_s_tables_8php_source.html#l00051">createRCMSTable()</a>.</p>
 <div class="dynheader">
@@ -855,7 +855,7 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">array $<a class="el" href="andet_8txt.html#a2bbf84d705340538237151a9bfe76c68">columns</a></td>
+          <td class="memname">array $columns</td>
         </tr>
       </table>
 </div><div class="memdoc">
