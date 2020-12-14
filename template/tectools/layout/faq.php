@@ -17,7 +17,7 @@ declare(strict_types=1);
 
     <div class="row">
 
-        <div class="main-content contentContainer">
+        <div id="faq" class="main-content contentContainer">
             <div class="contentArea contentPadding">
 
                 <h2 class="heading3" id="general">Generelt</h2>

@@ -79,6 +79,23 @@ class Helpers {
     }
 
     /**
+     * Funktion til at gøre et array unikt, ligesom den indbygget array_unique funktion, men denne virker på flerdimensionelle arrays
+     * @param array $array
+     * @param string $key
+     * @return array
+     */
+    public static function super_unique(array $array, string $key): array {
+        $temp_array = [];
+        foreach ($array as &$v) {
+            if (!isset($temp_array[$v[$key]])) {
+                $temp_array[$v[$key]] =& $v;
+            }
+        }
+        $array = array_values($temp_array);
+        return $array;
+    }
+
+    /**
      * Returnerer data til klienten i JSON format
      * @param int $status HTTP status kode, ex. 200 eller 404 osv.
      * @param array $result

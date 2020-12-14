@@ -366,3 +366,17 @@ button, input, optgroup, select, textarea {
         width: 92%;
     }
 }
+
+.ql-tooltip-editor input[data-video="Embed URL"] {
+    padding-top: 0 !important;
+    /*text-align: left;*/
+}
+
+div.ql-tooltip-editor {
+    text-align: left;
+}
+
+div.ql-editor {
+    padding-top: 35px;
+    padding-bottom: 20px;
+}

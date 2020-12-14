@@ -51,24 +51,24 @@ $categories = $TecTools->Categories->getAllCategories();
 
                     <br>
 
-                    <label>Status</label>
-                    <select required class="mat-select" name="status">
+                    <label for="status">Status</label>
+                    <select id="status" required="required" class="mat-select validate" name="status">
                         <option value="" disabled selected>Vælg status</option>
                         <?php foreach ($TecTools->getAllStatuses() as $status): ?>
                             <option value="<?= $status['StatusID'] ?>"><?= $status['StatusName'] ?></option>
                         <?php endforeach; ?>
                     </select>
 
-                    <label>Producent</label>
-                    <select id="manufacturer_id" required class="mat-select" name="manufacturer_id">
+                    <label for="manufacturer_id">Producent</label>
+                    <select id="manufacturer_id" required="required" class="mat-select validate" name="manufacturer_id">
                         <option value="" disabled selected>Vælg producent</option>
                         <?php foreach ($TecTools->Manufacturers->getAllManufacturers() as $manufacturer): ?>
                             <option value="<?= $manufacturer['ManufacturerID'] ?>"><?= $manufacturer['ManufacturerName'] ?></option>
                         <?php endforeach; ?>
                     </select>
 
-                    <label>Kategorier</label>
-                    <select style="min-height: 100px;" multiple required class="mat-select" name="categories[]">
+                    <label for="categories">Kategorier</label>
+                    <select id="categories" style="min-height: 100px;" multiple required="required" class="mat-select validate" name="categories[]">
                         <option disabled="disabled" value="">Vælg kategorier</option>
                         <?php foreach ($categories as $category): ?>
                             <option value="<?= $category['CategoryID'] ?>"><?= $category['CategoryName'] ?></option>
@@ -78,7 +78,7 @@ $categories = $TecTools->Categories->getAllCategories();
                     <div class="file-field input-field">
                         <div class="btn">
                             <span>Billede</span>
-                            <input onchange="updateImagePreview(this, 'tool-image');" required name="image" type="file">
+                            <input accept="image/png, image/jpeg, image/jpg" onchange="updateImagePreview(this, 'tool-image');" required name="image" type="file">
                         </div>
                         <div class="file-path-wrapper">
                             <input class="file-path validate" type="text">

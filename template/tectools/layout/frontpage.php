@@ -145,7 +145,7 @@ $carouselTools = $TecTools->getNewestTools(10);
                 <div class="step-container">
                     <p class="step">3</p>
                 </div>
-                <h6>Find, scan og lån det værktøj du mangler</h6>
+                <h6>Scan og lån det værktøj du mangler</h6>
             </div>
         </div>
     </div>

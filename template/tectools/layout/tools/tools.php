@@ -14,7 +14,9 @@ $GlobalHandlers = $GLOBALS['GlobalHandlers'];
 
 $categories = $TecTools->Categories->getAllCategories();
 $tools = $TecTools->getAllToolsWithFilters();
+
 $checkInsMarquee = $TecTools->CheckIns->getCheckInsForMarquee();
+$checkInsMarquee = Helpers::super_unique($checkInsMarquee, 'ToolName');
 $chunks = array_chunk($checkInsMarquee, 3);
 
 ?>
@@ -28,7 +30,8 @@ $chunks = array_chunk($checkInsMarquee, 3);
 <div class="container aaa">
     <div class="hero-container">
         <span>Nem og billig adgang til alle slags værktøj</span>
-        <span>Planer starter fra kun 200 kroner / md.</span>
+<!--        <span>Planer starter fra kun 200 kroner / md.</span>-->
+        <span>Scan og lån selv i en af vores butikker</span>
         <span>100% CO2 neutral</span>
     </div>
 

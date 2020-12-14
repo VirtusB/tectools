@@ -78,6 +78,8 @@ $listColumnCount = count($tool['Categories']) > 1 ? 2 : 1;
                     <h6 class="grey-text">Beskrivelse</h6>
 
                     <?= $tool['Description'] ?>
+                    <br>
+                    <p>Scan værktøjet i en af vores <a href="/stores">butikker</a> og tag det med hjem</p>
                 </div>
             </div>
 

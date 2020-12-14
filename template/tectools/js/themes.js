@@ -28,7 +28,7 @@ function addThemeSwitchListener() {
  */
 function initTheme() {
     const themeSwitch = document.getElementById('dark-theme-input');
-    const darkThemeSelected = (localStorage.getItem('LS_THEME') !== null && localStorage.getItem('LS_THEME') === 'dark');
+    const darkThemeSelected = (getCookie('LS_THEME') !== '' && getCookie('LS_THEME') === 'dark');
 
     themeSwitch.checked = darkThemeSelected;
 
@@ -49,10 +49,10 @@ function toggleTheme() {
 
     if(themeSwitch.checked) {
         enableDarkThemeStyle();
-        localStorage.setItem('LS_THEME', 'dark');
+        setCookie('LS_THEME', 'dark', 365 * 10);
     } else {
         disableDarkThemeStyle();
-        localStorage.removeItem('LS_THEME');
+        deleteCookie('LS_THEME');
     }
 }
 

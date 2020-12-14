@@ -205,10 +205,11 @@ class TecTools {
         $ext = pathinfo($imageName, PATHINFO_EXTENSION);
         $newImageName = date('dmYHis') . '_' . bin2hex(random_bytes(2)) . '.' . $ext;
 
+        // Tjek på filtype
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $type = finfo_file($finfo, $tmpName);
 
-        if (!isset($type) || !in_array($type, array("image/png", "image/jpeg", "image/gif"))) {
+        if (!isset($type) || !in_array($type, array("image/png", "image/jpeg", "image/jpg"))) {
             $_SESSION['tool_image_upload_error'] = 'Billedet kunne ikke uploades';
             return false;
         }
@@ -375,7 +376,6 @@ class TecTools {
         $pages = ceil($rowCount / self::TOOLS_PER_PAGE);
 
         $query = $this->getFilterQueryString();
-        //var_dump($query);
 
         echo '<span class="page-pagination">';
         for ($i = 1; $i <= $pages; $i++) {
@@ -444,10 +444,6 @@ class TecTools {
      */
     public function getAllToolsWithFilters(): array {
         $filters = $this->getPaginationFilters();
-
-        //echo '<pre>';
-        //print_r($filters);
-        //echo '</pre>';
 
         $res = $this->RCMS->execute('CALL getToolsBySearch(?, ?, ?, ?)', array('ssii', $filters['search-text'], $filters['categories'], $filters['only_in_stock'], $filters['pagenum']));
 

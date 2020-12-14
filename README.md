@@ -1,6 +1,6 @@
 # TecTools
 
-![logo.png](template/tectools/images/logo.png)
+![logo.png](template/tectools/images/logo-small.png)
 
 TecTools er en abonnementsbaseret service, som udlejer værktøj til private.
 

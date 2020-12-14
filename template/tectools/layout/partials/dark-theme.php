@@ -9,7 +9,7 @@ declare(strict_types=1);
 ?>
 
 <!-- Dark Theme style-->
-<style id="dark-theme-style" media="max-width: 1px">
+<style id="dark-theme-style" <?= isset($_COOKIE['LS_THEME']) && $_COOKIE['LS_THEME'] === 'dark' ? '' : 'media="max-width: 1px"' ?> >
     body, .option-label {
         color: #d8d8d8;
         background-color: #121212;
@@ -108,6 +108,26 @@ declare(strict_types=1);
         background: #121212 !important;
         /*background: #06090F !important;*/
         color: #fff !important;
+    }
+
+    #faq, #faq .contentArea h3 {
+        background-color: #1d1d1d;
+    }
+
+    #faq .heading3, #faq .section-title-large, #faq {
+        color: #d8d8d8;
+    }
+
+    #faq .toggle:after {
+        color: rgb(216 216 216 / 0.65);
+    }
+
+    .cms-page-view .std p, .cms-no-route .std p, .toggle-content p, .toggle-content span, .toggle-content strong, .col-wrapper-main p, .toggle-content ul {
+        color: #d8d8d8 !important;
+    }
+
+    .btn.disabled, .disabled.btn-large, .disabled.btn-small, .btn-floating.disabled, .btn-large.disabled, .btn-small.disabled, .btn-flat.disabled, .btn:disabled, .btn-large:disabled, .btn-small:disabled, .btn-floating:disabled, .btn-large:disabled, .btn-small:disabled, .btn-flat:disabled, .btn[disabled], .btn-large[disabled], .btn-small[disabled], .btn-floating[disabled], .btn-large[disabled], .btn-small[disabled], .btn-flat[disabled] {
+        background-color: #16191D !important;
     }
 </style>
 
