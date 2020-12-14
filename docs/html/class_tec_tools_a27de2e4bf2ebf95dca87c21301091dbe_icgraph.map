@@ -1,6 +1,9 @@
 <map id="getToolByID" name="getToolByID">
-<area shape="rect" id="node1" title=" " alt="" coords="224,56,316,83"/>
-<area shape="rect" id="node2" href="$class_check_ins.html#ab9632f999bfddcdb2a3c153a8639c847" title=" " alt="" coords="23,5,159,32"/>
-<area shape="rect" id="node3" href="$class_tec_tools.html#ae274a7295d24a36e9f4fadd5f930ad8e" title=" " alt="" coords="57,56,124,83"/>
-<area shape="rect" id="node4" href="$class_check_ins.html#a72805b72ea0a4c3580887e29a4fe880a" title=" " alt="" coords="5,107,176,133"/>
+<area shape="rect" id="node1" title=" " alt="" coords="451,88,543,115"/>
+<area shape="rect" id="node2" href="$class_check_ins.html#ab9632f999bfddcdb2a3c153a8639c847" title=" " alt="" coords="5,63,141,89"/>
+<area shape="rect" id="node3" href="$class_tec_tools.html#ae274a7295d24a36e9f4fadd5f930ad8e" title=" " alt="" coords="263,37,329,64"/>
+<area shape="rect" id="node4" href="$class_check_ins.html#a72805b72ea0a4c3580887e29a4fe880a" title=" " alt="" coords="211,88,381,115"/>
+<area shape="rect" id="node5" href="$class_check_ins.html#acbddbcb34ac4c76a7d825a3ca427c3d3" title=" " alt="" coords="189,189,403,216"/>
+<area shape="rect" id="node7" href="$class_check_ins.html#a9cda1e036a98cd80cc1f2ed8872e160a" title=" " alt="" coords="201,139,391,165"/>
+<area shape="rect" id="node6" href="$class_check_ins.html#a18cd4df1e7033624c21394879f1a3494" title=" " alt="" coords="11,189,136,216"/>
 </map>

@@ -145,11 +145,11 @@ $(function() {
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                                                &lt;input type=<span class="stringliteral">&quot;hidden&quot;</span> name=<span class="stringliteral">&quot;product_name&quot;</span> value=<span class="stringliteral">&quot;&lt;?= $product[&#39;name&#39;] ?&gt;&quot;</span>&gt;</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                                                &lt;button class=<span class="stringliteral">&#39;btn orange downgrade-subscription&#39;</span>&gt;Nedgrader</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                                                &lt;button class=<span class="stringliteral">&#39;btn red downgrade-subscription&#39;</span>&gt;Nedgrader</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                                                &lt;/button&gt;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                                            &lt;/form&gt;</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                                        &lt;?php <a class="code" href="contact_8php.html#a8f1dcddb8838e3565f15279d8d597bc8">endif</a>; ?&gt;</div>
-<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="my-subscription_8php.html#aed2d37b4e8da3f52103ae96ce9d26d82">   85</a></span>&#160;                                    &lt;?php <span class="keywordflow">else</span>: ?&gt;</div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="my-subscription_8php.html#ae8b4bb1441c6ab4dcb28a37bc46c8ead">   85</a></span>&#160;                                    &lt;?php <span class="keywordflow">else</span>: ?&gt;</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                                        &lt;form <span class="keyword">class</span>=<span class="stringliteral">&quot;newSubscriptionForm&quot;</span> action=<span class="stringliteral">&quot;/buy-subscription&quot;</span> method=<span class="stringliteral">&quot;get&quot;</span>&gt;</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                                            &lt;input type=<span class="stringliteral">&quot;hidden&quot;</span> name=<span class="stringliteral">&quot;post_endpoint&quot;</span> value=<span class="stringliteral">&quot;newSubscription&quot;</span>&gt;</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
@@ -176,25 +176,26 @@ $(function() {
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        &lt;div <span class="keyword">class</span>=<span class="stringliteral">&quot;row&quot;</span>&gt;</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            &lt;div <span class="keyword">class</span>=<span class="stringliteral">&quot;col s12 m4 offset-m1&quot;</span>&gt;</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                &lt;p <span class="keyword">class</span>=<span class="stringliteral">&quot;grey-text&quot;</span>&gt;*Opsig fra dag til dag - ingen bindinger&lt;/p&gt;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            &lt;/div&gt;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        &lt;/div&gt;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        &lt;br&gt;&lt;br&gt;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    &lt;/div&gt;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;&lt;/div&gt;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;                &lt;p <span class="keyword">class</span>=<span class="stringliteral">&quot;grey-text&quot;</span>&gt;*Alle priser er inkl. moms&lt;/p&gt;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            &lt;/div&gt;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        &lt;/div&gt;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        &lt;br&gt;&lt;br&gt;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    &lt;/div&gt;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;&lt;/div&gt;</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;&lt;link rel=<span class="stringliteral">&quot;stylesheet&quot;</span> href=<span class="stringliteral">&quot;&lt;?= $this-&gt;RCMS-&gt;getTemplateFolder() ?&gt;/css/my-subscription.css&quot;</span>&gt;</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;&lt;link rel=<span class="stringliteral">&quot;stylesheet&quot;</span> href=<span class="stringliteral">&quot;&lt;?= $this-&gt;RCMS-&gt;getTemplateFolder() ?&gt;/css/my-subscription.css&quot;</span>&gt;</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="abuy-subscription_8php_html_a67d8e3a58e5644af40e14f6db1504f01"><div class="ttname"><a href="buy-subscription_8php.html#a67d8e3a58e5644af40e14f6db1504f01">$product</a></div><div class="ttdeci">$product</div><div class="ttdef"><b>Definition:</b> <a href="buy-subscription_8php_source.html#l00016">buy-subscription.php:16</a></div></div>
 <div class="ttc" id="aclass_r_c_m_s_html"><div class="ttname"><a href="class_r_c_m_s.html">RCMS</a></div><div class="ttdef"><b>Definition:</b> <a href="_r_c_m_s_8php_source.html#l00020">RCMS.php:20</a></div></div>
-<div class="ttc" id="acontact_8php_html_a8f1dcddb8838e3565f15279d8d597bc8"><div class="ttname"><a href="contact_8php.html#a8f1dcddb8838e3565f15279d8d597bc8">endif</a></div><div class="ttdeci">&lt;/i &gt; Du kan også benytte dig af vores Live ude i højre side&lt; br &gt; Vores eksperter er klar til at hjælpe med ethvert spørgsmål du måtte have&lt;/p &gt;&lt;/div &gt;&lt;/div &gt; endif</div><div class="ttdef"><b>Definition:</b> <a href="contact_8php_source.html#l00089">contact.php:89</a></div></div>
+<div class="ttc" id="acontact_8php_html_a8f1dcddb8838e3565f15279d8d597bc8"><div class="ttname"><a href="contact_8php.html#a8f1dcddb8838e3565f15279d8d597bc8">endif</a></div><div class="ttdeci">&lt;/i &gt; Du kan også benytte dig af vores Live ude i højre side&lt; br &gt; Vores eksperter er klar til at hjælpe med ethvert spørgsmål du måtte have&lt;/p &gt;&lt;/div &gt;&lt;/div &gt; endif</div><div class="ttdef"><b>Definition:</b> <a href="contact_8php_source.html#l00093">contact.php:93</a></div></div>
 <div class="ttc" id="amy-subscription_8php_html_a244581a1e4534317daa62a995c2e4c98"><div class="ttname"><a href="my-subscription_8php.html#a244581a1e4534317daa62a995c2e4c98">$userProduct</a></div><div class="ttdeci">$userProduct</div><div class="ttdef"><b>Definition:</b> <a href="my-subscription_8php_source.html#l00017">my-subscription.php:17</a></div></div>
 <div class="ttc" id="amy-subscription_8php_html_ae0ee57e07f23e6ad01602937224998cc"><div class="ttname"><a href="my-subscription_8php.html#ae0ee57e07f23e6ad01602937224998cc">$products</a></div><div class="ttdeci">$products</div><div class="ttdef"><b>Definition:</b> <a href="my-subscription_8php_source.html#l00015">my-subscription.php:15</a></div></div>
 <div class="ttc" id="amy-subscription_8php_html_aeb8cdc56d4e45c5555c52cb3015c1fd1"><div class="ttname"><a href="my-subscription_8php.html#aeb8cdc56d4e45c5555c52cb3015c1fd1">else</a></div><div class="ttdeci">if( $userProduct)( $userProduct[ 'id']===$product[ 'id'])( 'Er du helt sikker?') else</div><div class="ttdef"><b>Definition:</b> <a href="my-subscription_8php_source.html#l00071">my-subscription.php:67</a></div></div>

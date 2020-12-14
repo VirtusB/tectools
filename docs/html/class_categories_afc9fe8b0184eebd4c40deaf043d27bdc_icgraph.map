@@ -1,8 +1,11 @@
 <map id="getCategoriesForTool" name="getCategoriesForTool">
-<area shape="rect" id="node1" title=" " alt="" coords="441,42,587,69"/>
-<area shape="rect" id="node2" href="$class_tec_tools.html#acc6e8a73237a20b685a55fabf387fb86" title=" " alt="" coords="224,5,393,47"/>
-<area shape="rect" id="node3" href="$class_tec_tools.html#a27de2e4bf2ebf95dca87c21301091dbe" title=" " alt="" coords="235,71,383,98"/>
-<area shape="rect" id="node4" href="$class_check_ins.html#ab9632f999bfddcdb2a3c153a8639c847" title=" " alt="" coords="23,21,159,47"/>
-<area shape="rect" id="node5" href="$class_tec_tools.html#ae274a7295d24a36e9f4fadd5f930ad8e" title=" " alt="" coords="29,71,152,98"/>
-<area shape="rect" id="node6" href="$class_check_ins.html#a72805b72ea0a4c3580887e29a4fe880a" title=" " alt="" coords="5,122,176,149"/>
+<area shape="rect" id="node1" title=" " alt="" coords="668,61,813,88"/>
+<area shape="rect" id="node2" href="$class_tec_tools.html#acc6e8a73237a20b685a55fabf387fb86" title=" " alt="" coords="451,24,620,66"/>
+<area shape="rect" id="node3" href="$class_tec_tools.html#a27de2e4bf2ebf95dca87c21301091dbe" title=" " alt="" coords="461,90,609,117"/>
+<area shape="rect" id="node4" href="$class_check_ins.html#ab9632f999bfddcdb2a3c153a8639c847" title=" " alt="" coords="5,65,141,92"/>
+<area shape="rect" id="node5" href="$class_tec_tools.html#ae274a7295d24a36e9f4fadd5f930ad8e" title=" " alt="" coords="235,40,357,66"/>
+<area shape="rect" id="node6" href="$class_check_ins.html#a72805b72ea0a4c3580887e29a4fe880a" title=" " alt="" coords="211,90,381,117"/>
+<area shape="rect" id="node7" href="$class_check_ins.html#acbddbcb34ac4c76a7d825a3ca427c3d3" title=" " alt="" coords="189,192,403,218"/>
+<area shape="rect" id="node9" href="$class_check_ins.html#a9cda1e036a98cd80cc1f2ed8872e160a" title=" " alt="" coords="201,141,391,168"/>
+<area shape="rect" id="node8" href="$class_check_ins.html#a18cd4df1e7033624c21394879f1a3494" title=" " alt="" coords="11,192,136,218"/>
 </map>

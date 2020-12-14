@@ -87,20 +87,12 @@ Variables</h2></td></tr>
 <tr class="separator:afc71bc53d6775d8a344893d5ec10f187"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77a602f13f1aa5cdcba877792fd54fe2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="frontpage_8php.html#a77a602f13f1aa5cdcba877792fd54fe2">$tools</a> = $<a class="el" href="class_tec_tools.html">TecTools</a>-&gt;getAllToolsWithFilters()</td></tr>
 <tr class="separator:a77a602f13f1aa5cdcba877792fd54fe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7011cc1a57dc9d6caa600a8836a055a2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="frontpage_8php.html#a7011cc1a57dc9d6caa600a8836a055a2">$checkInsMarquee</a> = $<a class="el" href="class_tec_tools.html">TecTools</a>-&gt;<a class="el" href="class_check_ins.html">CheckIns</a>-&gt;getCheckInsForMarquee()</td></tr>
-<tr class="separator:a7011cc1a57dc9d6caa600a8836a055a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3d09cf34467ab6ea61c754414e2de70"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="frontpage_8php.html#ab3d09cf34467ab6ea61c754414e2de70">$chunks</a> = array_chunk($checkInsMarquee, 3)</td></tr>
-<tr class="separator:ab3d09cf34467ab6ea61c754414e2de70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57d800fb6f8bccefcfd786bb3ec1dfb0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="frontpage_8php.html#a57d800fb6f8bccefcfd786bb3ec1dfb0">$carouselTools</a> = $<a class="el" href="class_tec_tools.html">TecTools</a>-&gt;getNewestTools(10)</td></tr>
+<tr class="separator:a57d800fb6f8bccefcfd786bb3ec1dfb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab836e6d0f95d7dbcc2e1f47d56370e06"><td class="memItemLeft" align="right" valign="top">foreach( $categories as $category)($_GET['categories']) &amp;&amp;in_array($category['CategoryID']&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="frontpage_8php.html#ab836e6d0f95d7dbcc2e1f47d56370e06">$_GET</a> ['categories'] = isset($_GET['search-text']) ? $_GET['search-text'] : ''</td></tr>
 <tr class="separator:ab836e6d0f95d7dbcc2e1f47d56370e06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75c5414f6e7d4193439615da207c975a"><td class="memItemLeft" align="right" valign="top">foreach( $categories as $category)($_GET['categories']) &amp;&amp;in_array($category['CategoryID']&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="frontpage_8php.html#a75c5414f6e7d4193439615da207c975a">false</a></td></tr>
 <tr class="separator:a75c5414f6e7d4193439615da207c975a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a672d9707ef91db026c210f98cc601123"><td class="memItemLeft" align="right" valign="top">foreach( $tools as $tool)($tool['<a class="el" href="class_categories.html">Categories</a>'] as $category)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="frontpage_8php.html#a672d9707ef91db026c210f98cc601123">endforeach</a></td></tr>
-<tr class="separator:a672d9707ef91db026c210f98cc601123"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8b4bb1441c6ab4dcb28a37bc46c8ead"><td class="memItemLeft" align="right" valign="top"><a class="el" href="header_8php.html#acb549e0f4feadeed43da9b568702f53d">else</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="frontpage_8php.html#ae8b4bb1441c6ab4dcb28a37bc46c8ead">__pad1__</a></td></tr>
-<tr class="separator:ae8b4bb1441c6ab4dcb28a37bc46c8ead"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68e4319e1120e61372002ad9f9879a0c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="header_8php.html#acb549e0f4feadeed43da9b568702f53d">else</a> der matcher dine kriterier&lt;/h5 &gt;&lt;/div &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="frontpage_8php.html#a68e4319e1120e61372002ad9f9879a0c">endif</a></td></tr>
-<tr class="separator:a68e4319e1120e61372002ad9f9879a0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Variable Documentation</h2>
 <a id="ab836e6d0f95d7dbcc2e1f47d56370e06"></a>
@@ -115,9 +107,25 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="frontpage_8php_source.html#l00045">45</a> of file <a class="el" href="frontpage_8php_source.html">frontpage.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="frontpage_8php_source.html#l00044">44</a> of file <a class="el" href="frontpage_8php_source.html">frontpage.php</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="_login_8php_source.html#l00021">Login\__construct()</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00049">RCMSTables\createRCMSTable()</a>, <a class="el" href="_tec_tools_8php_source.html#l00358">TecTools\displayFrontPagePagination()</a>, <a class="el" href="_tec_tools_8php_source.html#l00380">TecTools\displayToolCountMessage()</a>, <a class="el" href="_tec_tools_8php_source.html#l00426">TecTools\getPaginationFilters()</a>, <a class="el" href="_helpers_8php_source.html#l00021">Helpers\isFrontPage()</a>, and <a class="el" href="_r_c_m_s_tables_8php_source.html#l00241">RCMSTables\loadAjax()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="_login_8php_source.html#l00021">Login\__construct()</a>, <a class="el" href="_r_c_m_s_tables_8php_source.html#l00051">RCMSTables\createRCMSTable()</a>, <a class="el" href="_tec_tools_8php_source.html#l00396">TecTools\displayToolCountMessage()</a>, <a class="el" href="_tec_tools_8php_source.html#l00374">TecTools\displayToolsPagePagination()</a>, <a class="el" href="_tec_tools_8php_source.html#l00432">TecTools\getPaginationFilters()</a>, <a class="el" href="_helpers_8php_source.html#l00021">Helpers\isFrontPage()</a>, and <a class="el" href="_r_c_m_s_tables_8php_source.html#l00251">RCMSTables\loadAjax()</a>.</p>
+
+</div>
+</div>
+<a id="a57d800fb6f8bccefcfd786bb3ec1dfb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57d800fb6f8bccefcfd786bb3ec1dfb0">&#9670;&nbsp;</a></span>$carouselTools</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">$carouselTools = $<a class="el" href="class_tec_tools.html">TecTools</a>-&gt;getNewestTools(10)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="frontpage_8php_source.html#l00018">18</a> of file <a class="el" href="frontpage_8php_source.html">frontpage.php</a>.</p>
 
 </div>
 </div>
@@ -135,39 +143,7 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="frontpage_8php_source.html#l00015">15</a> of file <a class="el" href="frontpage_8php_source.html">frontpage.php</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="_tec_tools_8php_source.html#l00233">TecTools\addTool()</a>, and <a class="el" href="_tec_tools_8php_source.html#l00145">TecTools\editTool()</a>.</p>
-
-</div>
-</div>
-<a id="a7011cc1a57dc9d6caa600a8836a055a2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7011cc1a57dc9d6caa600a8836a055a2">&#9670;&nbsp;</a></span>$checkInsMarquee</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">$checkInsMarquee = $<a class="el" href="class_tec_tools.html">TecTools</a>-&gt;<a class="el" href="class_check_ins.html">CheckIns</a>-&gt;getCheckInsForMarquee()</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="frontpage_8php_source.html#l00017">17</a> of file <a class="el" href="frontpage_8php_source.html">frontpage.php</a>.</p>
-
-</div>
-</div>
-<a id="ab3d09cf34467ab6ea61c754414e2de70"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab3d09cf34467ab6ea61c754414e2de70">&#9670;&nbsp;</a></span>$chunks</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">$chunks = array_chunk($checkInsMarquee, 3)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="frontpage_8php_source.html#l00018">18</a> of file <a class="el" href="frontpage_8php_source.html">frontpage.php</a>.</p>
+<p class="reference">Referenced by <a class="el" href="_tec_tools_8php_source.html#l00234">TecTools\addTool()</a>, and <a class="el" href="_tec_tools_8php_source.html#l00145">TecTools\editTool()</a>.</p>
 
 </div>
 </div>
@@ -217,55 +193,7 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="frontpage_8php_source.html#l00016">16</a> of file <a class="el" href="frontpage_8php_source.html">frontpage.php</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="_tec_tools_8php_source.html#l00439">TecTools\getAllToolsWithFilters()</a>.</p>
-
-</div>
-</div>
-<a id="ae8b4bb1441c6ab4dcb28a37bc46c8ead"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae8b4bb1441c6ab4dcb28a37bc46c8ead">&#9670;&nbsp;</a></span>__pad1__</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="header_8php.html#acb549e0f4feadeed43da9b568702f53d">else</a> __pad1__</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="frontpage_8php_source.html#l00110">110</a> of file <a class="el" href="frontpage_8php_source.html">frontpage.php</a>.</p>
-
-</div>
-</div>
-<a id="a672d9707ef91db026c210f98cc601123"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a672d9707ef91db026c210f98cc601123">&#9670;&nbsp;</a></span>endforeach</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">endforeach</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="frontpage_8php_source.html#l00096">96</a> of file <a class="el" href="frontpage_8php_source.html">frontpage.php</a>.</p>
-
-</div>
-</div>
-<a id="a68e4319e1120e61372002ad9f9879a0c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68e4319e1120e61372002ad9f9879a0c">&#9670;&nbsp;</a></span>endif</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="header_8php.html#acb549e0f4feadeed43da9b568702f53d">else</a> der matcher dine kriterier&lt;/h5&gt;&lt;/div&gt; endif</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="frontpage_8php_source.html#l00116">116</a> of file <a class="el" href="frontpage_8php_source.html">frontpage.php</a>.</p>
+<p class="reference">Referenced by <a class="el" href="_tec_tools_8php_source.html#l00445">TecTools\getAllToolsWithFilters()</a>, and <a class="el" href="_tec_tools_8php_source.html#l00361">TecTools\getNewestTools()</a>.</p>
 
 </div>
 </div>
@@ -281,7 +209,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="frontpage_8php_source.html#l00045">45</a> of file <a class="el" href="frontpage_8php_source.html">frontpage.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="frontpage_8php_source.html#l00044">44</a> of file <a class="el" href="frontpage_8php_source.html">frontpage.php</a>.</p>
 
 </div>
 </div>

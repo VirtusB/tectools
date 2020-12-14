@@ -1,7 +1,9 @@
 <map id="getCheckIn" name="getCheckIn">
-<area shape="rect" id="node1" title=" " alt="" coords="204,81,291,108"/>
-<area shape="rect" id="node2" href="$class_check_ins.html#ab9632f999bfddcdb2a3c153a8639c847" title=" " alt="" coords="41,5,120,32"/>
-<area shape="rect" id="node3" href="$class_check_ins.html#a72805b72ea0a4c3580887e29a4fe880a" title=" " alt="" coords="24,56,137,83"/>
-<area shape="rect" id="node4" href="$class_check_ins.html#a56e36289c0a4f297554a400368c65d3d" title=" " alt="" coords="9,107,152,133"/>
-<area shape="rect" id="node5" href="$class_check_ins.html#a31b942d9ef88b045f060e6f676ba9804" title=" " alt="" coords="5,157,156,184"/>
+<area shape="rect" id="node1" title=" " alt="" coords="323,107,409,133"/>
+<area shape="rect" id="node2" href="$class_check_ins.html#ab9632f999bfddcdb2a3c153a8639c847" title=" " alt="" coords="158,5,237,32"/>
+<area shape="rect" id="node3" href="$class_check_ins.html#a72805b72ea0a4c3580887e29a4fe880a" title=" " alt="" coords="141,56,254,83"/>
+<area shape="rect" id="node4" href="$class_check_ins.html#a56e36289c0a4f297554a400368c65d3d" title=" " alt="" coords="126,107,269,133"/>
+<area shape="rect" id="node5" href="$class_check_ins.html#a31b942d9ef88b045f060e6f676ba9804" title=" " alt="" coords="122,157,273,184"/>
+<area shape="rect" id="node6" href="$class_check_ins.html#acbddbcb34ac4c76a7d825a3ca427c3d3" title=" " alt="" coords="120,208,275,235"/>
+<area shape="rect" id="node7" href="$class_check_ins.html#a18cd4df1e7033624c21394879f1a3494" title=" " alt="" coords="5,208,72,235"/>
 </map>

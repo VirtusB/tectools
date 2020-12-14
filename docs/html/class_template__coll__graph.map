@@ -1,11 +1,11 @@
 <map id="Template" name="Template">
-<area shape="rect" id="node1" title=" " alt="" coords="512,5,645,112"/>
-<area shape="rect" id="node2" href="$class_r_c_m_s.html" title=" " alt="" coords="477,175,680,604"/>
-<area shape="rect" id="node3" href="$class_helpers.html" title=" " alt="" coords="431,733,609,957"/>
-<area shape="rect" id="node4" href="$class_mailer.html" title=" " alt="" coords="243,799,397,891"/>
+<area shape="rect" id="node1" title=" " alt="" coords="517,5,651,112"/>
+<area shape="rect" id="node2" href="$class_r_c_m_s.html" title=" " alt="" coords="483,175,685,604"/>
+<area shape="rect" id="node3" href="$class_helpers.html" title=" " alt="" coords="403,711,581,979"/>
+<area shape="rect" id="node4" href="$class_mailer.html" title=" " alt="" coords="224,799,379,891"/>
 <area shape="rect" id="node5" href="$class_login.html" title=" " alt="" coords="5,667,200,1023"/>
-<area shape="rect" id="node6" href="$class_stripe_wrapper.html" title=" " alt="" coords="639,740,783,949"/>
-<area shape="rect" id="node8" href="$class_cron.html" title=" " alt="" coords="816,784,931,905"/>
-<area shape="rect" id="node9" href="$class_logs.html" title=" " alt="" coords="961,703,1197,986"/>
-<area shape="rect" id="node7" title=" " alt="" coords="1127,351,1217,428"/>
+<area shape="rect" id="node6" href="$class_stripe_wrapper.html" title=" " alt="" coords="606,725,813,964"/>
+<area shape="rect" id="node8" href="$class_cron.html" title=" " alt="" coords="837,784,952,905"/>
+<area shape="rect" id="node9" href="$class_logs.html" title=" " alt="" coords="977,703,1213,986"/>
+<area shape="rect" id="node7" title=" " alt="" coords="1133,351,1222,428"/>
 </map>

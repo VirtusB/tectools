@@ -76,7 +76,7 @@ $(function() {
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; * Denne fil indeholder klient kode som gøre at brugere kan vælge imellem Light Theme og Dark Theme på siden</div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; */</div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;document.addEventListener(&#39;DOMContentLoaded&#39;, e =&gt; {</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;document.addEventListener(&#39;DOMContentLoaded&#39;, function () {</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;    const themeSwitch = document.getElementById(&#39;dark-theme-input&#39;);</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    if (themeSwitch) {</div>
@@ -102,7 +102,7 @@ $(function() {
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; */</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;function initTheme() {</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    const themeSwitch = document.getElementById(&#39;dark-theme-input&#39;);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    const darkThemeSelected = (localStorage.getItem(&#39;LS_THEME&#39;) !== null &amp;&amp; localStorage.getItem(&#39;LS_THEME&#39;) === &#39;dark&#39;);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    const darkThemeSelected = (getCookie(&#39;LS_THEME&#39;) !== &#39;&#39; &amp;&amp; getCookie(&#39;LS_THEME&#39;) === &#39;dark&#39;);</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    themeSwitch.checked = darkThemeSelected;</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
@@ -123,10 +123,10 @@ $(function() {
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    if(themeSwitch.checked) {</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        enableDarkThemeStyle();</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        localStorage.setItem(&#39;LS_THEME&#39;, &#39;dark&#39;);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        setCookie(&#39;LS_THEME&#39;, &#39;dark&#39;, 365 * 10);</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    } else {</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        disableDarkThemeStyle();</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        localStorage.removeItem(&#39;LS_THEME&#39;);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        deleteCookie(&#39;LS_THEME&#39;);</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    }</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;}</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>

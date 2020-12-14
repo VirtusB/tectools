@@ -1,7 +1,8 @@
 <map id="deleteUser" name="deleteUser">
 <area shape="rect" id="node1" title=" " alt="" coords="5,81,89,108"/>
-<area shape="rect" id="node2" href="$class_r_c_m_s.html#a954320c12848b61035d1b305fc1fea89" title=" " alt="" coords="158,5,269,32"/>
-<area shape="rect" id="node3" href="$class_users.html#a1d59d1170325106c0a33df804d8c893b" title=" " alt="" coords="170,56,257,83"/>
-<area shape="rect" id="node4" href="$class_helpers.html#a5e14208a0df1b1fb4c4776cb8f078ea2" title=" " alt="" coords="157,107,270,133"/>
-<area shape="rect" id="node5" href="$class_helpers.html#a91eb7cf171c4c21c7382e0a055e55bea" title=" " alt="" coords="137,157,289,184"/>
+<area shape="rect" id="node2" href="$class_r_c_m_s.html#a954320c12848b61035d1b305fc1fea89" title=" " alt="" coords="337,31,448,57"/>
+<area shape="rect" id="node3" href="$class_users.html#a1d59d1170325106c0a33df804d8c893b" title=" " alt="" coords="170,31,257,57"/>
+<area shape="rect" id="node4" href="$class_users.html#af5ed13088a40aa3ccb6e6e4ba3e6c5f0" title=" " alt="" coords="147,81,279,108"/>
+<area shape="rect" id="node5" href="$class_helpers.html#a5e14208a0df1b1fb4c4776cb8f078ea2" title=" " alt="" coords="157,132,270,159"/>
+<area shape="rect" id="node6" href="$class_helpers.html#a91eb7cf171c4c21c7382e0a055e55bea" title=" " alt="" coords="137,183,289,209"/>
 </map>

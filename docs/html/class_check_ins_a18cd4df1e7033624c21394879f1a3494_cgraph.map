@@ -1,9 +1,17 @@
 <map id="checkIn" name="checkIn">
-<area shape="rect" id="node1" title=" " alt="" coords="5,99,72,126"/>
-<area shape="rect" id="node2" href="$class_r_c_m_s.html#a954320c12848b61035d1b305fc1fea89" title=" " alt="" coords="608,74,719,101"/>
-<area shape="rect" id="node3" href="$class_tec_tools.html#a0331fa4e96910095cb90fb1ce6a26947" title=" " alt="" coords="376,49,560,75"/>
-<area shape="rect" id="node4" href="$class_check_ins.html#acf014088f21390661c70ecd792a9f1f0" title=" " alt="" coords="120,99,328,126"/>
-<area shape="rect" id="node6" href="$class_check_ins.html#a670f633c8ef9df258c39989a9bd66b28" title=" " alt="" coords="409,150,527,177"/>
-<area shape="rect" id="node7" href="$class_helpers.html#a9713d075dbb8f4cffd7688dcd59d6793" title=" " alt="" coords="137,201,311,227"/>
-<area shape="rect" id="node5" href="$class_check_ins.html#a1d267241749eab01770944b96639ee57" title=" " alt="" coords="385,99,551,126"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,188,72,214"/>
+<area shape="rect" id="node2" href="$class_r_c_m_s.html#a954320c12848b61035d1b305fc1fea89" title=" " alt="" coords="847,213,957,240"/>
+<area shape="rect" id="node3" href="$class_tec_tools.html#a0331fa4e96910095cb90fb1ce6a26947" title=" " alt="" coords="615,112,799,138"/>
+<area shape="rect" id="node4" href="$class_check_ins.html#acf014088f21390661c70ecd792a9f1f0" title=" " alt="" coords="120,162,328,189"/>
+<area shape="rect" id="node6" href="$class_check_ins.html#a670f633c8ef9df258c39989a9bd66b28" title=" " alt="" coords="648,213,765,240"/>
+<area shape="rect" id="node7" href="$class_helpers.html#a9713d075dbb8f4cffd7688dcd59d6793" title=" " alt="" coords="137,264,311,290"/>
+<area shape="rect" id="node8" href="$class_check_ins.html#acbddbcb34ac4c76a7d825a3ca427c3d3" title=" " alt="" coords="147,365,301,392"/>
+<area shape="rect" id="node5" href="$class_check_ins.html#a1d267241749eab01770944b96639ee57" title=" " alt="" coords="623,162,790,189"/>
+<area shape="rect" id="node9" href="$class_helpers.html#a17bb17be641516c48d8949357fbb245d" title=" " alt="" coords="376,264,567,290"/>
+<area shape="rect" id="node10" href="$class_check_ins.html#a7f8ba576fbcaafca32ae3af4c2b476be" title=" " alt="" coords="663,276,750,302"/>
+<area shape="rect" id="node11" href="$class_helpers.html#ab7be5665ac5a241401d5004429839a50" title=" " alt="" coords="398,365,545,392"/>
+<area shape="rect" id="node12" href="$class_r_c_m_s.html#aa9522960dcaf82546b8fd196cdbdc2f2" title=" " alt="" coords="386,416,557,442"/>
+<area shape="rect" id="node13" href="$class_tec_tools.html#a27de2e4bf2ebf95dca87c21301091dbe" title=" " alt="" coords="397,466,545,493"/>
+<area shape="rect" id="node15" href="$class_mailer.html#ac6c85a2b2e8d8c33c3060bf8f337dee5" title=" " alt="" coords="410,517,533,544"/>
+<area shape="rect" id="node14" href="$class_categories.html#afc9fe8b0184eebd4c40deaf043d27bdc" title=" " alt="" coords="623,447,791,488"/>
 </map>

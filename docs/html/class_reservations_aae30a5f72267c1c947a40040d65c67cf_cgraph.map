@@ -1,6 +1,8 @@
 <map id="deleteReservation" name="deleteReservation">
-<area shape="rect" id="node1" title=" " alt="" coords="5,23,129,50"/>
-<area shape="rect" id="node2" href="$class_r_c_m_s.html#a954320c12848b61035d1b305fc1fea89" title=" " alt="" coords="377,23,488,50"/>
-<area shape="rect" id="node3" href="$class_helpers.html#a91eb7cf171c4c21c7382e0a055e55bea" title=" " alt="" coords="177,23,329,50"/>
-<area shape="rect" id="node4" href="$class_reservations.html#af00a64abbba90fccc43f0912973ab501" title=" " alt="" coords="180,74,327,101"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,81,129,108"/>
+<area shape="rect" id="node2" href="$class_helpers.html#a5eefba5e1ef61ce420f9586bb9423cf3" title=" " alt="" coords="177,5,340,32"/>
+<area shape="rect" id="node4" href="$class_r_c_m_s.html#a954320c12848b61035d1b305fc1fea89" title=" " alt="" coords="389,107,499,133"/>
+<area shape="rect" id="node5" href="$class_helpers.html#a91eb7cf171c4c21c7382e0a055e55bea" title=" " alt="" coords="183,107,335,133"/>
+<area shape="rect" id="node6" href="$class_reservations.html#af00a64abbba90fccc43f0912973ab501" title=" " alt="" coords="185,157,332,184"/>
+<area shape="rect" id="node3" href="$class_helpers.html#a175e17628a9b641bab7b12d9b3a1c97a" title=" " alt="" coords="388,5,500,32"/>
 </map>

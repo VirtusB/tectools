@@ -1,10 +1,16 @@
 <map id="sendEmail" name="sendEmail">
-<area shape="rect" id="node1" title=" " alt="" coords="717,78,800,105"/>
+<area shape="rect" id="node1" title=" " alt="" coords="717,159,800,186"/>
 <area shape="rect" id="node2" href="$class_tec_tools.html#af99c0ff1592f483ef43e2cdeae4a67bc" title=" " alt="" coords="473,5,650,47"/>
-<area shape="rect" id="node3" href="$class_cronjobs.html#a74d0d41d10217757efbb87cdca64e859" title=" " alt="" coords="453,71,669,112"/>
-<area shape="rect" id="node6" href="$class_login.html#a54e4f6825f5e1d396562cfa94ca97d84" title=" " alt="" coords="461,137,661,163"/>
-<area shape="rect" id="node4" href="$class_cronjobs.html#a7b7346157495ef6b6a2e78507aecaea2" title=" " alt="" coords="199,78,405,105"/>
-<area shape="rect" id="node5" href="$class_cronjobs.html#a10f468a6e3cde83e9061def52e24628a" title=" " alt="" coords="5,78,151,105"/>
-<area shape="rect" id="node7" href="$class_login.html#a82b559a8d8d349f7d784301fbf54997e" title=" " alt="" coords="231,137,373,163"/>
-<area shape="rect" id="node8" href="$class_login.html#a10f468a6e3cde83e9061def52e24628a" title=" " alt="" coords="15,137,141,163"/>
+<area shape="rect" id="node3" href="$class_check_ins.html#afe779271a38716159f5a7ec4ac6401d4" title=" " alt="" coords="465,71,657,98"/>
+<area shape="rect" id="node5" href="$class_cronjobs.html#a74d0d41d10217757efbb87cdca64e859" title=" " alt="" coords="453,123,669,164"/>
+<area shape="rect" id="node8" href="$class_check_ins.html#acbddbcb34ac4c76a7d825a3ca427c3d3" title=" " alt="" coords="455,189,668,215"/>
+<area shape="rect" id="node10" href="$class_check_ins.html#a9cda1e036a98cd80cc1f2ed8872e160a" title=" " alt="" coords="466,239,657,266"/>
+<area shape="rect" id="node12" href="$class_login.html#a54e4f6825f5e1d396562cfa94ca97d84" title=" " alt="" coords="461,290,661,317"/>
+<area shape="rect" id="node4" href="$class_check_ins.html#afd566c2c28772bc8dd681ad8e5984b40" title=" " alt="" coords="239,71,365,98"/>
+<area shape="rect" id="node6" href="$class_cronjobs.html#a7b7346157495ef6b6a2e78507aecaea2" title=" " alt="" coords="199,130,405,157"/>
+<area shape="rect" id="node7" href="$class_cronjobs.html#a10f468a6e3cde83e9061def52e24628a" title=" " alt="" coords="5,130,151,157"/>
+<area shape="rect" id="node9" href="$class_check_ins.html#a18cd4df1e7033624c21394879f1a3494" title=" " alt="" coords="239,189,365,215"/>
+<area shape="rect" id="node11" href="$class_check_ins.html#ab9632f999bfddcdb2a3c153a8639c847" title=" " alt="" coords="234,239,370,266"/>
+<area shape="rect" id="node13" href="$class_login.html#a82b559a8d8d349f7d784301fbf54997e" title=" " alt="" coords="231,290,373,317"/>
+<area shape="rect" id="node14" href="$class_login.html#a10f468a6e3cde83e9061def52e24628a" title=" " alt="" coords="15,290,141,317"/>
 </map>

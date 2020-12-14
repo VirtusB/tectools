@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['stripewrapper_371',['StripeWrapper',['../class_stripe_wrapper.html',1,'']]],
-  ['subscriptions_372',['Subscriptions',['../class_subscriptions.html',1,'']]]
+  ['stripewrapper_404',['StripeWrapper',['../class_stripe_wrapper.html',1,'']]],
+  ['subscriptions_405',['Subscriptions',['../class_subscriptions.html',1,'']]]
 ];

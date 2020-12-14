@@ -1,0 +1,12 @@
+<map id="payFine" name="payFine">
+<area shape="rect" id="node1" title=" " alt="" coords="5,107,73,133"/>
+<area shape="rect" id="node2" href="$class_check_ins.html#a4ed42db0e81f24fbc2144e9e2ac36f9a" title=" " alt="" coords="142,5,253,32"/>
+<area shape="rect" id="node4" href="$class_check_ins.html#a14cde6bdbffa3ead93563e0e265025ec" title=" " alt="" coords="138,56,257,83"/>
+<area shape="rect" id="node5" href="$class_helpers.html#a5e14208a0df1b1fb4c4776cb8f078ea2" title=" " alt="" coords="141,107,254,133"/>
+<area shape="rect" id="node6" href="$class_check_ins.html#afe779271a38716159f5a7ec4ac6401d4" title=" " alt="" coords="130,157,265,184"/>
+<area shape="rect" id="node10" href="$class_helpers.html#a91eb7cf171c4c21c7382e0a055e55bea" title=" " alt="" coords="121,208,273,235"/>
+<area shape="rect" id="node3" href="$class_r_c_m_s.html#a954320c12848b61035d1b305fc1fea89" title=" " alt="" coords="361,31,472,57"/>
+<area shape="rect" id="node7" href="$class_helpers.html#a17bb17be641516c48d8949357fbb245d" title=" " alt="" coords="321,107,512,133"/>
+<area shape="rect" id="node8" href="$class_r_c_m_s.html#aa9522960dcaf82546b8fd196cdbdc2f2" title=" " alt="" coords="331,157,502,184"/>
+<area shape="rect" id="node9" href="$class_mailer.html#ac6c85a2b2e8d8c33c3060bf8f337dee5" title=" " alt="" coords="355,208,478,235"/>
+</map>

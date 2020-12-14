@@ -83,6 +83,8 @@ Variables</h2></td></tr>
 <tr class="separator:ad847fdb160ff64bc3f0b5122e8398f77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b037c36042d23d431350ab1d35d7954"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dashboard_8php.html#a6b037c36042d23d431350ab1d35d7954">$TecTools</a> = $GLOBALS['<a class="el" href="class_tec_tools.html">TecTools</a>']</td></tr>
 <tr class="separator:a6b037c36042d23d431350ab1d35d7954"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab217049d1d9d51c664ccad947918162c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dashboard_8php.html#ab217049d1d9d51c664ccad947918162c">$noResultsHTML</a> =</td></tr>
+<tr class="separator:ab217049d1d9d51c664ccad947918162c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab112d7b276118678f3d6dc8fd9d56c2b"><td class="memItemLeft" align="right" valign="top">if($this-&gt;<a class="el" href="class_r_c_m_s.html">RCMS</a>-&gt;<a class="el" href="class_login.html">Login</a>-&gt;isAdmin()) margin&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dashboard_8php.html#ab112d7b276118678f3d6dc8fd9d56c2b">bottom</a> = $this-&gt;<a class="el" href="class_r_c_m_s.html">RCMS</a>-&gt;getTemplateFolder()</td></tr>
 <tr class="separator:ab112d7b276118678f3d6dc8fd9d56c2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20d0f3c3de8ac827c9d513b70d8f47a6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dashboard_8php.html#a20d0f3c3de8ac827c9d513b70d8f47a6">$order</a> = &quot;ORDER BY ToolID DESC&quot;</td></tr>
@@ -93,8 +95,14 @@ Variables</h2></td></tr>
 <tr class="separator:a248b27dba8425c24776276443dc10615"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19d2a3d21fe02053311fde465e6ae2e9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dashboard_8php.html#a19d2a3d21fe02053311fde465e6ae2e9">$columns</a></td></tr>
 <tr class="separator:a19d2a3d21fe02053311fde465e6ae2e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad530a85733b0ec1dc321859fd8faa0dc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dashboard_8php.html#ad530a85733b0ec1dc321859fd8faa0dc">$group</a> = &quot;GROUP BY p1.CategoryID, p1.CategoryName&quot;</td></tr>
+<tr class="separator:ad530a85733b0ec1dc321859fd8faa0dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4a3e16ae571f7498eedad9de246faf7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dashboard_8php.html#ad4a3e16ae571f7498eedad9de246faf7">$where</a></td></tr>
 <tr class="separator:ad4a3e16ae571f7498eedad9de246faf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53fc297f71bfaa55de66fb1174a75d69"><td class="memItemLeft" align="right" valign="top">elseif($this-&gt;<a class="el" href="class_r_c_m_s.html">RCMS</a>-&gt;<a class="el" href="class_login.html">Login</a>-&gt;isAdmin()===<a class="el" href="tools_8php.html#a75c5414f6e7d4193439615da207c975a">false</a> &amp;&amp; $this-&gt;<a class="el" href="class_r_c_m_s.html">RCMS</a>-&gt;<a class="el" href="class_login.html">Login</a>-&gt;isLoggedIn()===true) margin&lt;?=$this-&gt; <a class="el" href="class_r_c_m_s.html">RCMS</a> <a class="el" href="class_login.html">Login</a> getFirstName() ?&gt;&lt; br &gt;&lt;?&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dashboard_8php.html#a53fc297f71bfaa55de66fb1174a75d69">$unpaidFinesCount</a> = $<a class="el" href="class_tec_tools.html">TecTools</a>-&gt;<a class="el" href="class_check_ins.html">CheckIns</a>-&gt;getCountOfUnpaidFinesForUser()</td></tr>
+<tr class="separator:a53fc297f71bfaa55de66fb1174a75d69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3dda48c10626a5a9c42e9e3f7988a9c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dashboard_8php.html#ab3dda48c10626a5a9c42e9e3f7988a9c">$unpaidFinesBadge</a> = $unpaidFinesCount === 0 ? '' : &quot; &lt;span class='new badge fines-badge red'&gt;$unpaidFinesCount&lt;/span&gt;&quot;</td></tr>
+<tr class="separator:ab3dda48c10626a5a9c42e9e3f7988a9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82cd33ca97ff99f2fcc5e9c81d65251b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dashboard_8php.html#a82cd33ca97ff99f2fcc5e9c81d65251b">endif</a></td></tr>
 <tr class="separator:a82cd33ca97ff99f2fcc5e9c81d65251b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -117,7 +125,7 @@ Variables</h2></td></tr>
 <div class="line">                    )</div>
 <div class="line">                )</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="dashboard_8php_source.html#l00082">82</a> of file <a class="el" href="dashboard_8php_source.html">dashboard.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="dashboard_8php_source.html#l00106">106</a> of file <a class="el" href="dashboard_8php_source.html">dashboard.php</a>.</p>
 
 </div>
 </div>
@@ -128,12 +136,44 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">$columns</td>
+          <td class="memname">$<a class="el" href="andet_8txt.html#a2bbf84d705340538237151a9bfe76c68">columns</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="dashboard_8php_source.html#l00099">99</a> of file <a class="el" href="dashboard_8php_source.html">dashboard.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="dashboard_8php_source.html#l00123">123</a> of file <a class="el" href="dashboard_8php_source.html">dashboard.php</a>.</p>
+
+</div>
+</div>
+<a id="ad530a85733b0ec1dc321859fd8faa0dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad530a85733b0ec1dc321859fd8faa0dc">&#9670;&nbsp;</a></span>$group</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">$group = &quot;GROUP BY p1.CategoryID, p1.CategoryName&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="dashboard_8php_source.html#l00202">202</a> of file <a class="el" href="dashboard_8php_source.html">dashboard.php</a>.</p>
+
+</div>
+</div>
+<a id="ab217049d1d9d51c664ccad947918162c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab217049d1d9d51c664ccad947918162c">&#9670;&nbsp;</a></span>$noResultsHTML</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">$noResultsHTML =</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="dashboard_8php_source.html#l00019">19</a> of file <a class="el" href="dashboard_8php_source.html">dashboard.php</a>.</p>
 
 </div>
 </div>
@@ -149,7 +189,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="dashboard_8php_source.html#l00079">79</a> of file <a class="el" href="dashboard_8php_source.html">dashboard.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="dashboard_8php_source.html#l00103">103</a> of file <a class="el" href="dashboard_8php_source.html">dashboard.php</a>.</p>
 
 </div>
 </div>
@@ -181,7 +221,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="dashboard_8php_source.html#l00080">80</a> of file <a class="el" href="dashboard_8php_source.html">dashboard.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="dashboard_8php_source.html#l00104">104</a> of file <a class="el" href="dashboard_8php_source.html">dashboard.php</a>.</p>
 
 </div>
 </div>
@@ -198,6 +238,38 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="dashboard_8php_source.html#l00017">17</a> of file <a class="el" href="dashboard_8php_source.html">dashboard.php</a>.</p>
+
+</div>
+</div>
+<a id="ab3dda48c10626a5a9c42e9e3f7988a9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3dda48c10626a5a9c42e9e3f7988a9c">&#9670;&nbsp;</a></span>$unpaidFinesBadge</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">$unpaidFinesBadge = $unpaidFinesCount === 0 ? '' : &quot; &lt;span class='new badge fines-badge red'&gt;$unpaidFinesCount&lt;/span&gt;&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="dashboard_8php_source.html#l00641">641</a> of file <a class="el" href="dashboard_8php_source.html">dashboard.php</a>.</p>
+
+</div>
+</div>
+<a id="a53fc297f71bfaa55de66fb1174a75d69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53fc297f71bfaa55de66fb1174a75d69">&#9670;&nbsp;</a></span>$unpaidFinesCount</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">elseif ( $this-&gt;<a class="el" href="class_r_c_m_s.html">RCMS</a>-&gt;<a class="el" href="class_login.html">Login</a>-&gt;isAdmin()===<a class="el" href="tools_8php.html#a75c5414f6e7d4193439615da207c975a">false</a> &amp;&amp;$this-&gt;<a class="el" href="class_r_c_m_s.html">RCMS</a>-&gt;<a class="el" href="class_login.html">Login</a>-&gt;isLoggedIn()===true) margin&lt;?= $this-&gt; <a class="el" href="class_r_c_m_s.html">RCMS</a> <a class="el" href="class_login.html">Login</a> getFirstName () ?&gt; &lt;br&gt; &lt;? $unpaidFinesCount = $<a class="el" href="class_tec_tools.html">TecTools</a>-&gt;<a class="el" href="class_check_ins.html">CheckIns</a>-&gt;getCountOfUnpaidFinesForUser()</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="dashboard_8php_source.html#l00640">640</a> of file <a class="el" href="dashboard_8php_source.html">dashboard.php</a>.</p>
 
 </div>
 </div>
@@ -220,7 +292,7 @@ Variables</h2></td></tr>
 <div class="line">                    ]</div>
 <div class="line">                ]</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="dashboard_8php_source.html#l00316">316</a> of file <a class="el" href="dashboard_8php_source.html">dashboard.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="dashboard_8php_source.html#l00378">378</a> of file <a class="el" href="dashboard_8php_source.html">dashboard.php</a>.</p>
 
 </div>
 </div>
@@ -231,12 +303,12 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">elseif ( $this-&gt;<a class="el" href="class_r_c_m_s.html">RCMS</a>-&gt;<a class="el" href="class_login.html">Login</a>-&gt;isAdmin()===<a class="el" href="frontpage_8php.html#a75c5414f6e7d4193439615da207c975a">false</a> &amp;&amp;$this-&gt;<a class="el" href="class_r_c_m_s.html">RCMS</a>-&gt;<a class="el" href="class_login.html">Login</a>-&gt;isLoggedIn()===true) margin bottom = $this-&gt;<a class="el" href="class_r_c_m_s.html">RCMS</a>-&gt;getTemplateFolder()</td>
+          <td class="memname">elseif ( $this-&gt;<a class="el" href="class_r_c_m_s.html">RCMS</a>-&gt;<a class="el" href="class_login.html">Login</a>-&gt;isAdmin()===<a class="el" href="tools_8php.html#a75c5414f6e7d4193439615da207c975a">false</a> &amp;&amp;$this-&gt;<a class="el" href="class_r_c_m_s.html">RCMS</a>-&gt;<a class="el" href="class_login.html">Login</a>-&gt;isLoggedIn()===true) margin bottom = $this-&gt;<a class="el" href="class_r_c_m_s.html">RCMS</a>-&gt;getTemplateFolder()</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="dashboard_8php_source.html#l00033">33</a> of file <a class="el" href="dashboard_8php_source.html">dashboard.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="dashboard_8php_source.html#l00046">46</a> of file <a class="el" href="dashboard_8php_source.html">dashboard.php</a>.</p>
 
 </div>
 </div>
@@ -252,7 +324,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="dashboard_8php_source.html#l00747">747</a> of file <a class="el" href="dashboard_8php_source.html">dashboard.php</a>.</p>
+<p class="definition">Definition at line <a class="el" href="dashboard_8php_source.html#l00982">982</a> of file <a class="el" href="dashboard_8php_source.html">dashboard.php</a>.</p>
 
 </div>
 </div>

@@ -65,77 +65,136 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-static-attribs">Static Private Attributes</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">Base Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="dynheader">
+Inheritance diagram for Base:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_base__inherit__graph.png" border="0" usemap="#_base_inherit__map" alt="Inheritance graph"/></div>
+<map name="_base_inherit__map" id="_base_inherit__map">
+<area shape="rect" title=" " alt="" coords="26,5,199,97"/>
+<area shape="rect" href="class_tec_tools_categories.html" title=" " alt="" coords="5,145,220,311"/>
+</map>
+</div>
+<div class="dynheader">
 Collaboration diagram for Base:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_base__coll__graph.png" border="0" usemap="#_base_coll__map" alt="Collaboration graph"/></div>
 <map name="_base_coll__map" id="_base_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,144,83"/>
+<area shape="rect" title=" " alt="" coords="5,5,179,97"/>
 </map>
 </div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:a427a025cfc6142ff807c86787861e77f"><td class="memItemLeft" align="right" valign="top">public function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base.html#a427a025cfc6142ff807c86787861e77f">__construct</a> ()</td></tr>
-<tr class="separator:a427a025cfc6142ff807c86787861e77f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a095c5d389db211932136b53f25f39685"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base.html#a095c5d389db211932136b53f25f39685">__construct</a> ()</td></tr>
+<tr class="separator:a095c5d389db211932136b53f25f39685"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a595f55e9bfacfd852e2bb496c417d94e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base.html#a595f55e9bfacfd852e2bb496c417d94e">handlePOSTEndpoints</a> ()</td></tr>
+<tr class="separator:a595f55e9bfacfd852e2bb496c417d94e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
-Static Private Attributes</h2></td></tr>
-<tr class="memitem:ad40a5f3ce881a17980ebfd196d6197a5"><td class="memItemLeft" align="right" valign="top">static public array&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base.html#ad40a5f3ce881a17980ebfd196d6197a5">$allowedEndpoints</a> = []</td></tr>
-<tr class="separator:ad40a5f3ce881a17980ebfd196d6197a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a8e7a895523f5613d96195a06c1dc4d6d"><td class="memItemLeft" align="right" valign="top">static array&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base.html#a8e7a895523f5613d96195a06c1dc4d6d">$allowedEndpoints</a> = []</td></tr>
+<tr class="separator:a8e7a895523f5613d96195a06c1dc4d6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class <a class="el" href="class_base.html">Base</a> Denne klasse er fundamentet for alle vores andre klasser, som indeholder metoder der skal køres ved POST requests. Klassen eksister kun for at reducere duplikeret kode, ved at give alle underklasser adgang til variablen $allowedEndpoints og metoden handlePOSTEndpoints. Den kan selvfølgelig udvides senere, hvis der er andre metoder man gerne vil have adgang til at alle underklasser. </p>
 
-<p class="definition">Definition at line <a class="el" href="andet_8txt_source.html#l00198">198</a> of file <a class="el" href="andet_8txt_source.html">andet.txt</a>.</p>
+<p class="definition">Definition at line <a class="el" href="andet_8txt_source.html#l00222">222</a> of file <a class="el" href="andet_8txt_source.html">andet.txt</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a427a025cfc6142ff807c86787861e77f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a427a025cfc6142ff807c86787861e77f">&#9670;&nbsp;</a></span>__construct()</h2>
+<a id="a095c5d389db211932136b53f25f39685"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a095c5d389db211932136b53f25f39685">&#9670;&nbsp;</a></span>__construct()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">public function __construct </td>
+          <td class="memname">__construct </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="andet_8txt_source.html#l00206">206</a> of file <a class="el" href="andet_8txt_source.html">andet.txt</a>.</p>
+<p class="definition">Definition at line <a class="el" href="andet_8txt_source.html#l00230">230</a> of file <a class="el" href="andet_8txt_source.html">andet.txt</a>.</p>
 
-<p class="reference">References <a class="el" href="andet_8txt.html#a4b3b71c1c46d044288cdd63a19bfedc6">handlePOSTEndpoints()</a>.</p>
+<p class="reference">References <a class="el" href="andet_8txt_source.html#l00241">handlePOSTEndpoints()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="andet_8txt_source.html#l00056">stringify()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="class_base_a427a025cfc6142ff807c86787861e77f_cgraph.png" border="0" usemap="#class_base_a427a025cfc6142ff807c86787861e77f_cgraph" alt=""/></div>
-<map name="class_base_a427a025cfc6142ff807c86787861e77f_cgraph" id="class_base_a427a025cfc6142ff807c86787861e77f_cgraph">
+<div class="center"><img src="class_base_a095c5d389db211932136b53f25f39685_cgraph.png" border="0" usemap="#class_base_a095c5d389db211932136b53f25f39685_cgraph" alt=""/></div>
+<map name="class_base_a095c5d389db211932136b53f25f39685_cgraph" id="class_base_a095c5d389db211932136b53f25f39685_cgraph">
 <area shape="rect" title=" " alt="" coords="5,5,96,32"/>
-<area shape="rect" href="andet_8txt.html#a4b3b71c1c46d044288cdd63a19bfedc6" title=" " alt="" coords="144,5,297,32"/>
+<area shape="rect" href="class_base.html#a595f55e9bfacfd852e2bb496c417d94e" title=" " alt="" coords="144,5,297,32"/>
+<area shape="rect" href="class_helpers.html#a91eb7cf171c4c21c7382e0a055e55bea" title=" " alt="" coords="345,5,497,32"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_base_a095c5d389db211932136b53f25f39685_icgraph.png" border="0" usemap="#class_base_a095c5d389db211932136b53f25f39685_icgraph" alt=""/></div>
+<map name="class_base_a095c5d389db211932136b53f25f39685_icgraph" id="class_base_a095c5d389db211932136b53f25f39685_icgraph">
+<area shape="rect" title=" " alt="" coords="120,5,211,32"/>
+<area shape="rect" href="andet_8txt.html#a9265a7c58e6bdbdf7bae68ab8304fc61" title=" " alt="" coords="5,5,72,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a595f55e9bfacfd852e2bb496c417d94e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a595f55e9bfacfd852e2bb496c417d94e">&#9670;&nbsp;</a></span>handlePOSTEndpoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">handlePOSTEndpoints </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Denne metode tjekker, om $_POST arrayet indeholder navnet på en metode i denne klasse (og underklasse), tjekker derefter om det er en af de tilladte endpoints, og eksekvere efterfølgende metoden hvis det er tilfældet</p>
+<p>Det er endda muligt for handlePOSTEndpoints at overdrage funktionsparametre til målfunktionen </p>
+
+<p class="definition">Definition at line <a class="el" href="andet_8txt_source.html#l00241">241</a> of file <a class="el" href="andet_8txt_source.html">andet.txt</a>.</p>
+
+<p class="reference">References <a class="el" href="_helpers_8php_source.html#l00034">Helpers::setNotification()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="andet_8txt_source.html#l00230">__construct()</a>, and <a class="el" href="andet_8txt_source.html#l00056">stringify()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_base_a595f55e9bfacfd852e2bb496c417d94e_cgraph.png" border="0" usemap="#class_base_a595f55e9bfacfd852e2bb496c417d94e_cgraph" alt=""/></div>
+<map name="class_base_a595f55e9bfacfd852e2bb496c417d94e_cgraph" id="class_base_a595f55e9bfacfd852e2bb496c417d94e_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,159,32"/>
+<area shape="rect" href="class_helpers.html#a91eb7cf171c4c21c7382e0a055e55bea" title=" " alt="" coords="207,5,359,32"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_base_a595f55e9bfacfd852e2bb496c417d94e_icgraph.png" border="0" usemap="#class_base_a595f55e9bfacfd852e2bb496c417d94e_icgraph" alt=""/></div>
+<map name="class_base_a595f55e9bfacfd852e2bb496c417d94e_icgraph" id="class_base_a595f55e9bfacfd852e2bb496c417d94e_icgraph">
+<area shape="rect" title=" " alt="" coords="259,31,412,57"/>
+<area shape="rect" href="class_base.html#a095c5d389db211932136b53f25f39685" title=" " alt="" coords="120,5,211,32"/>
+<area shape="rect" href="andet_8txt.html#a9265a7c58e6bdbdf7bae68ab8304fc61" title=" " alt="" coords="5,31,72,57"/>
 </map>
 </div>
 
 </div>
 </div>
 <h2 class="groupheader">Field Documentation</h2>
-<a id="ad40a5f3ce881a17980ebfd196d6197a5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad40a5f3ce881a17980ebfd196d6197a5">&#9670;&nbsp;</a></span>$allowedEndpoints</h2>
+<a id="a8e7a895523f5613d96195a06c1dc4d6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e7a895523f5613d96195a06c1dc4d6d">&#9670;&nbsp;</a></span>$allowedEndpoints</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -144,17 +203,19 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">public array $allowedEndpoints = []</td>
+          <td class="memname">array $allowedEndpoints = []</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="andet_8txt_source.html#l00204">204</a> of file <a class="el" href="andet_8txt_source.html">andet.txt</a>.</p>
+<p class="definition">Definition at line <a class="el" href="andet_8txt_source.html#l00228">228</a> of file <a class="el" href="andet_8txt_source.html">andet.txt</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="andet_8txt_source.html#l00056">stringify()</a>.</p>
 
 </div>
 </div>

@@ -1,5 +1,7 @@
 <map id="sendMailOldReservationDeleted" name="sendMailOldReservationDeleted">
-<area shape="rect" id="node1" title=" " alt="" coords="5,31,211,57"/>
-<area shape="rect" id="node2" href="$class_r_c_m_s.html#aa9522960dcaf82546b8fd196cdbdc2f2" title=" " alt="" coords="259,5,429,32"/>
-<area shape="rect" id="node3" href="$class_mailer.html#ac6c85a2b2e8d8c33c3060bf8f337dee5" title=" " alt="" coords="283,56,405,83"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,81,211,108"/>
+<area shape="rect" id="node2" href="$class_helpers.html#a17bb17be641516c48d8949357fbb245d" title=" " alt="" coords="259,5,449,32"/>
+<area shape="rect" id="node3" href="$class_helpers.html#ab7be5665ac5a241401d5004429839a50" title=" " alt="" coords="281,56,427,83"/>
+<area shape="rect" id="node4" href="$class_r_c_m_s.html#aa9522960dcaf82546b8fd196cdbdc2f2" title=" " alt="" coords="269,107,439,133"/>
+<area shape="rect" id="node5" href="$class_mailer.html#ac6c85a2b2e8d8c33c3060bf8f337dee5" title=" " alt="" coords="293,157,415,184"/>
 </map>

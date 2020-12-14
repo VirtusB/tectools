@@ -89,59 +89,66 @@ $(function() {
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    &lt;br&gt;&lt;br&gt;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    &lt;h2 <span class="keyword">class</span>=<span class="stringliteral">&quot;header center&quot;</span>&gt;Aktivitet Center&lt;/h2&gt;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    &lt;div <span class="keyword">class</span>=<span class="stringliteral">&quot;row&quot;</span>&gt;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        &lt;?php <span class="keywordflow">foreach</span> (<a class="code" href="activity-center_8php.html#a92101992db85179f8c655965e738f4af">$logTypes</a> as $logType): ?&gt;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        &lt;div <span class="keyword">class</span>=<span class="stringliteral">&quot;col s6 m4 l3&quot;</span>&gt;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            &lt;div onclick=<span class="stringliteral">&quot;updateSelectedTypes(this)&quot;</span> data-log-type-<span class="keywordtype">id</span>=<span class="stringliteral">&quot;&lt;?= $logType[&#39;LogTypeID&#39;] ?&gt;&quot;</span> <span class="keyword">class</span>=<span class="stringliteral">&quot;log-type&quot;</span>&gt;&lt;?= <span class="stringliteral">&quot;{$logType[&#39;LogTypeName&#39;]} ({$logType[&#39;count&#39;]}x)&quot;</span> ?&gt;&lt;/div&gt;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        &lt;/div&gt;</div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="activity-center_8php.html#a4247515ffc953812fd7dafff8b9b685b">   31</a></span>&#160;        &lt;?php <a class="code" href="activity-center_8php.html#a4247515ffc953812fd7dafff8b9b685b">endforeach</a>; ?&gt;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    &lt;/div&gt;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    &lt;div <span class="keyword">class</span>=<span class="stringliteral">&quot;row&quot;</span>&gt;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        &lt;div <span class="keyword">class</span>=<span class="stringliteral">&quot;col s12&quot;</span>&gt;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            &lt;table <span class="keywordtype">id</span>=<span class="stringliteral">&quot;logs&quot;</span>&gt;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                &lt;thead&gt;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                &lt;tr&gt;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                    &lt;th&gt;Dato&lt;/th&gt;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                    &lt;th&gt;Handling&lt;/th&gt;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                    &lt;th&gt;Bruger&lt;/th&gt;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                &lt;/tr&gt;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                &lt;/thead&gt;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                &lt;tbody&gt;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                &lt;?php <span class="keywordflow">foreach</span> (<a class="code" href="activity-center_8php.html#a1985bbbc5349038a012f02c97f5276e6">$logs</a> as $log): ?&gt;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                &lt;tr data-log-type-<span class="keywordtype">id</span>=<span class="stringliteral">&quot;&lt;?= $log[&#39;FK_LogTypeID&#39;] ?&gt;&quot;</span>&gt;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                    &lt;td&gt;&lt;?= strftime (<span class="stringliteral">&#39;d. %e %B kl. %H:%M:%S&#39;</span>, strtotime($log[<span class="stringliteral">&#39;Created&#39;</span>])) ?&gt;&lt;/td&gt;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                    &lt;td&gt;&lt;?= $log[<span class="stringliteral">&#39;LogTypeName&#39;</span>] ?&gt;&lt;/td&gt;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                    &lt;td&gt;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                        &lt;a href=<span class="stringliteral">&quot;/users/edit?userid=&lt;?= $log[&#39;Data&#39;][&#39;UserID&#39;] ?&gt;&quot;</span>&gt;&lt;?= $log[<span class="stringliteral">&#39;Data&#39;</span>][<span class="stringliteral">&#39;UserID&#39;</span>] ?&gt;&lt;/a&gt;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                    &lt;/td&gt;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                &lt;/tr&gt;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                &lt;?php <a class="code" href="activity-center_8php.html#a4247515ffc953812fd7dafff8b9b685b">endforeach</a>; ?&gt;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                &lt;/tbody&gt;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            &lt;/table&gt;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            &lt;div <span class="keyword">class</span>=<span class="stringliteral">&quot;log-pagination mt2 mb2&quot;</span>&gt;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                Side</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            &lt;/div&gt;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            &lt;button <span class="keyword">class</span>=<span class="stringliteral">&quot;btn tec-btn mt2&quot;</span> type=<span class="stringliteral">&quot;button&quot;</span> onclick=<span class="stringliteral">&quot;history.back()&quot;</span>&gt;Tilbage&lt;/button&gt;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        &lt;/div&gt;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    &lt;/div&gt;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    &lt;br&gt;&lt;br&gt;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;&lt;/div&gt;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;&lt;script src=<span class="stringliteral">&quot;&lt;?= $this-&gt;RCMS-&gt;getTemplateFolder() ?&gt;/js/activity-center/activity-center.js&quot;</span>&gt;&lt;/script&gt;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;&lt;link rel=<span class="stringliteral">&quot;stylesheet&quot;</span> href=<span class="stringliteral">&quot;&lt;?= $this-&gt;RCMS-&gt;getTemplateFolder() ?&gt;/css/activity-center.css&quot;</span>&gt;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    &lt;div <span class="keyword">class</span>=<span class="stringliteral">&quot;row&quot;</span>&gt;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        &lt;div <span class="keyword">class</span>=<span class="stringliteral">&quot;col s12 m6 offset-m3&quot;</span>&gt;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            &lt;div <span class="keyword">class</span>=<span class="stringliteral">&quot;card-panel teal&quot;</span>&gt;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                &lt;p <span class="keyword">class</span>=<span class="stringliteral">&quot;white-text&quot;</span>&gt;Alle bruger-ID<span class="stringliteral">&#39;er for hændelser er ID&#39;</span>et <span class="keywordflow">for</span> brugeren der har foretaget hændelsen,</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;                    så bruger-ID<span class="stringliteral">&#39;et for bl.a. &quot;Tilføj bøde&quot; og &quot;Tjek ud&quot; tilhører altid en personale bruger&lt;/p&gt;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="stringliteral">            &lt;/div&gt;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="stringliteral">        &lt;/div&gt;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="stringliteral">    &lt;/div&gt;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="stringliteral">    &lt;div class=&quot;row&quot;&gt;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="stringliteral">        &lt;?php foreach ($logTypes as $logType): ?&gt;</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="stringliteral">        &lt;div class=&quot;col s6 m4 l3&quot;&gt;</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="stringliteral">            &lt;div onclick=&quot;updateSelectedTypes(this)&quot; data-log-type-id=&quot;&lt;?= $logType[&#39;</span>LogTypeID<span class="stringliteral">&#39;] ?&gt;&quot; class=&quot;log-type&quot;&gt;&lt;?= &quot;{$logType[&#39;</span>LogTypeName<span class="stringliteral">&#39;]} ({$logType[&#39;</span>count<span class="stringliteral">&#39;]}x)&quot; ?&gt;&lt;/div&gt;</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="stringliteral">        &lt;/div&gt;</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="activity-center_8php.html#a4247515ffc953812fd7dafff8b9b685b">   39</a></span>&#160;<span class="stringliteral">        &lt;?php endforeach; ?&gt;</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="stringliteral">    &lt;/div&gt;</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="stringliteral">    &lt;div class=&quot;row&quot;&gt;</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="stringliteral">        &lt;div class=&quot;col s12&quot;&gt;</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="stringliteral">            &lt;table id=&quot;logs&quot;&gt;</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="stringliteral">                &lt;thead&gt;</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="stringliteral">                &lt;tr&gt;</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="stringliteral">                    &lt;th&gt;Dato&lt;/th&gt;</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="stringliteral">                    &lt;th&gt;Handling&lt;/th&gt;</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="stringliteral">                    &lt;th&gt;Bruger&lt;/th&gt;</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="stringliteral">                &lt;/tr&gt;</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="stringliteral">                &lt;/thead&gt;</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="stringliteral">                &lt;tbody&gt;</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="stringliteral">                &lt;?php foreach ($logs as $log): ?&gt;</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="stringliteral">                &lt;tr data-log-type-id=&quot;&lt;?= $log[&#39;</span>FK_LogTypeID<span class="stringliteral">&#39;] ?&gt;&quot;&gt;</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="stringliteral">                    &lt;td&gt;&lt;?= strftime (&#39;</span>d. %e %B kl. %H:%M:%S<span class="stringliteral">&#39;, strtotime($log[&#39;</span>Created<span class="stringliteral">&#39;])) ?&gt;&lt;/td&gt;</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="stringliteral">                    &lt;td&gt;&lt;?= $log[&#39;</span>LogTypeName<span class="stringliteral">&#39;] ?&gt;&lt;/td&gt;</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="stringliteral">                    &lt;td&gt;</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="stringliteral">                        &lt;a href=&quot;/users/edit?userid=&lt;?= $log[&#39;</span>Data<span class="stringliteral">&#39;][&#39;</span>UserID<span class="stringliteral">&#39;] ?&gt;&quot;&gt;&lt;?= $log[&#39;</span>Data<span class="stringliteral">&#39;][&#39;</span>UserID<span class="stringliteral">&#39;] ?&gt;&lt;/a&gt;</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="stringliteral">                    &lt;/td&gt;</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="stringliteral">                &lt;/tr&gt;</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="stringliteral">                &lt;?php endforeach; ?&gt;</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="stringliteral">                &lt;/tbody&gt;</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="stringliteral">            &lt;/table&gt;</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="stringliteral">            &lt;div class=&quot;log-pagination mt2 mb2&quot;&gt;</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="stringliteral">                Side</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="stringliteral">            &lt;/div&gt;</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="stringliteral">            &lt;button class=&quot;btn tec-btn mt2&quot; type=&quot;button&quot; onclick=&quot;history.back()&quot;&gt;Tilbage&lt;/button&gt;</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="stringliteral">        &lt;/div&gt;</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="stringliteral">    &lt;/div&gt;</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="stringliteral">    &lt;br&gt;&lt;br&gt;</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="stringliteral">&lt;/div&gt;</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="stringliteral">&lt;script src=&quot;&lt;?= $this-&gt;RCMS-&gt;getTemplateFolder() ?&gt;/js/activity-center/activity-center.js&quot;&gt;&lt;/script&gt;</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="stringliteral">&lt;link rel=&quot;stylesheet&quot; href=&quot;&lt;?= $this-&gt;RCMS-&gt;getTemplateFolder() ?&gt;/css/activity-center.css&quot;&gt;</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclass_r_c_m_s_html"><div class="ttname"><a href="class_r_c_m_s.html">RCMS</a></div><div class="ttdef"><b>Definition:</b> <a href="_r_c_m_s_8php_source.html#l00020">RCMS.php:20</a></div></div>
 <div class="ttc" id="aactivity-center_8php_html_a263621399c53f2952c2329ee13ad8e4e"><div class="ttname"><a href="activity-center_8php.html#a263621399c53f2952c2329ee13ad8e4e">$pages</a></div><div class="ttdeci">$pages</div><div class="ttdef"><b>Definition:</b> <a href="activity-center_8php_source.html#l00017">activity-center.php:17</a></div></div>
 <div class="ttc" id="aactivity-center_8php_html_aee13c32fe831b7bbf35de1031ea99d6c"><div class="ttname"><a href="activity-center_8php.html#aee13c32fe831b7bbf35de1031ea99d6c">$TecTools</a></div><div class="ttdeci">$TecTools</div><div class="ttdef"><b>Definition:</b> <a href="activity-center_8php_source.html#l00012">activity-center.php:12</a></div></div>
-<div class="ttc" id="aactivity-center_8php_html_a4247515ffc953812fd7dafff8b9b685b"><div class="ttname"><a href="activity-center_8php.html#a4247515ffc953812fd7dafff8b9b685b">endforeach</a></div><div class="ttdeci">foreach( $logTypes as $logType)(this)&quot; data-log-type-id endforeach</div><div class="ttdef"><b>Definition:</b> <a href="activity-center_8php_source.html#l00031">activity-center.php:27</a></div></div>
 <div class="ttc" id="aactivity-center_8php_html_a1985bbbc5349038a012f02c97f5276e6"><div class="ttname"><a href="activity-center_8php.html#a1985bbbc5349038a012f02c97f5276e6">$logs</a></div><div class="ttdeci">$logs</div><div class="ttdef"><b>Definition:</b> <a href="activity-center_8php_source.html#l00015">activity-center.php:15</a></div></div>
 <div class="ttc" id="aactivity-center_8php_html_a92101992db85179f8c655965e738f4af"><div class="ttname"><a href="activity-center_8php.html#a92101992db85179f8c655965e738f4af">$logTypes</a></div><div class="ttdeci">$logTypes</div><div class="ttdef"><b>Definition:</b> <a href="activity-center_8php_source.html#l00014">activity-center.php:14</a></div></div>
 <!-- start footer part -->

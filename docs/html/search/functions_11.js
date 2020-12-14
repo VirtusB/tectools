@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['teardown_582',['tearDown',['../class_login_test.html#a80fe3d17e658907fc75346a0ec9d6fc7',1,'LoginTest']]],
-  ['test_5fsignup_5fduplicateemail_5fuserisnotcreated_583',['test_SignUp_DuplicateEmail_UserIsNotCreated',['../class_login_test.html#a048477912415bacf9ce18096145eb2b2',1,'LoginTest']]],
-  ['test_5fsignup_5feverythingvalid_5fcreatesuser_584',['test_SignUp_EverythingValid_CreatesUser',['../class_login_test.html#aebde7d89a0caedc6b719db2511bdf269',1,'LoginTest']]]
+  ['upgradedowngradesubscription_641',['upgradeDowngradeSubscription',['../class_subscriptions.html#a4b03dcfe3a7d73e7988278743d0427ad',1,'Subscriptions']]],
+  ['uploadimage_642',['uploadImage',['../class_tec_tools.html#a880d92aef90db5b12773bf280caa1b84',1,'TecTools']]],
+  ['userownsreservation_643',['userOwnsReservation',['../class_reservations.html#af00a64abbba90fccc43f0912973ab501',1,'Reservations']]]
 ];
