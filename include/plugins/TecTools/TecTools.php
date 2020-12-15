@@ -98,7 +98,7 @@ class TecTools {
 
     /**
      * Liste over POST endpoints (metoder), som kan eksekveres automatisk
-     * Vi er nød til at have en liste over tilladte endpoints, så brugere ikke kan eksekvere alle metoder i denne klasse
+     * Vi er nødt til at have en liste over tilladte endpoints, så brugere ikke kan eksekvere alle metoder i denne klasse
      * @var $allowedEndpoints array|string[]
      */
     public static array $allowedEndpoints = [
@@ -296,7 +296,7 @@ class TecTools {
     public function cleanImagePath(string $path): string {
         return $this->RELATIVE_TOOL_IMAGE_FOLDER . '/' . $path;
     }
-
+    
     /**
      * Henter et værktøj ud af databasen via stregkoden, og udskriver resultatet i JSON.
      * Via POST request
