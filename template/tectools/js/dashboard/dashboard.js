@@ -85,7 +85,7 @@ window.addEventListener('load', function () {
 });
 
 /**
- * Tilføjer tooltips til udlejninger der har overskredet datoen for indlevering
+ * Tilføjer tooltips til lån der har overskredet datoen for indlevering
  */
 function handleExceededRentals() {
     let elements = document.querySelectorAll('td[data-exceeded-date="1"]');
@@ -179,7 +179,7 @@ function disablePaidFines() {
 }
 
 /**
- * Åbner et vindue hvor brugeren kan indtaste en kommentar til deres udlejning
+ * Åbner et vindue hvor brugeren kan indtaste en kommentar til deres lån
  * @param checkInID
  * @param context
  */
@@ -220,7 +220,7 @@ function showCommentCheckIn(checkInID, context) {
 }
 
 /**
- * Gemmer en kommentar til en udlejning
+ * Gemmer en kommentar til et lån
  * @param checkInID
  * @param context
  */

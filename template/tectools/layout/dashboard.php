@@ -659,7 +659,7 @@ HTML;
                     <h4>Kommentér dit lån</h4>
 
                     <label for="comment-textarea">Din kommentar</label>
-                    <textarea class="materialize-textarea" id="comment-textarea" cols="30" rows="10"></textarea>
+                    <textarea maxlength="1000" class="materialize-textarea" id="comment-textarea" cols="30" rows="10"></textarea>
 
                     <button onclick="saveCheckInComment(this.getAttribute('data-checkin-id'), this)" class="btn tec-btn right modal-close">Gem</button>
                 </div>

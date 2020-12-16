@@ -230,6 +230,11 @@ HTML;
      */
 	public function createUser(): void {
         extract($_POST, EXTR_OVERWRITE);
+        $firstname = strip_tags($firstname);
+        $lastname = strip_tags($lastname);
+        $phone = strip_tags($phone);
+        $address = strip_tags($address);
+        $city = strip_tags($city);
 
         $exists = $this->RCMS->execute('CALL getUserByEmail(?)', array('s', $email));
 

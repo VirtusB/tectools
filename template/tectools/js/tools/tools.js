@@ -3,8 +3,7 @@ Denne fil indeholder klient kode som køres på forsiden
 Side: /
 Layout: frontpage.php
  */
-
-history.pushState(location.href,null, location.href.split('?')[0]);
+// history.pushState(location.href,null, location.href.split('?')[0]);
 
 document.addEventListener('DOMContentLoaded', function() {
     let categorySelect = document.getElementById('category-select');
@@ -16,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     $('#category-select-col').next().height(height);
 
 });
+
 
 window.addEventListener('load', function () {
     fixCardHeights();

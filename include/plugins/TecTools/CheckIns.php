@@ -43,7 +43,7 @@ class CheckIns {
     }
 
     /**
-     * Gemmer en kommentar for en udlejning via POST request
+     * Gemmer en kommentar for et lån via POST request
      */
     public function saveCheckInComment(): void {
         $checkInID = (int) $_POST['check_in_id'];
@@ -68,7 +68,7 @@ class CheckIns {
     }
 
     /**
-     * Henter kommentaren for en specifik udlejning og udskriver den via POST request
+     * Henter kommentaren for et specifikt lån og udskriver den via POST request
      */
     public function getCheckInComment(): void {
         $checkInID = (int) $_POST['check_in_id'];
@@ -501,7 +501,7 @@ HTML;
     }
 
     /**
-     * Returnerer hvor mange udlån brugeren har
+     * Returnerer hvor mange lån brugeren har
      * @param int $userID
      * @return int
      */
@@ -511,7 +511,7 @@ HTML;
     }
 
     /**
-     * Returnerer udlejninger som skal vises nederst på forsiden i det glidende element, marquee
+     * Returnerer lån som skal vises nederst på forsiden i det glidende element, marquee
      * @return array
      */
     public function getCheckInsForMarquee(): array {

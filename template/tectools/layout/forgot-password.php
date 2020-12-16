@@ -24,12 +24,12 @@ declare(strict_types=1);
 
                 <div class="row mt4">
                     <div class="input-field col s12">
-                        <input required value="" id="password" name="password" type="password" class="validate">
+                        <input minlength="8" required value="" id="password" name="password" type="password" class="validate">
                         <label for="password">Ny adgangskode</label>
                     </div>
 
                     <div class="input-field col s12">
-                        <input required value="" id="repeat_password" name="repeat_password" type="password" class="validate">
+                        <input minlength="8" required value="" id="repeat_password" name="repeat_password" type="password" class="validate">
                         <label for="repeat_password">Gentag adgangskode</label>
                     </div>
                 </div>

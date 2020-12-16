@@ -59,7 +59,7 @@ class Users {
 
     /**
      * Sletter en bruger via POST request
-     * Tjekker om brugeren stadig har aktive udlejninger
+     * Tjekker om brugeren stadig har aktive lån
      * Hvis brugeren har et abonnement, opsiges det
      * @throws \Stripe\Exception\ApiErrorException
      */
@@ -154,13 +154,13 @@ class Users {
             return;
         }
 
-        $firstname = $_POST['firstname'];
-        $lastname = $_POST['lastname'];
+        $firstname = strip_tags($_POST['firstname']);
+        $lastname = strip_tags($_POST['lastname']);
         $email = $_POST['email'];
-        $phone = $_POST['phone'];
-        $address = $_POST['address'];
-        $zipcode = $_POST['zipcode'];
-        $city = $_POST['city'];
+        $phone = strip_tags($_POST['phone']);
+        $address = strip_tags($_POST['address']);
+        $zipcode = strip_tags($_POST['zipcode']);
+        $city = strip_tags($_POST['city']);
         $level = $this->RCMS->Login::STANDARD_USER_LEVEL;
 
         if ($this->RCMS->Login->isAdmin()) {
