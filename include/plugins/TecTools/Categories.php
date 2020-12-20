@@ -126,6 +126,7 @@ class Categories {
 
         if ($this->categoryExists($categoryName)) {
             Helpers::setNotification('Fejl', 'Kategorien eksisterer allerede', 'error');
+            Helpers::customLocation();
             return;
         }
 

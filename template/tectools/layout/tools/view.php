@@ -35,7 +35,7 @@ $listColumnCount = count($tool['Categories']) > 1 ? 2 : 1;
         <div class="row">
 
             <div class="col s12 m12 l6">
-                <h1 class="header center orange-text"><?= $tool['ManufacturerName'] . ' ' . $tool['ToolName'] ?></h1>
+                <h1 style="word-break: break-word" class="header center orange-text"><?= $tool['ManufacturerName'] . ' ' . $tool['ToolName'] ?></h1>
 
                 <ul id="category-list">
                     <?php foreach ($tool['Categories'] as $category): ?>
@@ -87,7 +87,5 @@ $listColumnCount = count($tool['Categories']) > 1 ? 2 : 1;
         <br><br>
     </div>
 </div>
-
-<script src="<?= $this->RCMS->getTemplateFolder() ?>/js/tools/tool.js"></script>
 
 <link rel="stylesheet" href="<?= $this->RCMS->getTemplateFolder() ?>/css/tools-view.css">

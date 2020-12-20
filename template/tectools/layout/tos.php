@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 <div class="container mt4">
     <div class="row">
-        <div class="col s12 mb2">
+        <div class="col s12 mb2 tos">
             <h4 class="bold">Persondata ved køb</h4>
 
             <p>Persondata ved køb</p>
@@ -72,7 +72,7 @@ declare(strict_types=1);
 </div>
 
 <style>
-    p {
+    .tos p {
         margin: 0;
     }
 </style>

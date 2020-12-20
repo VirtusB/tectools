@@ -34,6 +34,11 @@ $user = $TecTools->Users->getUserByID($userID);
 
             <div style="text-align: center">
                 <?php
+                if (!$user) {
+                    Helpers::outputError('Brugeren eksisterer ikke', 'h3');
+                    return;
+                }
+
                 if (isset($_GET['emailtaken'])) {
                     Helpers::outputError('Bruger med den email eksisterer allerede', 'h6');
                 }
@@ -83,12 +88,12 @@ $user = $TecTools->Users->getUserByID($userID);
 
                 <?php if ($this->RCMS->Login->isAdmin()): ?>
                     <div class="input-field col s6">
+                        <label class="active" for="user-level">Niveau</label>
                         <select class="mat-select" id="user-level" required  name="level">
                             <option value="" disabled selected>Vælg brugertype</option>
                             <option <?= $user['Level'] === 1 ? 'selected' : '' ?> value="1">Standard</option>
                             <option <?= $user['Level'] === 9 ? 'selected' : '' ?> value="9">Personale</option>
                         </select>
-                        <label for="user-level">Niveau</label>
                     </div>
                 <?php endif; ?>
 
@@ -106,7 +111,7 @@ $user = $TecTools->Users->getUserByID($userID);
 
             <div class="row mb0">
                 <div class="input-field col s6 m0">
-                    <button class="btn tec-btn" type="button" onclick="history.back()">Tilbage</button>
+                    <button class="btn tec-btn" type="button" onclick="back()">Tilbage</button>
                 </div>
             </div>
 

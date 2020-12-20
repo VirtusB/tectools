@@ -56,7 +56,7 @@ $pages = ceil(count($logs) / 10);
                     <td><?= strftime ('d. %e %B kl. %H:%M:%S', strtotime($log['Created'])) ?></td>
                     <td><?= $log['LogTypeName'] ?></td>
                     <td>
-                        <a href="/users/edit?userid=<?= $log['Data']['UserID'] ?>"><?= $log['Data']['UserID'] ?></a>
+                        <a target="_blank" href="/users/edit?userid=<?= $log['Data']['UserID'] ?>"><?= $log['Data']['UserID'] ?></a>
                     </td>
                 </tr>
                 <?php endforeach; ?>
@@ -68,7 +68,7 @@ $pages = ceil(count($logs) / 10);
 
             </div>
 
-            <button class="btn tec-btn mt2" type="button" onclick="history.back()">Tilbage</button>
+            <button class="btn tec-btn mt2" type="button" onclick="location.href = '/dashboard'">Tilbage</button>
         </div>
     </div>
 

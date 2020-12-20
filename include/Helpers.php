@@ -127,11 +127,8 @@ class Helpers {
      * Omdirigerer en bruger til den URL der blev postet, hvis den er sat
      */
     public static function customLocation(): void {
-        if (isset($_POST['custom_location'])) {
-            $location = self::escape($_POST['custom_location']);
-            header('Location: ' . $location);
-            return;
-        }
+        $location = self::escape($_POST['custom_location'] ?? $_SERVER['REQUEST_URI']);
+        header('Location: ' . $location);
     }
 
     /**

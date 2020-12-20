@@ -17,6 +17,6 @@
 }
 
 .log-type.selected {
-    background: #ff9100;
+    background: #ff9100 !important;
     color: #eee;
 }

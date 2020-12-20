@@ -6,6 +6,8 @@
 #tools-row .card-image img {
     width: 65%;
     margin: 0 auto;
+    max-height: 193px;
+    object-fit: scale-down;
 }
 
 div.card-action a {

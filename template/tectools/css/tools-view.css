@@ -20,6 +20,7 @@
     border-radius: 5px;
 
     max-width: 450px;
+    margin: 0 auto;
 }
 
 @media screen and (max-width: 992px) {
